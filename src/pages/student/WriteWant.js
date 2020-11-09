@@ -8,7 +8,7 @@ class WriteWant extends Component {
     render() { 
         return ( 
             <div className="test_all margindiv">
-                填写志愿
+                成员互评
             </div>
          );
     }

@@ -7,7 +7,7 @@ class Join extends Component {
     }
     render() { 
         return ( 
-            <div className="test_all margindiv">
+            <div className="test_all">
                 加入公司
                 </div>
 

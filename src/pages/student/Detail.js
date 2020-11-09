@@ -8,7 +8,7 @@ class Detail extends Component {
     render() { 
         return ( 
             <div className="test_all margindiv">
-                公司信息
+                宣讲投票
             </div>
          );
     }

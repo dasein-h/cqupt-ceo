@@ -13,20 +13,19 @@ class MyCompany extends Component {
     }
     render() { 
         return ( 
-            <div>
+            <div className="test_all">
 
                 <div className="logo" />
       <Menu theme="light" mode="horizontal" defaultSelectedKeys={['1']}>
-        <Menu.Item key="1"><Link to="/MyCompany/WriteWant">填写志愿</Link></Menu.Item>
-        <Menu.Item key="2"><Link to="/MyCompany/Detail">公司信息</Link></Menu.Item>
-        <Menu.Item key="3"><Link to="/MyCompany/Participants">申请成员</Link></Menu.Item>
+        <Menu.Item key="1"><Link to="/index/Student/MyCompany/WriteWant">成员互评</Link></Menu.Item>
+        <Menu.Item key="2"><Link to="/index/Student/MyCompany/Detail">宣讲投票</Link></Menu.Item>
       </Menu>
 
                 <div>
-                <Route path="/MyCompany/WriteWant" component={WriteWant}></Route>
-                <Redirect to="/MyCompany/WriteWant" from='/MyCompany' />
-        <Route path="/MyCompany/Detail" component={Detail}></Route>
-        <Route path="/MyCompany/Participants" component={Participants}></Route>
+                <Route path="/index/Student/MyCompany/WriteWant" component={WriteWant}></Route>
+                <Redirect to="/index/Student/MyCompany/WriteWant" from='/index/MyCompany' />
+        <Route path="/index/Student/MyCompany/Detail" component={Detail}></Route>
+        <Route path="/index/Student/MyCompany/Participants" component={Participants}></Route>
                 </div>
                 </div>
          );
