@@ -12,12 +12,12 @@ class App extends Component {
     render() { 
         return ( 
             <div>
-            <Route path="/index/Student" component={Student}/>
+            <Route path="/Student" component={Student}/>
             
-            <Route path="/index/CEO" component={CEO}/>
+            <Route path="/CEO" component={CEO}/>
             </div>
          );
     }
 }
- 
+
 export default App;

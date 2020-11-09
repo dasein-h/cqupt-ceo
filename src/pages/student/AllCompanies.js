@@ -7,6 +7,7 @@ import {  Menu } from 'antd';
 import ChosenClasses from './ChosenClasses'
 import UnChosenClasses from './UnChosenClasses'
 import store from '../../redux/store'
+import changeNav from '../../until/changeNav'
 class AllCompanies extends Component {
     constructor(props) {
         super(props);
@@ -18,14 +19,14 @@ class AllCompanies extends Component {
             <div className="test_all">
 
             <div className="logo" />
-  <Menu theme="light" mode="horizontal" defaultSelectedKeys={['1']}>
-    <Menu.Item key="1"><Link to="/index/Student/AllCompanies/ChosenClasses">已选择的班级</Link></Menu.Item>
-    <Menu.Item key="2"><Link to="/index/Student/AllCompanies/UnChosenClasses">未选择的班级</Link></Menu.Item>
+  <Menu theme="light" mode="horizontal" defaultSelectedKeys={[sessionStorage.getItem("count1")||'1']}>
+    <Menu.Item key="1"><Link to="/Student/AllCompanies/ChosenClasses" onClick={changeNav.bind(this,1,1)}>已选择的班级</Link></Menu.Item>
+    <Menu.Item key="2"><Link to="/Student/AllCompanies/UnChosenClasses" onClick={changeNav.bind(this,1,2)}>未选择的班级</Link></Menu.Item>
   </Menu>
 
             <div>
-            <Route path="/index/Student/AllCompanies/ChosenClasses" component={ChosenClasses}></Route>
-    <Route path="/index/Student/AllCompanies/UnChosenClasses" component={UnChosenClasses}></Route>
+            <Route path="/Student/AllCompanies/ChosenClasses" component={ChosenClasses}></Route>
+    <Route path="/Student/AllCompanies/UnChosenClasses" component={UnChosenClasses}></Route>
             </div>
             </div>
              );

@@ -5,9 +5,10 @@ import '../../static/style/style.sass'
 import AllCompanies from './AllCompanies';
 import Join from './Join';
 import MyCompany from './MyCompany';
-import {HashRouter as Router, Route,Redirect} from 'react-router-dom';
+import {HashRouter as Router, Route,Redirect,Switch} from 'react-router-dom';
 import store from '../../redux/store'
 import {connect} from 'react-redux'
+import changeNav from '../../until/changeNav'
 import { 
   Layout, 
   Menu,
@@ -56,6 +57,14 @@ class Student extends Component {
         this.userIdchange = this.userIdchange.bind(this)
         this.passwordchange = this.passwordchange.bind(this)
     }
+    shouldComponentUpdate(nextProps,nextState){
+      if(nextProps!==nextState){
+        return true
+      }
+      else{
+        return false
+      }			
+    }
     showModal = () => {
       this.setState({
         visible: true,
@@ -78,18 +87,18 @@ class Student extends Component {
       });
     };
   
-    handleVisibleChange = loginVisible=> {
-      this.setState({ loginVisible });
-    };
-    
-    loginClick = ()=>{
+
+
+    loginClick = () => {
       if(this.state.userId!==""&&this.state.password!==""){
       this.props.login(this.state.userId,this.state.password)
-      console.log(store.getState())
-      // window.location="/index/CEO"
+      // window.location="/CEO"
+      // this.props.history.push("/CEO")
       }
       else{
-        this.state.checkVisible=true
+        this.setState({
+          loginVisible:true
+        })
       }
     }
     onChange3 = e => {
@@ -115,10 +124,10 @@ class Student extends Component {
       if(newProps !== this.props){
         if(this.props.isLogin==true){
           if(this.props.message==="学生登录"){
-            window.location="/index/Student"
+            window.location="/Student"
           }
           if(this.props.message==="CEO登录"){
-            window.location="/index/CEO"
+            window.location="/CEO"
           }
         }
       }
@@ -138,18 +147,18 @@ class Student extends Component {
     width="300"
   >
     <div className="logo" />
-    <Menu theme="light" mode="inline" defaultSelectedKeys={['1']}>
+    <Menu theme="light" mode="inline" defaultSelectedKeys={[sessionStorage.getItem("count0")||'1']}>
       <Menu.Item key="1" icon={<UserOutlined />}>
-      <Link to="/index/Student/AllCompanies/ChosenClasses" onClick={this.getAllCompanies}>申请公司</Link>
+       <Link to="/Student/AllCompanies/ChosenClasses" onClick={changeNav.bind(this,0,1)}>申请公司</Link>
       </Menu.Item>
       <Menu.Item key="2" icon={<VideoCameraOutlined />}>
-      <Link to="/index/Student/Join">提交日志</Link> 
+      <Link to="/Student/Join" onClick={changeNav.bind(this,0,2)}>提交日志</Link> 
       </Menu.Item>
       <Menu.Item key="3" icon={<EditOutlined />}>
-      <Link to="/index/Student/MyCompany/WriteWant">评分</Link> 
+      <Link to="/Student/MyCompany/WriteWant" onClick={changeNav.bind(this,0,3)}>评分</Link> 
       </Menu.Item>
       <Menu.Item key="4" icon={<OrderedListOutlined />}>
-      <Link to="/index/Student/CEO/Campaign">CEO</Link> 
+      <Link to="/Student/CEO/Campaign" onClick={changeNav.bind(this,0,4)}>CEO</Link> 
       </Menu.Item>
 
     </Menu>
@@ -172,14 +181,13 @@ class Student extends Component {
           title="账号和密码不能为空"
           trigger="click"
           visible={this.state.loginVisible}
-          onVisibleChange={this.handleVisibleChange}
-          disabled={true}
-        >
-        <Button  
+          disabled={true}>          
+          <Button  
           type="primary" 
           onClick={this.loginClick}
           >登录</Button>
           </Popover>
+
           }
       >
         <div className="login_input">
@@ -216,11 +224,13 @@ class Student extends Component {
       </Header>
     <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
     <div className="site-layout-background" style={{ padding: 24, textAlign: 'center' ,borderRadius:10}}>
-        <Route path="/index/Student/AllCompanies" component={AllCompanies}/>
-        <Redirect to="/index/Student/AllCompanies/ChosenClasses" from='/index/Student/AllCompanies'/>
-        <Route path="/index/Student/Join" component={Join}/>
-        <Route path="/index/Student/MyCompany" component={MyCompany}/>
-        <Route path="/index/Student/CEO" component={CEO}/>
+      <Switch>
+        <Route path="/Student/AllCompanies" component={AllCompanies}/>
+        <Route path="/Student/Join" component={Join}/>
+        <Route path="/Student/MyCompany" component={MyCompany}/>
+        <Route path="/Student/CEO" component={CEO}/>
+        <Redirect to="/Student/AllCompanies"/>
+        </Switch>
       </div>
     </Content>
     <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
@@ -242,18 +252,18 @@ class Student extends Component {
     width="300"
   >
     <div className="logo" />
-    <Menu theme="light" mode="inline" defaultSelectedKeys={['1']}>
+    <Menu theme="light" mode="inline" defaultSelectedKeys={[sessionStorage.getItem("count0")||'1']}>
       <Menu.Item key="1" icon={<UserOutlined />}>
-       <Link to="/index/Student/AllCompanies/ChosenClasses" onClick={this.getAllCompanies}>申请公司</Link>
+       <Link to="/Student/AllCompanies/ChosenClasses" onClick={changeNav.bind(this,0,1)}>申请公司</Link>
       </Menu.Item>
       <Menu.Item key="2" icon={<VideoCameraOutlined />}>
-      <Link to="/index/Student/Join">提交日志</Link> 
+      <Link to="/Student/Join" onClick={changeNav.bind(this,0,2)}>提交日志</Link> 
       </Menu.Item>
       <Menu.Item key="3" icon={<EditOutlined />}>
-      <Link to="/index/Student/MyCompany/WriteWant">评分</Link> 
+      <Link to="/Student/MyCompany/WriteWant" onClick={changeNav.bind(this,0,3)}>评分</Link> 
       </Menu.Item>
       <Menu.Item key="4" icon={<OrderedListOutlined />}>
-      <Link to="/index/Student/CEO/Campaign">CEO</Link> 
+      <Link to="/Student/CEO/Campaign" onClick={changeNav.bind(this,0,4)}>CEO</Link> 
       </Menu.Item>
 
     </Menu>
@@ -267,11 +277,11 @@ class Student extends Component {
       </Header>
     <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
       <div className="site-layout-background" style={{ padding: 24, textAlign: 'center' ,borderRadius:10}}>
-        <Route path="/index/Student/AllCompanies" component={AllCompanies}/>
-        <Redirect to="/index/Student/AllCompanies/ChosenClasses" from='/index/Student/AllCompanies'/>
-        <Route path="/index/Student/Join" component={Join}/>
-        <Route path="/index/Student/MyCompany" component={MyCompany}/>
-        <Route path="/index/Student/CEO" component={CEO}/>
+        <Route path="/Student/AllCompanies" component={AllCompanies}/>
+        <Redirect to="/Student/AllCompanies/ChosenClasses" from='/Student/AllCompanies'/>
+        <Route path="/Student/Join" component={Join}/>
+        <Route path="/Student/MyCompany" component={MyCompany}/>
+        <Route path="/Student/CEO" component={CEO}/>
       </div>
     </Content>
     <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
