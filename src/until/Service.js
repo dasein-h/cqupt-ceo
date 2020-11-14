@@ -2,9 +2,7 @@ import axios from 'axios'
 const Service = axios.create({
 
   baseURL: 'http://localhost:3000/api',
-
-  baseURL: 'http://120.79.207.60:8089',
-
+  /*debug修改*/
   headers: {
     get: {
       'Content-Type': 'application/json'
