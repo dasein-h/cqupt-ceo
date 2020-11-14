@@ -1,7 +1,7 @@
 import React, { Component,Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { withRouter } from 'react-router-dom'
-import '../../static/style/style.sass'
+import '../../static/style/style.scss'
 import AllCompanies from './AllCompanies';
 import Join from './Join';
 import MyCompany from './MyCompany';
