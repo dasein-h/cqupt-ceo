@@ -2,7 +2,14 @@ import axios from 'axios'
 const Service = axios.create({
   /*没有被覆盖*/
   baseURL: 'http://localhost:3000/api',
+<<<<<<< HEAD
   /*debug修改*/
+=======
+
+  // baseURL: 'http://120.79.207.60:8089',
+  // github测试
+
+>>>>>>> 3b8e27f (TestGit)
   headers: {
     get: {
       'Content-Type': 'application/json'
