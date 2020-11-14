@@ -1,6 +1,6 @@
 import axios from 'axios'
 const Service = axios.create({
-
+  /*没有被覆盖*/
   baseURL: 'http://localhost:3000/api',
   /*debug修改*/
   headers: {
