@@ -3,7 +3,8 @@ const Service = axios.create({
 
   baseURL: 'http://localhost:3000/api',
 
-  baseURL: 'http://120.79.207.60:8089',
+  // baseURL: 'http://120.79.207.60:8089',
+  // github测试
 
   headers: {
     get: {
