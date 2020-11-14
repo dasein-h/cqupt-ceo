@@ -7,7 +7,7 @@ class WriteWant extends Component {
     }
     render() { 
         return ( 
-            <div className="test_all margindiv">
+            <div className="">
                 成员互评
             </div>
          );

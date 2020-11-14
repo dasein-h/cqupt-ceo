@@ -147,7 +147,7 @@ class Student extends Component {
     width="300"
   >
     <div className="logo" />
-    <Menu theme="light" mode="inline" defaultSelectedKeys={[sessionStorage.getItem("count0")||'1']}>
+    <Menu theme="light" mode="inline" defaultSelectedKeys={[sessionStorage.getItem("count0")||'1']} >
       <Menu.Item key="1" icon={<UserOutlined />}>
        <Link to="/Student/AllCompanies/ChosenClasses" onClick={changeNav.bind(this,0,1)}>申请公司</Link>
       </Menu.Item>

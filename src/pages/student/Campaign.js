@@ -5,7 +5,7 @@ class Campaign extends Component {
         this.state = {  }
     }
     render() { 
-        return ( 111 );
+        return ( "参与竞选" );
     }
 }
  

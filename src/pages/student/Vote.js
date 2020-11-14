@@ -5,7 +5,7 @@ class Vote extends Component {
         this.state = {  }
     }
     render() { 
-        return ( 222 );
+        return ( "提交志愿" );
     }
 }
  

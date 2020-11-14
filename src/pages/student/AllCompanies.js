@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom'
+import { withRouter,Switch } from 'react-router-dom'
 import {connect} from 'react-redux'
 import actions from '../../redux/actionCreators/creators'
 import {HashRouter as Router, Route,Link,Redirect} from 'react-router-dom';
@@ -25,8 +25,11 @@ class AllCompanies extends Component {
   </Menu>
 
             <div>
+              <Switch>
             <Route path="/Student/AllCompanies/ChosenClasses" component={ChosenClasses}></Route>
-    <Route path="/Student/AllCompanies/UnChosenClasses" component={UnChosenClasses}></Route>
+            <Route path="/Student/AllCompanies/UnChosenClasses" component={UnChosenClasses}></Route>
+            <Redirect to="/Student/AllCompanies/ChosenClasses"/>
+            </Switch>
             </div>
             </div>
              );
