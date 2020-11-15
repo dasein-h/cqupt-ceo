@@ -27,21 +27,21 @@ class Teacher extends Component {
             <Router>
                 <div id="All">
                     <div className="nav-div">
-                        <Link to="/"> 
+                        <Link to="/Teacher/"> 
                             <div className={this.state.displayStu ? 'nav' : 'nav-point'}
                                 onClick={this.handleNavStyChanStu}>
                             学生信息
                             </div>
                         </Link>
                         
-                        <Link to="/ComInfo">
+                        <Link to="/Teacher/ComInfo">
                             <div className={this.state.displayCom ? 'nav' : 'nav-point'}
                             onClick={this.handleNavStyChanCom}>
                             公司情况
                             </div>
                         </Link>
                         
-                        <Link to="/VotSit">
+                        <Link to="/Teacher/VotSit">
                             <div className={this.state.displayVot ? 'nav' : 'nav-point'}
                             onClick={this.handleNavStyChanVot}>
                             投票情况
@@ -54,13 +54,13 @@ class Teacher extends Component {
 
                     <div className="content">
                         <Switch>
-                            <Route exact path="/">
+                            <Route exact path="/Teacher">
                                 <StuInfo/>
                             </Route>
-                            <Route path="/ComInfo">
+                            <Route path="/Teacher/ComInfo">
                                 <ComInfo/>
                             </Route>
-                            <Route path="/VotSit">
+                            <Route path="/Teacher/VotSit">
                                 <VotSit/>
                             </Route>
                         </Switch>
