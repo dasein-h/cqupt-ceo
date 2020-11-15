@@ -19,7 +19,8 @@ class Teacher extends Component {
         this.state = {
             displayStu:true,
             displayCom:true,
-           displayVot:true
+           displayVot:true,
+           displayNews:true
           }
     }
     render() {
@@ -48,6 +49,12 @@ class Teacher extends Component {
                             </div>
                             
                         </Link>
+                        <Link to="/Teacher/news">
+                        <div className={this.state.displayNews ? 'nav' : 'nav-point'}
+                            onClick={this.handleNavStyChanNews}>
+                            消息
+                            </div>
+                        </Link>
                         
                     </div>
 
@@ -63,6 +70,7 @@ class Teacher extends Component {
                             <Route path="/VotSit">
                                 <VotSit/>
                             </Route>
+                            <Route path="/Teacher/news"></Route>
                         </Switch>
                     </div>
                     
@@ -75,21 +83,32 @@ class Teacher extends Component {
             this.setState({
                 displayStu:false,
                 displayCom:true,
-                displayVot:true
+                displayVot:true,
+                displayNews:true
             })
     }
     handleNavStyChanCom() { 
         this.setState({
             displayStu:true,
             displayCom:false,
-            displayVot:true
+            displayVot:true,
+            displayNews:true
         })
     }
     handleNavStyChanVot() { 
         this.setState({
             displayStu:true,
             displayCom:true,
-            displayVot:false
+            displayVot:false,
+            displayNews:true
+        })
+    }
+    handleNavStyChanNews = () =>{ 
+        this.setState({
+            displayStu:true,
+            displayCom:true,
+            displayVot:true,
+            displayNews:false
         })
     }
 
