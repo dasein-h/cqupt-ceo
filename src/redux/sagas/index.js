@@ -4,9 +4,9 @@ import actions from '../actionCreators/creators'
 export default function* defSaga(){
     yield throttle(2000,'login',function*(){
                 const action = yield select();
-                console.log("saga"+'aaaaaa'+action)
-                const res = yield call(Service.post,'/login/user', action.payload)
-            if (res.status==200){
+                const res = yield call(Service.get,'/login/user', {params:action.payload})
+                console.log(res)
+            if (res.status==200&&res.data.flag===true){
                 yield put(actions.Login_Success(res.message,res.data))
                 localStorage.setItem("name",res.data.userName)
                 localStorage.setItem("userId",res.data.userId)

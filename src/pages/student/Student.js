@@ -94,6 +94,9 @@ class Student extends Component {
       this.props.login(this.state.userId,this.state.password,this.state.chooseType)
       // window.location="/CEO"
       // this.props.history.push("/CEO")
+      if(this.props.isLogin===true){
+      setInterval(this.props.Login_Check(),5000)
+      }
       }
       else{
         this.setState({
@@ -240,7 +243,6 @@ class Student extends Component {
        );
       }
       else{
-            setInterval(this.props.Login_Check(),5000)
         return ( 
           <Layout>
   <Sider
