@@ -3,6 +3,7 @@ const actions = {
         if(type==="学生"){
             return {
                 type:"login",
+                chooseType:type,
                 payload:{        
                     studentId:userId,
                     password:password
@@ -12,6 +13,7 @@ const actions = {
         else {
             return {
                 type:"login",
+                chooseType:type,
                 payload:{
                     teacherId:userId,
                     password:password

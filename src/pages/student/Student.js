@@ -143,8 +143,13 @@ class Student extends Component {
         if(that.props.Login===false){
           //alert("重新登录")
         }
-        else{
-
+        else if(that.props.Login===true){
+          if(localStorage.getItem("type")==="老师"){
+            window.location="/Teacher"
+          }
+          if(localStorage.getItem("type")==="学生"){
+            window.location="/Student"
+          }
         }
       },5000)
     }

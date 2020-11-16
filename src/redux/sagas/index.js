@@ -10,6 +10,7 @@ export default function* defSaga(){
                 yield put(actions.Login_Success(res.message,res.data))
                 localStorage.setItem("name",res.data.userName)
                 localStorage.setItem("userId",res.data.userId)
+                localStorage.setItem("type",action.chooseType)
             }
             else {
                 yield put(actions.Login_Fail());

@@ -18,7 +18,6 @@ class RouteMap extends React.Component {
      <Route path="/" component={App}>
      <Switch>
             <Route path="/Student" component={Student}/>
-            <Route path="/CEO" component={CEO}/>
             <Route path="/Teacher" component={Teacher}/>
           <Redirect to="/Student" />
         </Switch>
@@ -29,7 +28,7 @@ class RouteMap extends React.Component {
         {/* <Route path="/MyCompany/WriteWant" component={WriteWant}></Route>
         <Route path="/MyCompany/Detail" component={Detail}></Route>
         <Route path="/MyCompany/Participants" component={Participants}></Route> */}
-                <Redirect from="/index" to="/index/Student/AllCompanies/ChosenClasses"/>
+                {/* <Redirect from="/index" to="/index/Student/AllCompanies/ChosenClasses"/> */}
   </BrowserRouter> 
   </Provider>
   </div>

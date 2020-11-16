@@ -28,7 +28,7 @@ class Teacher extends Component {
             <Router>
                 <div id="All">
                     <div className="nav-div">
-                        <Link to="/Teacher/"> 
+                        <Link to="/Teacher"> 
                             <div className={this.state.displayStu ? 'nav' : 'nav-point'}
                                 onClick={this.handleNavStyChanStu}>
                             学生信息
