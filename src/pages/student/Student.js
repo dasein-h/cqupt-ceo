@@ -33,9 +33,8 @@ import CEO from './CEO';
 
 const { Header, Content, Footer, Sider } = Layout;
 const options = [
-  { label: '老师', value: '老师' },
-  { label: '学生', value: '学生' },
-  { label: '管理员', value: '管理员' },
+  { label: '老师/管理员', value: '老师' },
+  { label: '学生/CEO', value: '学生' },
 ];
 const content = (
   <div>
@@ -92,11 +91,17 @@ class Student extends Component {
     loginClick = () => {
       if(this.state.userId!==""&&this.state.password!==""){
       this.props.login(this.state.userId,this.state.password,this.state.chooseType)
+      if(this.props.isLogin===true){
+        if(this.state.chooseType==="学生"){
+          window.location = "/Student"
+        }
+        else{
+          window.location = "/teacher"
+        }
+      }
       // window.location="/CEO"
       // this.props.history.push("/CEO")
-      if(this.props.isLogin===true){
-      setInterval(this.props.Login_Check(),5000)
-      }
+
       }
       else{
         this.setState({
@@ -125,18 +130,29 @@ class Student extends Component {
     }
     componentWillUpdate(newProps){
       if(newProps !== this.props){
-        if(this.props.isLogin==true){
-          if(this.props.message==="学生登录"){
-            window.location="/Student"
-          }
-          if(this.props.message==="CEO登录"){
-            window.location="/CEO"
-          }
-        }
+
       }
     }
+    componentWillMount(){
+      //组件第一次render之前执行，每五秒查看一次登录状态
+      let that = this
+      //这里this的指向会改变，先把this固定一下
+      setInterval(function(){
+        if(localStorage.getItem("userId")!=="undefined")
+        that.props.Login_Check()
+        if(that.props.Login===false){
+          //alert("重新登录")
+        }
+        else{
+
+        }
+      },5000)
+    }
+    componentDidMount(){
+      //如果要获取数据，最好在这里进行，组件在render之前不会返回数据
+    }
     render() { 
-      if(this.props.isLogin===false||this.props.isLogin===undefined){
+      if(this.props.isLogin===false||this.props.isLogin===undefined)
         
         return ( 
           <Layout>
@@ -241,7 +257,7 @@ class Student extends Component {
   </Layout>
 </Layout>
        );
-      }
+      
       else{
         return ( 
           <Layout>
@@ -277,7 +293,10 @@ class Student extends Component {
               marginLeft: 300,
    }}>
     <Header className="site-layout-background" style={{ padding: 0 }}>
-  <h4>{this.props.userNmae}</h4>
+
+  {/* <h4>名字</h4> */}
+  {/* 退出按钮 */}
+  
       </Header>
     <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
       <div className="site-layout-background" style={{ padding: 24, textAlign: 'center' ,borderRadius:10}}>
@@ -296,6 +315,7 @@ class Student extends Component {
     }
 }
 const mapDispatchToProps = (dispatch) => {
+  //把发送action的方法绑定到当前组件的props
   return {
     login:(userId,password,type)=> {
       dispatch(actions.loginAction(userId,password,type))
@@ -303,12 +323,17 @@ const mapDispatchToProps = (dispatch) => {
     Login_Check:()=> {
       dispatch(actions.Login_Check())
     },
+    Exit:() => {
+      dispatch(actions.Exit())
+    }
   }
 }
 const mapStateToProps = state =>{
+  //把store里的state绑定到当前组件的props
   console.log("Student",state)
   return state
 }
 
 withRouter(Student);
 export default connect(mapStateToProps,mapDispatchToProps)(Student)
+//将要使用mapStateToProps和mapDispatchToProps

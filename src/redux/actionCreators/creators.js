@@ -60,6 +60,24 @@ const actions = {
         return {
             type:"Login_Check_NO",
         }
-    }
+    },
+    Exit: () => {
+        return{
+            type:"Exit",
+            payload:{
+                userId:localStorage.getItem("userId")
+            }
+        }
+    },
+    Exit_OK: () => {
+        return{
+            type:"Exit_OK",
+        }
+    },
+    Exit_NO: () => {
+        return{
+            type:"Exit_NO",
+        }
+    },
 }
 export default actions
