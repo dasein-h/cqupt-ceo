@@ -1,7 +1,7 @@
 import React from 'react';
 import App from './pages/App';
 import Student from './pages/student/Student'
-import Teacher from './pages/teacher/content/Teacher'
+import Teacher from './pages/teacher/view/Teacher'
 import CEO from './pages/ceo/CEO'
 import {Provider} from 'react-redux'
 import store from './redux/store'
@@ -29,7 +29,7 @@ class RouteMap extends React.Component {
         {/* <Route path="/MyCompany/WriteWant" component={WriteWant}></Route>
         <Route path="/MyCompany/Detail" component={Detail}></Route>
         <Route path="/MyCompany/Participants" component={Participants}></Route> */}
-                {/* <Redirect from="/index" to="/index/Student/AllCompanies/ChosenClasses"/> */}
+                <Redirect from="/index" to="/index/Student/AllCompanies/ChosenClasses"/>
   </BrowserRouter> 
   </Provider>
   </div>

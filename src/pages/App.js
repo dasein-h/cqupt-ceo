@@ -3,7 +3,7 @@ import Student from './student/Student'
 import {Provider} from 'react-redux'
 import store from '../redux/store'
 import CEO from './ceo/CEO'
-import Teacher from './teacher/content/Teacher'
+import Teacher from './teacher/view/Teacher'
 import {HashRouter as Router, Switch, Route, Redirect,BrowserRouter} from 'react-router-dom';
 class App extends Component {
     constructor(props) {
