@@ -1,146 +1,120 @@
 import React from 'react'
-import {changeCompanyName,agreeChange,rejectChange} from '../../../until/api/teacherApi'
-import { Table, Tag, Space } from 'antd'
-
-  // const columns = [
-  //   {
-  //     title: '姓名',
-  //     dataIndex: 'name',
-  //     key: 'name',
-  //     render: text => <a>{text}</a>,
-  //   },
-  //   {
-  //     title: '原公司名',
-  //     dataIndex: 'oriName',
-  //     key: 'oriName',
-  //   },
-  //   {
-  //     title: '修改后公司名',
-  //     dataIndex: 'nowName',
-  //     key: 'nowName',
-  //   },
-  //   {
-  //     title: '操作',
-  //     key: 'action',
-  //     dataIndex: 'action',
-  //     render: tags => (
-  //       <>
-  //         {tags.map(tag => {
-  //           let color = tag.length > 5 ? 'geekblue' : 'green';
-  //           if (tag === 'loser') {
-  //             color = 'volcano';
-  //           }
-  //           return (
-  //             <Tag color={color} key={tag}>
-  //               {tag.toUpperCase()}
-  //             </Tag>
-  //           );
-  //         })}
-  //       </>
-  //     ),
-  //   },
-  // ];
-  
-  // const data = [
-  //   {
-  //     key: '1',
-  //     姓名: 'John Brown',
-  //     原公司名: 32,
-  //     修改后公司名:23,
-  //     操作: ['nice', 'developer'],
-  //   },
-  //   {
-  //     key: '2',
-  //     name: 'Jim Green',
-  //     age: 42,
-  //     address: 'London No. 1 Lake Park',
-  //     tags: ['loser'],
-  //   },
-  //   {
-  //     key: '3',
-  //     name: 'Joe Black',
-  //     age: 32,
-  //     address: 'Sidney No. 1 Lake Park',
-  //     tags: ['cool', 'teacher'],
-  //   },
-  // ];
-
+import { changeCompanyName, agreeChange, rejectChange } from '../../../until/api/teacherApi'
+import { Table, Space, Button, notification } from 'antd'
+import store from '../../../redux/store'
+let click = (text,record,index) => {
+  console.log(record);//这是这一行的数据
+  // console.log(store.getState());
+  agreeChange("2017210952")
+}
 const columns = [
   {
     title: '名字',
     dataIndex: 'name',
-    key: 'name',
   },
   {
     title: '原公司名',
-    dataIndex: 'oriName',
-    key: 'oriName',
+    dataIndex: 'message',
   },
   {
     title: '修改后公司名',
-    dataIndex: 'nowName',
-    key: 'nowName',
+    dataIndex: 'error',
   },
   {
-    title: '同意',
-    key: 'agree',
+    title: '操作',
     dataIndex: 'agree',
-    render: tags => (
-      <>
-        {tags.map(tag => {
-          let color = tag.length > 5 ? 'geekblue' : 'green';
-          if (tag === 'loser') {
-            color = 'volcano';
-          }
-          return (
-            <Tag color={color} key={tag}>
-              {tag.toUpperCase()}
-            </Tag>
-          );
-        })}
-      </>
-    ),
-  },
-  {
-    title: '删除',
-    key: 'delete',
-    render: (text, record) => (
+    render: (text, record, index) => (
       <Space size="middle">
-        <a>Invite {record.name}</a>
-        <a>Delete</a>
+        <Button size="small" type="primary" ghost onClick={() => { click(text,record,index) }}>同意</Button>
+        <Button size="small" danger="true">拒绝</Button>
       </Space>
     ),
   },
 ];
-
-const data = [
-  {
-    key: '1',
-    name: 'John Brown',
-    oriName: 32,
-    nowName: 'New York No. 1 Lake Park',
-    agree: ['nice', 'developer'],
-  }
-];
-class newLists extends React.Component{
-    constructor(...props){
-        super(...props)
-        this.state = {
-            
+class newLists extends React.Component {
+  constructor(...props) {
+    super(...props)
+    this.state = {
+      loading: true,
+      data: [],
+      pagination: {
+        pageSize: 2,
+        current: 1,
+        total: 5,
+        hideOnSinglePage: true,
+        onChange: (page, pageSize) => {
+          this.state.pagination.current = page
+          console.log(this.state.pagination.current);
         }
+      }
     }
-    render(){
-        return (
-        <div id="news">
-            <div className="header">
-            <Table columns={columns} dataSource={data} />
-            </div>
+  }
+  render() {
+    console.log(this.state);
+    return (
+      <div id="news">
+        <div className="header">
+          <Table
+            columns={columns}
+            dataSource={this.state.data}
+            pagination={this.state.pagination}
+            loading={this.state.loading}
+            rowKey="name"
+          />
         </div>
-        )
-        
-    }
-    componentWillMount(){
-        changeCompanyName('tiansh',"1","1")
-    }
+      </div>
+    )
+
+  }
+  componentDidMount() {
+    this.setState({
+      data:[{
+        name:1,
+        message:1,
+        error:1
+      },
+      {
+        name:2,
+        message:1,
+        error:1
+      },{
+        name:3,
+        message:1,
+        error:1
+      },{
+        name:4,
+        message:1,
+        error:1
+      },{
+        name:5,
+        message:1,
+        error:1
+      }],
+      loading:false,
+    })
+
+    // let lists;
+    // changeCompanyName('tiansh', "1", "1").then(
+    //   res => {
+    //     lists = JSON.parse(res.data)
+    //     console.log(lists);
+    //     this.setState({ data: lists });
+    //     this.setState({ loading: false })
+    //   }).catch(err => {
+    //     console.log(err)
+    //     this.setState({ loading: false })
+    //     notification.open({
+    //       message: '警告',
+    //       placement: "bottomRight",
+    //       description:
+    //         '请求超时或服务器异常,请检查网络或联系管理员!',
+    //       onClick: () => {
+    //         console.log('Notification Clicked!');
+    //       },
+    //     });
+    //   })
+  }
 }
 export default newLists
+
+
