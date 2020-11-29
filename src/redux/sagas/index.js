@@ -11,11 +11,12 @@ export default function* defSaga() {
   yield throttle(2000, 'login', function* () {
     const action = yield select();
     const res = yield call(LoginApi.Login, action)
-    if (res.status === 200 && res.data.flag) {//还要再添加判断条件，已向后端反映问题
+    if (res.status === 200 && res.data.flag) {
       yield put(actions.Login_Success(res.message, res.data))
+      
       setLocalStorage({
-        name: res.data.userName,
-        userId: res.data.userId,
+        name: res.data.data.userName,
+        userId: res.data.data.userId,
         type: action.chooseType
       })
     }
@@ -26,11 +27,13 @@ export default function* defSaga() {
   })
   yield takeEvery('Login_Check', function* () {
     const action = yield select()
-    const res = yield call(LoginApi.KeepLogin, action.payload)
+
+    const res = yield call(LoginApi.KeepLogin, action)
     if (res.status == 200 && res.data.flag) {
       yield put(actions.Login_Check_OK())
     }
     else {
+      console.log('clear localstorage')
       yield put(actions.Login_Check_NO())
       localStorage.clear()
       //清除本地数据
@@ -40,7 +43,7 @@ export default function* defSaga() {
     const action = yield select()
     const res = yield call(LoginApi.Exit, action.payload)
     if (res.status === 200 && res.data.flag) {
-      alert('退出成功')
+      console.log('clear localstorage')
       yield put(actions.Exit_OK())
       localStorage.clear()
       //不再登录后清除本地数据
