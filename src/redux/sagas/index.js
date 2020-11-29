@@ -11,7 +11,6 @@ export default function* defSaga() {
   yield throttle(2000, 'login', function* () {
     const action = yield select();
     const res = yield call(LoginApi.Login, action)
-    console.log(res)
     if (res.status === 200 && res.data.flag) {//还要再添加判断条件，已向后端反映问题
       yield put(actions.Login_Success(res.message, res.data))
       setLocalStorage({
