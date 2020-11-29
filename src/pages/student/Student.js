@@ -136,6 +136,7 @@ class Student extends Component {
     //这里this的指向会改变，先把this固定一下
     setInterval(function () {
       if (localStorage.getItem("userId"))
+
         that.props.Login_Check()
       if (!that.props.isLogin) {
         // alert("重新登录")
