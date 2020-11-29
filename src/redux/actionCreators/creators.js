@@ -60,6 +60,7 @@ const actions = {
     }
   },
   Exit_OK: () => {
+    console.log('exit ok')
     return {
       type: "Exit_OK",
     }
