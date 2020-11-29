@@ -2,12 +2,14 @@ import Service from "../Service"
 const LoginApi = {
     Login: (payload) => {
         return Service.get('/login/user', {
-            params: {payload}
+          params: {
+            ...payload
+          }
         })
     },
     KeepLogin: (payload) => {
         return Service.post('/login/keepLogin',{
-            payload
+            ...payload
         })
     },
     Exit : (payload) => {

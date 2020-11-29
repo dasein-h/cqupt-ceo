@@ -102,7 +102,6 @@ class ChosenClasses extends Component {
         console.log("设置"+sessionStorage.getItem("currentPage"))
     }
     render() { 
-        console.log(1)
         console.log(this.state.data)
         const pagination = {
             pageSize: 8,

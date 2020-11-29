@@ -47,5 +47,5 @@ const mapStateToProps = state =>{
     console.log(store.getState())
     return state
   }
-withRouter(AllCompanies);
-export default connect(mapStateToProps,mapDispatchToProps)(AllCompanies)
+
+export default connect(mapStateToProps,mapDispatchToProps)(withRouter(AllCompanies))

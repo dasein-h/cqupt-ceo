@@ -9,8 +9,8 @@ import {HashRouter as Router, Route,Redirect,Switch} from 'react-router-dom';
 import store from '../../redux/store'
 import {connect} from 'react-redux'
 import changeNav from '../../until/changeNav'
-import { 
-  Layout, 
+import {
+  Layout,
   Menu,
   Button,
   Modal,
@@ -44,7 +44,7 @@ const content = (
 class Student extends Component {
     constructor(props) {
         super(props);
-        this.state = { 
+        this.state = {
           visible: false,
           userId:'',
           password:'',
@@ -62,7 +62,7 @@ class Student extends Component {
       }
       else{
         return false
-      }			
+      }
     }
     showModal = () => {
       this.setState({
@@ -85,7 +85,7 @@ class Student extends Component {
         loginVisible: false,
       });
     };
-  
+
 
 
     loginClick = () => {
@@ -128,38 +128,35 @@ class Student extends Component {
         password:value,
       })
     }
-    componentWillUpdate(newProps){
-      if(newProps !== this.props){
-
-      }
-    }
     componentWillMount(){
       //组件第一次render之前执行，每五秒查看一次登录状态
       let that = this
+      console.log(that.props)
+
       //这里this的指向会改变，先把this固定一下
       setInterval(function(){
-        if(localStorage.getItem("userId")!=="undefined")
+        if(localStorage.getItem("userId"))
         that.props.Login_Check()
-        if(that.props.Login===false){
-          //alert("重新登录")
+        if(!that.props.isLogin){
+          // alert("重新登录")
         }
-        else if(that.props.Login===true){
-          if(localStorage.getItem("type")==="老师"){
+        else{
+          if (localStorage.getItem("type") === "老师" && !/Teacher/.test(window.location)){
             window.location="/Teacher"
           }
-          if(localStorage.getItem("type")==="学生"){
+          if(localStorage.getItem("type")==="学生" && !/Student/.test(window.location)){
             window.location="/Student"
           }
         }
-      },5000)
+      },10000)
     }
     componentDidMount(){
       //如果要获取数据，最好在这里进行，组件在render之前不会返回数据
     }
-    render() { 
-      if(this.props.isLogin===false||this.props.isLogin===undefined)
-        
-        return ( 
+    render() {
+      if(!this.props.isLogin)
+
+        return (
           <Layout>
   <Sider
     style={{
@@ -177,19 +174,19 @@ class Student extends Component {
        <Link to="/Student/AllCompanies/ChosenClasses" onClick={changeNav.bind(this,0,1)}>申请公司</Link>
       </Menu.Item>
       <Menu.Item key="2" icon={<VideoCameraOutlined />}>
-      <Link to="/Student/Join" onClick={changeNav.bind(this,0,2)}>提交日志</Link> 
+      <Link to="/Student/Join" onClick={changeNav.bind(this,0,2)}>提交日志</Link>
       </Menu.Item>
       <Menu.Item key="3" icon={<EditOutlined />}>
-      <Link to="/Student/MyCompany/WriteWant" onClick={changeNav.bind(this,0,3)}>评分</Link> 
+      <Link to="/Student/MyCompany/WriteWant" onClick={changeNav.bind(this,0,3)}>评分</Link>
       </Menu.Item>
       <Menu.Item key="4" icon={<OrderedListOutlined />}>
-      <Link to="/Student/CEO/Campaign" onClick={changeNav.bind(this,0,4)}>CEO</Link> 
+      <Link to="/Student/CEO/Campaign" onClick={changeNav.bind(this,0,4)}>CEO</Link>
       </Menu.Item>
 
     </Menu>
   </Sider>
-  <Layout className="site-layout" 
-          style={{ 
+  <Layout className="site-layout"
+          style={{
               marginLeft: 300,
    }}>
     <Header className="site-layout-background" style={{ padding: 0 }}>
@@ -206,9 +203,9 @@ class Student extends Component {
           title="账号和密码不能为空"
           trigger="click"
           visible={this.state.loginVisible}
-          disabled={true}>          
-          <Button  
-          type="primary" 
+          disabled={true}>
+          <Button
+          type="primary"
           onClick={this.loginClick}
           >登录</Button>
           </Popover>
@@ -218,17 +215,17 @@ class Student extends Component {
         <div className="login_input">
           <div>
       用户名：
-      <Input 
-      placeholder="学生用户名为学号" 
+      <Input
+      placeholder="学生用户名为学号"
       onChange={this.userIdchange}
       value={this.state.userId}
       />
-      </div>            
+      </div>
       <div>
-       密码：  
-       <Input.Password 
-       className="Input_password" 
-       placeholder="初始密码为：123" 
+       密码：
+       <Input.Password
+       className="Input_password"
+       placeholder="初始密码为：123"
        value={this.state.password}
        onChange={this.passwordchange}
        />
@@ -262,9 +259,9 @@ class Student extends Component {
   </Layout>
 </Layout>
        );
-      
+
       else{
-        return ( 
+        return (
           <Layout>
   <Sider
     style={{
@@ -282,26 +279,26 @@ class Student extends Component {
        <Link to="/Student/AllCompanies/ChosenClasses" onClick={changeNav.bind(this,0,1)}>申请公司</Link>
       </Menu.Item>
       <Menu.Item key="2" icon={<VideoCameraOutlined />}>
-      <Link to="/Student/Join" onClick={changeNav.bind(this,0,2)}>提交日志</Link> 
+      <Link to="/Student/Join" onClick={changeNav.bind(this,0,2)}>提交日志</Link>
       </Menu.Item>
       <Menu.Item key="3" icon={<EditOutlined />}>
-      <Link to="/Student/MyCompany/WriteWant" onClick={changeNav.bind(this,0,3)}>评分</Link> 
+      <Link to="/Student/MyCompany/WriteWant" onClick={changeNav.bind(this,0,3)}>评分</Link>
       </Menu.Item>
       <Menu.Item key="4" icon={<OrderedListOutlined />}>
-      <Link to="/Student/CEO/Campaign" onClick={changeNav.bind(this,0,4)}>CEO</Link> 
+      <Link to="/Student/CEO/Campaign" onClick={changeNav.bind(this,0,4)}>CEO</Link>
       </Menu.Item>
 
     </Menu>
   </Sider>
-  <Layout className="site-layout" 
-          style={{ 
+  <Layout className="site-layout"
+          style={{
               marginLeft: 300,
    }}>
     <Header className="site-layout-background" style={{ padding: 0 }}>
 
   {/* <h4>名字</h4> */}
   {/* 退出按钮 */}
-  
+
       </Header>
     <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
       <div className="site-layout-background" style={{ padding: 24, textAlign: 'center' ,borderRadius:10}}>

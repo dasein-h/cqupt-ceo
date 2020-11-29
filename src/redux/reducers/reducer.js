@@ -13,11 +13,11 @@ export default  (state = newstate,action)=>{
         case "Login_Fail":
             return Object.assign({isLogin:false},state,action);
         case "Login_Check_OK":
-            return Object.assign({Login:true,isLogin:true},state,action);
+            return Object.assign({isLogin:true},state,action);
         case "Login_Check_NO":
-            return Object.assign({Login:false,isLogin:false},state,action);
+            return Object.assign({isLogin:false},state,action);
         case "Exit_OK":
-            return Object.assign({Login:false,isLogin:false},state,action);
+            return Object.assign({isLogin:false},state,action);
         default:
             return Object.assign({},state,action);
     }
