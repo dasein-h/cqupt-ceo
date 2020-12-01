@@ -20,14 +20,13 @@ class AllCompanies extends Component {
 
         <div className="logo" />
         <Menu theme="light" mode="horizontal" defaultSelectedKeys={[sessionStorage.getItem("count1") || '1']}>
-          <Menu.Item key="1"><Link to="/Student/AllCompanies/ChosenClasses" onClick={changeNav.bind(this, 1, 1)}>已选择的班级</Link></Menu.Item>
-          <Menu.Item key="2"><Link to="/Student/AllCompanies/UnChosenClasses" onClick={changeNav.bind(this, 1, 2)}>未选择的班级</Link></Menu.Item>
+
         </Menu>
 
         <div>
           <Switch>
             <Route path="/Student/AllCompanies/ChosenClasses" component={ChosenClasses}></Route>
-            <Route path="/Student/AllCompanies/UnChosenClasses" component={UnChosenClasses}></Route>
+
             <Redirect to="/Student/AllCompanies/ChosenClasses" />
           </Switch>
         </div>

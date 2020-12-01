@@ -52,13 +52,13 @@ class Student extends Component {
       chooseType: '老师',
       checkVisible: false,
     }
-
+    this.exit = this.exit.bind(this)
     this.loginClick = this.loginClick.bind(this)
     this.userIdchange = this.userIdchange.bind(this)
     this.passwordchange = this.passwordchange.bind(this)
   }
   shouldComponentUpdate(nextProps, nextState) {
-    if (nextProps !== nextState) {
+    if (nextProps !== this.props || nextState!== this.state) {
       return true
     }
     else {
@@ -85,11 +85,14 @@ class Student extends Component {
     this.setState({
       loginVisible: false,
     });
-  };
-
+  }
+  exit = () => {
+    this.props.Exit()
+  }
 
 
   loginClick = () => {
+    
     if (this.state.userId !== "" && this.state.password !== "") {
       this.props.login(this.state.userId, this.state.password, this.state.chooseType)
       if (this.props.isLogin) {
@@ -135,11 +138,11 @@ class Student extends Component {
 
     //这里this的指向会改变，先把this固定一下
     setInterval(function () {
-      if (localStorage.getItem("userId"))
+      if (localStorage.getItem("userId")){
 
         that.props.Login_Check()
-      if (!that.props.isLogin) {
-        // alert("重新登录")
+      if (!that.props.isLogin||that.props.isLogin===false) {
+        alert("请登录")
       }
       else {
         if (localStorage.getItem("type") === "老师" && !/Teacher/.test(window.location)) {
@@ -149,13 +152,17 @@ class Student extends Component {
           window.location = "/Student"
         }
       }
-    }, 10000)
+    }
+      else {
+        // console.log('aaaa')
+      }
+    }, 5000)
   }
   componentDidMount() {
     //如果要获取数据，最好在这里进行，组件在render之前不会返回数据
   }
   render() {
-    if (!this.props.isLogin)
+    if (!this.props.isLogin||this.props.isLogin===false)
 
       return (
         <Layout>
@@ -172,7 +179,7 @@ class Student extends Component {
             <div className="logo" />
             <Menu theme="light" mode="inline" defaultSelectedKeys={[sessionStorage.getItem("count0") || '1']} >
               <Menu.Item key="1" icon={<UserOutlined />}>
-                <Link to="/Student/AllCompanies/ChosenClasses" onClick={changeNav.bind(this, 0, 1)}>申请公司</Link>
+                <Link to="/Student/AllCompanies/ChosenClasses" onClick={changeNav.bind(this, 0, 1)}>所有公司</Link>
               </Menu.Item>
               <Menu.Item key="2" icon={<VideoCameraOutlined />}>
                 <Link to="/Student/Join" onClick={changeNav.bind(this, 0, 2)}>提交日志</Link>
@@ -277,7 +284,7 @@ class Student extends Component {
             <div className="logo" />
             <Menu theme="light" mode="inline" defaultSelectedKeys={[sessionStorage.getItem("count0") || '1']}>
               <Menu.Item key="1" icon={<UserOutlined />}>
-                <Link to="/Student/AllCompanies/ChosenClasses" onClick={changeNav.bind(this, 0, 1)}>申请公司</Link>
+                <Link to="/Student/AllCompanies/ChosenClasses" onClick={changeNav.bind(this, 0, 1)}>所有公司</Link>
               </Menu.Item>
               <Menu.Item key="2" icon={<VideoCameraOutlined />}>
                 <Link to="/Student/Join" onClick={changeNav.bind(this, 0, 2)}>提交日志</Link>
@@ -298,7 +305,7 @@ class Student extends Component {
             <Header className="site-layout-background" style={{ padding: 0 }}>
 
               {/* <h4>名字</h4> */}
-              <Button className="login" type="primary" onClick={this.props.Exit}>
+              <Button className="login" type="primary" onClick={this.exit}>
                 退出登陆</Button>
 
             </Header>
@@ -327,9 +334,11 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(action)
     },
     Login_Check: () => {
+      console.log('Login_Check')
       dispatch(actions.Login_Check())
     },
     Exit: () => {
+      console.log('Exit')
       dispatch(actions.Exit())
     }
   }

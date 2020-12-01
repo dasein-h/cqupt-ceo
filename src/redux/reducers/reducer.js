@@ -5,20 +5,20 @@ const newstate = {
 export default (state = newstate, action) => {
   switch (action.type) {
     case "getAllCompanies":
-      return Object.assign({}, state, action.payload);
-    // case "login":
-    //   return Object.assign({}, state, action.payload);
+      return { ...action.payload};
+
     case "Login_Success":
-      return Object.assign({ isLogin: true }, state, action.payload.data);
+      return { isLogin: true ,  ...action.payload.data};
     case "Login_Fail":
-      return Object.assign({ isLogin: false }, state, action.payload);
+      return { isLogin: false ,  ...action.payload};
     case "Login_Check_OK":
-      return Object.assign({ isLogin: true }, state, action.payload);
+      return { isLogin: true ,  ...action.payload};
     case "Login_Check_NO":
-      return Object.assign({ isLogin: false }, state, action.payload);
+      return { isLogin: false ,  ...action.payload};
     case "Exit_OK":
-      return Object.assign({ isLogin: false }, state, action.payload);
+      return { isLogin: false ,  ...action.payload}
+      
     default:
-      return Object.assign({}, state, action.payload);
+      return {  ...action.payload};
   }
 }

@@ -9,16 +9,6 @@ const actions = {
       }
     }
   },
-  getAllCompanies: (userId, page, rows) => {
-    return {
-      type: "getAllCompanies",
-      payload: {
-        userId: userId,
-        page: page,
-        rows: rows
-      }
-    }
-  },
   Login_Success: (message, data) => {
     return {
       type: "Login_Success",
@@ -51,16 +41,33 @@ const actions = {
       type: "Login_Check_NO",
     }
   },
+  getAllCompanies: (userId, page) => {
+    return {
+      type: "getAllCompanies",
+      payload: {
+        studentId: userId,
+        currentPage: page,
+      }
+    }
+  },
+  getAllCompanies_OK: (data) => {
+    return {
+      type: "getAllCompanies_OK",
+      payload: {
+        ...data
+      }
+    }
+  },
+
   Exit: () => {
     return {
       type: "Exit",
-      payload: {
+      payload:{
         userId: localStorage.getItem("userId")
       }
     }
   },
   Exit_OK: () => {
-    console.log('exit ok')
     return {
       type: "Exit_OK",
     }
@@ -70,5 +77,6 @@ const actions = {
       type: "Exit_NO",
     }
   },
+  
 }
 export default actions

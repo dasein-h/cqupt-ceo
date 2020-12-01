@@ -1,6 +1,7 @@
 import { takeEvery, select, throttle, call, put } from 'redux-saga/effects'
 import actions from '../actionCreators/creators'
 import LoginApi from '../../until/api/LoginApi.js'
+import StudentApi from '../../until/api/StudentApi'
 function setLocalStorage(config) {
   Reflect.ownKeys(config).forEach(key => {
     localStorage.setItem(key, config[key])
@@ -9,6 +10,7 @@ function setLocalStorage(config) {
 
 export default function* defSaga() {
   yield throttle(2000, 'login', function* () {
+
     const action = yield select();
     const res = yield call(LoginApi.Login, action)
     if (res.status === 200 && res.data.flag) {
@@ -19,6 +21,7 @@ export default function* defSaga() {
         userId: res.data.data.userId,
         type: action.chooseType
       })
+      
     }
     else {
       yield put(actions.Login_Fail());
@@ -39,6 +42,7 @@ export default function* defSaga() {
       //清除本地数据
     }
   })
+  
   yield takeEvery('Exit', function* () {
     const action = yield select()
     const res = yield call(LoginApi.Exit, action.payload)
@@ -52,5 +56,15 @@ export default function* defSaga() {
       alert('退出失败')
       yield put(actions.Exit_NO())
     }
+  })
+
+  yield takeEvery('getAllCompanies', function* () {
+    const action = yield select()
+    const res = yield call(StudentApi.ShowAllCompany, action.payload)
+    if (res.status === 200 && res.data.flag) {
+      yield put(actions.getAllCompanies_OK(res.data))
+      //把获取到的数据发送到state，展示在页面上
+    }
+
   })
 }
