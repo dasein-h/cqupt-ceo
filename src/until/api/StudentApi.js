@@ -1,8 +1,10 @@
 import Service from "../Service"
 const StudentApi = {
     ShowAllCompany : (payload) => {
-        return Service.post('/student/showCompany',{
-            ...payload
+        return Service.get('/student/showCompany',{
+            params:{
+                ...payload
+            }
         })
     },
     RunCeo : (payload) => {

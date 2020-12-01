@@ -12,12 +12,12 @@ export default function* defSaga() {
   yield throttle(2000, 'login', function* () {
 
     const action = yield select();
-    const res = yield call(LoginApi.Login, action)
+    const res = yield call(LoginApi.Login, action.payload)
     console.log(res)
     console.log(action)
     // if (res.status === 200 && res.data.flag) 
     if (res.status === 200 ) 
-    {
+    {      console.log(action.payload)
       yield put(actions.Login_Success(res.message, res.data))
       
       // setLocalStorage({
@@ -25,18 +25,21 @@ export default function* defSaga() {
       //   userId: res.data.data.userId,
       //   type: action.chooseType
       // })
-      if(action.chooseType==="学生"){
+      console.log(action.payload)
+      if(action.payload.studentId!==undefined){
+
         setLocalStorage({
           userId: action.payload.studentId,
-          type: action.chooseType
+          type: "学生"
         })
       }
-      if(action.chooseType==="老师"){
+      else{
         setLocalStorage({
           userId: action.payload.teacherId,
-          type: action.chooseType
+          type: "老师"
         })
       }
+      console.log(localStorage.getItem("userId"))
     }
     else {
       yield put(actions.Login_Fail());
@@ -44,24 +47,31 @@ export default function* defSaga() {
 
   })
   yield takeEvery('Login_Check', function* () {
+    console.log(localStorage.getItem("userId"))
     const action = yield select()
-
-    const res = yield call(LoginApi.KeepLogin, action)
-    if (res.status == 200 && res.data.flag) {
+    console.log(action)
+    const res = yield call(LoginApi.KeepLogin, localStorage.getItem("userId"))
+    console.log(res)
+    // if (res.status == 200 && res.data.flag)
+    if (res.status == 200 && res.data.flag)
+    //flag不对，向后端反映
+     {
       yield put(actions.Login_Check_OK())
     }
     else {
-      console.log('clear localstorage')
-      yield put(actions.Login_Check_NO())
-      localStorage.clear()
-      //清除本地数据
+      // console.log('clear localstorage')
+      // yield put(actions.Login_Check_NO())
+      // localStorage.clear()
+      // //清除本地数据
     }
   })
   
   yield takeEvery('Exit', function* () {
     const action = yield select()
-    const res = yield call(LoginApi.Exit, action.payload)
-    if (res.status === 200 && res.data.flag) {
+    const res = yield call(LoginApi.Exit, localStorage.getItem("userId"))
+    // if (res.status === 200 && res.data.flag) 
+    if (res.status === 200) 
+    {
       console.log('clear localstorage')
       yield put(actions.Exit_OK())
       localStorage.clear()
@@ -76,6 +86,7 @@ export default function* defSaga() {
   yield takeEvery('getAllCompanies', function* () {
     const action = yield select()
     const res = yield call(StudentApi.ShowAllCompany, action.payload)
+    console.log(res)
     if (res.status === 200 && res.data.flag) {
       yield put(actions.getAllCompanies_OK(res.data))
       //把获取到的数据发送到state，展示在页面上

@@ -127,13 +127,13 @@ class Student extends Component {
     })
   }
   componentWillUpdate(nextProps, nextState){
-    if(nextProps.isLogin!==nextState.isLogin){
+    if(nextState.isLogin===true){
       if (this.props.isLogin) {
-        if (this.state.chooseType === "学生" && !/Student/.test(window.location)) 
+        if (localStorage.getItem("type") === "学生" && !/Student/.test(window.location))
         {
           window.location = "/Student"
         }
-        else if (!/teacher/.test(window.location))
+        else if (localStorage.getItem("type") === "老师" && !/Teacher/.test(window.location))
          {
           window.location = "/teacher"
         }
@@ -141,33 +141,28 @@ class Student extends Component {
     }
   }
   componentWillMount() {
+
+  }
+  componentWillUnmount() {
+
+}
+  componentDidMount() {
     //组件第一次render之前执行，每五秒查看一次登录状态
     let that = this
     console.log(that.props)
-
+    that.props.Login_Check()
     //这里this的指向会改变，先把this固定一下
     setInterval(function () {
-      if (localStorage.getItem("userId")){
+      console.log("aaaaaaa")
+      console.log(localStorage.getItem("userId"))
+      if ((localStorage.getItem("userId")!==undefined||localStorage.getItem("userId")!==null)){
         that.props.Login_Check()
-      if (!that.props.isLogin) {
-        alert("请登录")
-      }
-      else {
-        if (localStorage.getItem("type") === "老师" && !/Teacher/.test(window.location)) {
-          window.location = "/Teacher"
-        }
-        if (localStorage.getItem("type") === "学生" && !/Student/.test(window.location)) {
-          window.location = "/Student"
-        }
-      }
+
+      
     }
       else {
-        // console.log('aaaa')
       }
     }, 5000)
-  }
-  componentDidMount() {
-    //如果要获取数据，最好在这里进行，组件在render之前不会返回数据
   }
   render() {
     if (!this.props.isLogin)
