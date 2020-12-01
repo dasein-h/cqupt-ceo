@@ -13,15 +13,30 @@ export default function* defSaga() {
 
     const action = yield select();
     const res = yield call(LoginApi.Login, action)
-    if (res.status === 200 && res.data.flag) {
+    console.log(res)
+    console.log(action)
+    // if (res.status === 200 && res.data.flag) 
+    if (res.status === 200 ) 
+    {
       yield put(actions.Login_Success(res.message, res.data))
       
-      setLocalStorage({
-        name: res.data.data.userName,
-        userId: res.data.data.userId,
-        type: action.chooseType
-      })
-      
+      // setLocalStorage({
+      //   name: res.data.data.userName,
+      //   userId: res.data.data.userId,
+      //   type: action.chooseType
+      // })
+      if(action.chooseType==="学生"){
+        setLocalStorage({
+          userId: action.payload.studentId,
+          type: action.chooseType
+        })
+      }
+      if(action.chooseType==="老师"){
+        setLocalStorage({
+          userId: action.payload.teacherId,
+          type: action.chooseType
+        })
+      }
     }
     else {
       yield put(actions.Login_Fail());

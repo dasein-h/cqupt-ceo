@@ -20,13 +20,13 @@ const StudentApi = {
         })
     },
 
-    // ShowCeo : (payload) => {
-    //     return Service.get('/application/addApplication',{
-    //         params:{
-    //             ...payload
-    //         }
-    //     })
-    // },
+    ShowCeo : (payload) => {    
+        return Service.get('/stu/showCeoVote',{
+            params:{
+                ...payload
+            }
+        })
+    },
     //后端的接口文档上面没有写地址，已经反映
 
     AddApplication : (payload) => {

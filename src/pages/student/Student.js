@@ -95,18 +95,13 @@ class Student extends Component {
     
     if (this.state.userId !== "" && this.state.password !== "") {
       this.props.login(this.state.userId, this.state.password, this.state.chooseType)
-      if (this.props.isLogin) {
-        if (this.state.chooseType === "学生" && !/Student/.test(window.location)) {
-          window.location = "/Student"
-        }
-        else if (!/teacher/.test(window.location)) {
-          window.location = "/teacher"
-        }
-      }
+
+
       // window.location="/CEO"
       // this.props.history.push("/CEO")
     }
     else {
+      
       this.setState({
         loginVisible: true
       })
@@ -131,6 +126,20 @@ class Student extends Component {
       password: value,
     })
   }
+  componentWillUpdate(nextProps, nextState){
+    if(nextProps.isLogin!==nextState.isLogin){
+      if (this.props.isLogin) {
+        if (this.state.chooseType === "学生" && !/Student/.test(window.location)) 
+        {
+          window.location = "/Student"
+        }
+        else if (!/teacher/.test(window.location))
+         {
+          window.location = "/teacher"
+        }
+      }
+    }
+  }
   componentWillMount() {
     //组件第一次render之前执行，每五秒查看一次登录状态
     let that = this
@@ -139,9 +148,8 @@ class Student extends Component {
     //这里this的指向会改变，先把this固定一下
     setInterval(function () {
       if (localStorage.getItem("userId")){
-
         that.props.Login_Check()
-      if (!that.props.isLogin||that.props.isLogin===false) {
+      if (!that.props.isLogin) {
         alert("请登录")
       }
       else {
@@ -162,7 +170,7 @@ class Student extends Component {
     //如果要获取数据，最好在这里进行，组件在render之前不会返回数据
   }
   render() {
-    if (!this.props.isLogin||this.props.isLogin===false)
+    if (!this.props.isLogin)
 
       return (
         <Layout>

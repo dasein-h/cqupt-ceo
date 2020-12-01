@@ -65,12 +65,12 @@ class ChosenClasses extends Component {
     }
     componentDidMount() {
       //如果要获取数据，最好在这里进行，组件在render之前不会返回数据
-      this.props.getAllCompanies(localStorage.getItem("userId"),parseInt(sessionStorage.getItem("Page1"))||'1')
-      let newdata = this.state.data.object
-      this.setState({
-          currentPage: parseInt(sessionStorage.getItem("Page1"))||'1',
-          data:newdata
-      })
+      // this.props.getAllCompanies(localStorage.getItem("userId"),parseInt(sessionStorage.getItem("Page1"))||'1')
+      // let newdata = this.state.data.object
+      // this.setState({
+      //     currentPage: parseInt(sessionStorage.getItem("Page1"))||'1',
+      //     data:newdata
+      // })
     }
     shouldComponentUpdate(nextProps, nextState){
         if(this.state!==nextState||this.props!==nextProps){
