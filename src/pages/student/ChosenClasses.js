@@ -55,9 +55,9 @@ class ChosenClasses extends Component {
     }
     componentWillUpdate(newProps){
       if(newProps!==this.props&&newProps.isgetAllCompanies===true&&newProps.isgetAllCompanies!==undefined){
-        const {payload} = newProps
+        const {data} = newProps
         try{
-        let newdata = payload.data.object
+        let newdata = data.object
         for (let item in newdata){
           newdata[item].key = item
         }

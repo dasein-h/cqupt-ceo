@@ -14,12 +14,14 @@ export default function* defSaga() {
   yield throttle(2000, 'login', function* () {
 
     const action = yield select();
+    console.log(action)
     const res = yield call(LoginApi.Login, action.payload)
     console.log(res)
     console.log(action)
-    // if (res.status === 200 && res.data.flag)
-    if (res.status === 200 )
-    {      console.log(action.payload)
+    if (res.status === 200 && res.data.flag)
+    // if (res.status === 200 )
+    {      
+      
       yield put(actions.Login_Success(res.message, res.data))
 
       // setLocalStorage({
@@ -27,17 +29,17 @@ export default function* defSaga() {
       //   userId: res.data.data.userId,
       //   type: action.chooseType
       // })
-      console.log(action.payload)
-      if(action.payload.studentId!==undefined){
+      console.log(action)
+      if(action.studentId!==undefined){
 
         setLocalStorage({
-          userId: action.payload.studentId,
+          userId: action.studentId,
           type: "学生"
         })
       }
       else{
         setLocalStorage({
-          userId: action.payload.teacherId,
+          userId: action.teacherId,
           type: "老师"
         })
       }

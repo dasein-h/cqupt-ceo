@@ -10,9 +10,11 @@ export default (state = newstate, action) => {
     case "getAllCompanies":
       return { ...state,   ...action}
     case "getAllCompanies_OK":
-      return { isgetAllCompanies:true,   ...action}
+      return { isgetAllCompanies:true, ...state,  ...action.payload}
     case "getAllCompanies_OK":
-      return { isgetAllCompanies:false,    ...action}
+      return { isgetAllCompanies:false,  ...state,  ...action.payload}
+    case "login":
+      return {   ...state,  ...action}
     case "Login_Success":
       return {isLogin: true, ...action.payload.data, ...state};
     case "Login_Fail":
@@ -67,6 +69,6 @@ export default (state = newstate, action) => {
         ]
       }
     default:
-      return {...action.payload};
+      return {...action.payload,...state};
   }
 }
