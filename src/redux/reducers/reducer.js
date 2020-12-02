@@ -4,24 +4,6 @@ const newstate = {
 export default (state = newstate, action) => {
   switch (action.type) {
     case "getAllCompanies":
-<<<<<<< HEAD
-      return { ...state,   ...action}
-    case "getAllCompanies_OK":
-      return { ...state,   ...action}
-    case "Login_Success":
-      return { isLogin: true ,  ...action}
-    case "Login_Fail":
-      return { isLogin: false ,   ...action}
-    case "Login_Check_OK":
-      return { isLogin: true ,  ...action}
-    case "Login_Check_NO":
-      return { isLogin: false ,   ...action}
-    case "Exit_OK":
-      return { isLogin: false ,  ...action}
-      
-    default:
-      return {  ...state, ...action}
-=======
       return {...action.payload, ...state};
 
     case "Login_Success":
@@ -79,6 +61,5 @@ export default (state = newstate, action) => {
       }
     default:
       return {...action.payload};
->>>>>>> dev
   }
 }
