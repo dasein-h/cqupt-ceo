@@ -92,7 +92,7 @@ class Student extends Component {
 
 
   loginClick = () => {
-    
+
     if (this.state.userId !== "" && this.state.password !== "") {
       this.props.login(this.state.userId, this.state.password, this.state.chooseType)
 
@@ -101,7 +101,7 @@ class Student extends Component {
       // this.props.history.push("/CEO")
     }
     else {
-      
+
       this.setState({
         loginVisible: true
       })
@@ -158,7 +158,7 @@ class Student extends Component {
       if ((localStorage.getItem("userId")!==undefined||localStorage.getItem("userId")!==null)){
         that.props.Login_Check()
 
-      
+
     }
       else {
       }
