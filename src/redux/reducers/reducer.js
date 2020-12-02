@@ -1,11 +1,18 @@
 const newstate = {
-  TestValue: '测试中',
+  payload:{
+    data:{
+      object:[]
+    }
+  }
 }
 export default (state = newstate, action) => {
   switch (action.type) {
     case "getAllCompanies":
-      return {...action.payload, ...state};
-
+      return { ...state,   ...action}
+    case "getAllCompanies_OK":
+      return { isgetAllCompanies:true,   ...action}
+    case "getAllCompanies_OK":
+      return { isgetAllCompanies:false,    ...action}
     case "Login_Success":
       return {isLogin: true, ...action.payload.data, ...state};
     case "Login_Fail":

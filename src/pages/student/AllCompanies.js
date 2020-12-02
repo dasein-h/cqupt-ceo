@@ -42,8 +42,7 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 const mapStateToProps = state => {
-  console.log("AllCompanies", state)
-  console.log(store.getState())
+
   return state
 }
 

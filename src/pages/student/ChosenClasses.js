@@ -5,40 +5,25 @@ import actions from '../../redux/actionCreators/creators'
 import changePage from '../../until/changePage'
 const columns = [
     {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-      render: text => <a>{text}</a>,
+      title: 'companyID',
+      dataIndex: 'companyID',
+      key: 'companyID',
     },
     {
-      title: 'Age',
-      dataIndex: 'age',
-      key: 'age',
+      title: 'type',
+      dataIndex: 'type',
+      key: 'type',
     },
     {
-      title: 'Address',
-      dataIndex: 'address',
-      key: 'address',
+      title: 'companyName',
+      dataIndex: 'companyName',
+      key: 'companyName',
     },
     {
-      title: 'Tags',
-      key: 'tags',
-      dataIndex: 'tags',
-      render: tags => (
-        <>
-          {tags.map(tag => {
-            let color = tag.length > 5 ? 'geekblue' : 'green';
-            if (tag === 'loser') {
-              color = 'volcano';
-            }
-            return (
-              <Tag color={color} key={tag}>
-                {tag.toUpperCase()}
-              </Tag>
-            );
-          })}
-        </>
-      ),
+      title: 'ceoName',
+      key: 'ceoName',
+      dataIndex: 'ceoName',
+
     },
     {
       title: 'Action',
@@ -59,21 +44,39 @@ class ChosenClasses extends Component {
             totalNum:30,
             currentPage:parseInt(sessionStorage.getItem("Page1"))||"1",
             data : [
-              ]
+              ],
          }
          this.onPageChange=this.onPageChange.bind(this)
     }
-    componentDidMount() {
-      //如果要获取数据，最好在这里进行，组件在render之前不会返回数据
+    componentWillMount(){
       if(localStorage.getItem("userId")){
-      this.props.getAllCompanies(localStorage.getItem("userId"),parseInt(sessionStorage.getItem("Page1"))||'1')
-      let newdata = this.state.data.object
-      this.setState({
+        this.props.getAllCompanies(localStorage.getItem("userId"),parseInt(sessionStorage.getItem("Page1"))||'1')
+      }
+    }
+    componentWillUpdate(newProps){
+      if(newProps!==this.props&&newProps.isgetAllCompanies===true&&newProps.isgetAllCompanies!==undefined){
+        const {payload} = newProps
+        try{
+        let newdata = payload.data.object
+        for (let item in newdata){
+          newdata[item].key = item
+        }
+        this.setState({
           currentPage: parseInt(sessionStorage.getItem("Page1"))||'1',
           data:newdata
-      })
+        })
+      }
+      catch{
+        console.log("error")
+      }
+      }
     }
+    componentDidMount() {
+      //如果要获取数据，最好在这里进行，组件在render之前不会返回数据
+
+      
     }
+
     shouldComponentUpdate(nextProps, nextState){
         if(this.state!==nextState||this.props!==nextProps){
             return true
@@ -89,12 +92,18 @@ class ChosenClasses extends Component {
             currentPage: page,
             // data:newdata
         })
-        console.log(this.state.data)
+
+
         changePage(1,page)
-        console.log("设置"+sessionStorage.getItem("Page1"))
     }
     render() { 
-        console.log(this.state.data)
+  //     if(this.props.payload.data!==undefined){
+  //     let newdata = this.props.payload.data.object
+  //     this.setState({
+  //       currentPage: parseInt(sessionStorage.getItem("Page1"))||'1',
+  //       data:newdata
+  //   })
+  // }
         const pagination = {
             pageSize: 8,
             total:this.state.totalNum,
@@ -117,7 +126,6 @@ const mapDispatchToProps = (dispatch) => {
 }
 const mapStateToProps = state => {
   //把store里的state绑定到当前组件的props
-  console.log("ChonsenClasses", state)
   return state
 }
 

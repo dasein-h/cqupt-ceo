@@ -108,7 +108,7 @@ class Student extends Component {
     }
   }
   onChange3 = e => {
-    console.log('radio3 checked', e.target.value);
+
     this.setState({
       chooseType: e.target.value,
     });
@@ -149,12 +149,10 @@ class Student extends Component {
   componentDidMount() {
     //组件第一次render之前执行，每五秒查看一次登录状态
     let that = this
-    console.log(that.props)
+
     that.props.Login_Check()
     //这里this的指向会改变，先把this固定一下
     setInterval(function () {
-      console.log("aaaaaaa")
-      console.log(localStorage.getItem("userId"))
       if ((localStorage.getItem("userId")!==undefined||localStorage.getItem("userId")!==null)){
         that.props.Login_Check()
 
@@ -333,15 +331,14 @@ const mapDispatchToProps = (dispatch) => {
   return {
     login: (userId, password, type) => {
       const action = actions.loginAction(userId, password, type)
-      console.log(action);
       dispatch(action)
     },
     Login_Check: () => {
-      console.log('Login_Check')
+
       dispatch(actions.Login_Check())
     },
     Exit: () => {
-      console.log('Exit')
+
       dispatch(actions.Exit())
     }
   }

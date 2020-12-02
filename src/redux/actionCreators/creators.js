@@ -58,7 +58,11 @@ const actions = {
       }
     }
   },
-
+  getAllCompanies_NO: () => {
+    return {
+      type: "getAllCompanies_NO",
+    }
+  },
   Exit: () => {
     return {
       type: "Exit",

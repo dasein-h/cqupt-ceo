@@ -92,6 +92,9 @@ export default function* defSaga() {
       yield put(actions.getAllCompanies_OK(res.data))
       //把获取到的数据发送到state，展示在页面上
     }
+    else{
+      yield put(actions.getAllCompanies_NO())
+    }
 
   })
 
