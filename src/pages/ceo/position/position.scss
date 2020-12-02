@@ -1,0 +1,23 @@
+.member {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+
+  .card {
+    height: 100%;
+    width: 30%;
+    margin: 0 20px 20px;
+
+    p {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  .title {
+    font-size: 30px;
+    color: #a1a1a1;
+  }
+}

@@ -1,7 +1,9 @@
-import { takeEvery, select, throttle, call, put } from 'redux-saga/effects'
+import {takeEvery, select, throttle, call, put, takeLatest} from 'redux-saga/effects'
 import actions from '../actionCreators/creators'
 import LoginApi from '../../until/api/LoginApi.js'
 import StudentApi from '../../until/api/StudentApi'
+import {getMember, setPosition} from "../../until/api/ceo";
+
 function setLocalStorage(config) {
   Reflect.ownKeys(config).forEach(key => {
     localStorage.setItem(key, config[key])
@@ -15,15 +17,14 @@ export default function* defSaga() {
     const res = yield call(LoginApi.Login, action)
     if (res.status === 200 && res.data.flag) {
       yield put(actions.Login_Success(res.message, res.data))
-      
+
       setLocalStorage({
         name: res.data.data.userName,
         userId: res.data.data.userId,
         type: action.chooseType
       })
-      
-    }
-    else {
+
+    } else {
       yield put(actions.Login_Fail());
     }
 
@@ -34,15 +35,14 @@ export default function* defSaga() {
     const res = yield call(LoginApi.KeepLogin, action)
     if (res.status == 200 && res.data.flag) {
       yield put(actions.Login_Check_OK())
-    }
-    else {
+    } else {
       console.log('clear localstorage')
       yield put(actions.Login_Check_NO())
       localStorage.clear()
       //清除本地数据
     }
   })
-  
+
   yield takeEvery('Exit', function* () {
     const action = yield select()
     const res = yield call(LoginApi.Exit, action.payload)
@@ -51,8 +51,7 @@ export default function* defSaga() {
       yield put(actions.Exit_OK())
       localStorage.clear()
       //不再登录后清除本地数据
-    }
-    else {
+    } else {
       alert('退出失败')
       yield put(actions.Exit_NO())
     }
@@ -67,4 +66,18 @@ export default function* defSaga() {
     }
 
   })
+
+
+  /* CEO */
+  // yield takeLatest('CEO_MEMBER', function* ceoSetMember(action) {
+  //   action.cb && action.cb()
+  //   const res = yield getMember(action.payload)
+  //   action.cb && action.cb()
+  //   yield put({
+  //     type: 'CEO_SET_MEMBER',
+  //     payload: {
+  //       member: res.data
+  //     }
+  //   })
+  // })
 }

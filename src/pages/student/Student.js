@@ -92,7 +92,7 @@ class Student extends Component {
 
 
   loginClick = () => {
-    
+
     if (this.state.userId !== "" && this.state.password !== "") {
       this.props.login(this.state.userId, this.state.password, this.state.chooseType)
       if (this.props.isLogin) {
@@ -137,26 +137,26 @@ class Student extends Component {
     console.log(that.props)
 
     //这里this的指向会改变，先把this固定一下
-    setInterval(function () {
-      if (localStorage.getItem("userId")){
-
-        that.props.Login_Check()
-      if (!that.props.isLogin||that.props.isLogin===false) {
-        alert("请登录")
-      }
-      else {
-        if (localStorage.getItem("type") === "老师" && !/Teacher/.test(window.location)) {
-          window.location = "/Teacher"
-        }
-        if (localStorage.getItem("type") === "学生" && !/Student/.test(window.location)) {
-          window.location = "/Student"
-        }
-      }
-    }
-      else {
-        // console.log('aaaa')
-      }
-    }, 5000)
+    // setInterval(function () {
+    //   if (localStorage.getItem("userId")){
+    //
+    //     that.props.Login_Check()
+    //   if (!that.props.isLogin||that.props.isLogin===false) {
+    //     alert("请登录")
+    //   }
+    //   else {
+    //     if (localStorage.getItem("type") === "老师" && !/Teacher/.test(window.location)) {
+    //       window.location = "/Teacher"
+    //     }
+    //     if (localStorage.getItem("type") === "学生" && !/Student/.test(window.location)) {
+    //       window.location = "/Student"
+    //     }
+    //   }
+    // }
+    //   else {
+    //     // console.log('aaaa')
+    //   }
+    // }, 5000)
   }
   componentDidMount() {
     //如果要获取数据，最好在这里进行，组件在render之前不会返回数据
