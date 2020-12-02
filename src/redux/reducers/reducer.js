@@ -11,20 +11,18 @@ export default (state = newstate, action) => {
       return { ...state,   ...action}
     case "getAllCompanies_OK":
       return { isgetAllCompanies:true, ...state,  ...action.payload}
-    case "getAllCompanies_OK":
-      return { isgetAllCompanies:false,  ...state,  ...action.payload}
     case "login":
       return {   ...state,  ...action}
     case "Login_Success":
-      return {isLogin: true, ...action.payload.data, ...state};
+      return {isLogin: true, ...action.payload.data, };
     case "Login_Fail":
-      return {isLogin: false, ...action.payload, ...state};
+      return {isLogin: false, ...action.payload, };
     case "Login_Check_OK":
-      return {isLogin: true, ...action.payload, ...state};
+      return {isLogin: true, ...action.payload, };
     case "Login_Check_NO":
-      return {isLogin: false, ...action.payload, ...state};
+      return {isLogin: false, ...action.payload, };
     case "Exit_OK":
-      return {isLogin: false, ...action.payload, ...state}
+      return {isLogin: false, ...action.payload, }
 
 
     /* CEO */
@@ -69,6 +67,6 @@ export default (state = newstate, action) => {
         ]
       }
     default:
-      return {...action.payload,...state};
+      return {...action,...state};
   }
 }

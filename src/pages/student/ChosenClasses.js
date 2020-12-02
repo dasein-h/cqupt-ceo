@@ -49,14 +49,12 @@ class ChosenClasses extends Component {
          this.onPageChange=this.onPageChange.bind(this)
     }
     componentWillMount(){
-      if(localStorage.getItem("userId")){
-        this.props.getAllCompanies(localStorage.getItem("userId"),parseInt(sessionStorage.getItem("Page1"))||'1')
-      }
+
     }
     componentWillUpdate(newProps){
       if(newProps!==this.props&&newProps.isgetAllCompanies===true&&newProps.isgetAllCompanies!==undefined){
-        const {data} = newProps
         try{
+        const {data} = newProps
         let newdata = data.object
         for (let item in newdata){
           newdata[item].key = item
@@ -73,10 +71,19 @@ class ChosenClasses extends Component {
     }
     componentDidMount() {
       //如果要获取数据，最好在这里进行，组件在render之前不会返回数据
-
+      if(localStorage.getItem("userId")){
+        this.props.getAllCompanies(localStorage.getItem("userId"),parseInt(sessionStorage.getItem("Page1"))||'1')
+      }
       
     }
-
+    shouldComponentUpdate(nextProps, nextState) {
+      if (nextProps !== this.props || nextState!== this.state) {
+        return true
+      }
+      else {
+        return false
+      }
+    }
     shouldComponentUpdate(nextProps, nextState){
         if(this.state!==nextState||this.props!==nextProps){
             return true

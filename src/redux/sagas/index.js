@@ -30,16 +30,16 @@ export default function* defSaga() {
       //   type: action.chooseType
       // })
       console.log(action)
-      if(action.studentId!==undefined){
+      if(action.payload.studentId!==undefined){
 
         setLocalStorage({
-          userId: action.studentId,
+          userId: action.payload.studentId,
           type: "学生"
         })
       }
       else{
         setLocalStorage({
-          userId: action.teacherId,
+          userId: action.payload.teacherId,
           type: "老师"
         })
       }

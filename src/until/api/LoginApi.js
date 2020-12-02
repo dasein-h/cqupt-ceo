@@ -13,9 +13,9 @@ const LoginApi = {
       userId:payload
     })
   },
-  Exit: (payload) => {
+  Exit: (userId) => {
     return Service.post('/login/quituser', {
-      payload
+      userId
     })
   },
 }
