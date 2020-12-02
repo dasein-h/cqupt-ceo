@@ -17,12 +17,11 @@ export default function* defSaga() {
     const res = yield call(LoginApi.Login, action.payload)
     console.log(res)
     console.log(action)
-    // if (res.status === 200 && res.data.flag) 
-    if (res.status === 200 ) 
+    // if (res.status === 200 && res.data.flag)
+    if (res.status === 200 )
     {      console.log(action.payload)
       yield put(actions.Login_Success(res.message, res.data))
-<<<<<<< HEAD
-      
+
       // setLocalStorage({
       //   name: res.data.data.userName,
       //   userId: res.data.data.userId,
@@ -45,16 +44,6 @@ export default function* defSaga() {
       console.log(localStorage.getItem("userId"))
     }
     else {
-=======
-
-      setLocalStorage({
-        name: res.data.data.userName,
-        userId: res.data.data.userId,
-        type: action.chooseType
-      })
-
-    } else {
->>>>>>> dev
       yield put(actions.Login_Fail());
     }
 
@@ -70,28 +59,20 @@ export default function* defSaga() {
     //flag不对，向后端反映
      {
       yield put(actions.Login_Check_OK())
-<<<<<<< HEAD
     }
     else {
       // console.log('clear localstorage')
       // yield put(actions.Login_Check_NO())
       // localStorage.clear()
       // //清除本地数据
-=======
-    } else {
-      console.log('clear localstorage')
-      yield put(actions.Login_Check_NO())
-      localStorage.clear()
-      //清除本地数据
->>>>>>> dev
     }
   })
 
   yield takeEvery('Exit', function* () {
     const action = yield select()
     const res = yield call(LoginApi.Exit, localStorage.getItem("userId"))
-    // if (res.status === 200 && res.data.flag) 
-    if (res.status === 200) 
+    // if (res.status === 200 && res.data.flag)
+    if (res.status === 200)
     {
       console.log('clear localstorage')
       yield put(actions.Exit_OK())
