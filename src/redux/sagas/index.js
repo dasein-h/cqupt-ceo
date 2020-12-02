@@ -44,6 +44,7 @@ export default function* defSaga() {
         })
       }
       console.log(localStorage.getItem("userId"))
+      yield put(actions.getAllCompanies(localStorage.getItem("userId"),1))
     }
     else {
       yield put(actions.Login_Fail());
@@ -80,6 +81,7 @@ export default function* defSaga() {
       yield put(actions.Exit_OK())
       localStorage.clear()
       //不再登录后清除本地数据
+      yield put(actions.getAllCompanies(null,null))
     } else {
       alert('退出失败')
       yield put(actions.Exit_NO())

@@ -51,8 +51,8 @@ class ChosenClasses extends Component {
     componentWillMount(){
 
     }
-    componentWillUpdate(newProps){
-      if(newProps!==this.props&&newProps.isgetAllCompanies===true&&newProps.isgetAllCompanies!==undefined){
+    componentWillUpdate(newProps,newState){
+      if(newProps!==this.props){
         try{
         const {data} = newProps
         let newdata = data.object
@@ -68,6 +68,7 @@ class ChosenClasses extends Component {
         console.log("error")
       }
       }
+
     }
     componentDidMount() {
       //如果要获取数据，最好在这里进行，组件在render之前不会返回数据
@@ -84,14 +85,7 @@ class ChosenClasses extends Component {
         return false
       }
     }
-    shouldComponentUpdate(nextProps, nextState){
-        if(this.state!==nextState||this.props!==nextProps){
-            return true
-        }
-        else {
-          return false
-        }
-    }
+
     onPageChange (page,pageSize) {
         this.props.getAllCompanies(localStorage.getItem("userId"),page)
         // let newdata = this.state.data.object
