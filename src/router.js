@@ -14,7 +14,6 @@ class RouteMap extends React.Component {
       <div>
         <Provider store={store}>
           <BrowserRouter>
-
             <Route path="/" component={App}>
               <Switch>
                 <Route path="/Student" component={Student}/>

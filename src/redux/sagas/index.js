@@ -14,10 +14,10 @@ export default function* defSaga() {
   yield throttle(2000, 'login', function* () {
 
     const action = yield select();
-    console.log(action)
+
     const res = yield call(LoginApi.Login, action.payload)
     console.log(res)
-    console.log(action)
+
     if (res.status === 200 && res.data.flag)
     // if (res.status === 200 )
     {      
@@ -29,7 +29,7 @@ export default function* defSaga() {
       //   userId: res.data.data.userId,
       //   type: action.chooseType
       // })
-      console.log(action)
+
       if(action.payload.studentId!==undefined){
 
         setLocalStorage({
@@ -43,8 +43,18 @@ export default function* defSaga() {
           type: "老师"
         })
       }
-      console.log(localStorage.getItem("userId"))
-      yield put(actions.getAllCompanies(localStorage.getItem("userId"),1))
+      setLocalStorage({
+        userName:res.data.data.userName
+      })
+      if(localStorage.getItem("type")==="学生"){
+        window.location="/Student/AllCompanies/ChosenClasses"
+      }
+      sessionStorage.clear()
+      // yield put(actions.getAllCompanies(localStorage.getItem("userId")))
+      // yield put(actions.ShowCeo(1,localStorage.getItem("userId")))
+      // location.reload()
+      // window.location="/Student/AllCompanies/ChosenClasses"
+      
     }
     else {
       yield put(actions.Login_Fail());
@@ -52,9 +62,9 @@ export default function* defSaga() {
 
   })
   yield takeEvery('Login_Check', function* () {
-    console.log(localStorage.getItem("userId"))
+
     const action = yield select()
-    console.log(action)
+
     const res = yield call(LoginApi.KeepLogin, localStorage.getItem("userId"))
     console.log(res)
     // if (res.status == 200 && res.data.flag)
@@ -62,12 +72,16 @@ export default function* defSaga() {
     //flag不对，向后端反映
      {
       yield put(actions.Login_Check_OK())
+      // yield put(actions.getAllCompanies(localStorage.getItem("userId"),parseInt(sessionStorage.getItem("Page1"))||"1"))
     }
     else {
-      // console.log('clear localstorage')
-      // yield put(actions.Login_Check_NO())
-      // localStorage.clear()
+      yield put(actions.Login_Check_NO())
+
+      console.log('clear localstorage')
+
+      localStorage.clear()
       // //清除本地数据
+      // yield put(actions.getAllCompanies(null,null))
     }
   })
 
@@ -80,8 +94,12 @@ export default function* defSaga() {
       console.log('clear localstorage')
       yield put(actions.Exit_OK())
       localStorage.clear()
+      window.location="/Student/AllCompanies/ChosenClasses"
+      sessionStorage.clear()
+      // location.reload()
       //不再登录后清除本地数据
-      yield put(actions.getAllCompanies(null,null))
+      // yield put(actions.getAllCompanies(null,null))
+      // yield put(actions.ShowCeo(null,null))
     } else {
       alert('退出失败')
       yield put(actions.Exit_NO())
@@ -101,8 +119,43 @@ export default function* defSaga() {
     }
 
   })
-
-
+  yield takeEvery('VoteForCompany', function* () {
+    const action = yield select()
+    const res = yield call(StudentApi.VoteCompany, action.payload)
+    console.log(res)
+    if (res.status === 200 && res.data.flag) {
+      yield put(actions.VoteForCompany_OK(res.data.message))
+      yield put(actions.getAllCompanies(localStorage.getItem("userId"),parseInt(sessionStorage.getItem("Page1"))||"1"))
+      //把获取到的数据发送到state，展示在页面上
+    }
+    else{
+      yield put(actions.VoteForCompany_NO(res.data.message))
+    }
+  })
+  yield takeEvery('ShowCeo', function* () {
+    const action = yield select()
+    const res = yield call(StudentApi.ShowCeo, action.payload)
+    console.log(res)
+    if (res.status === 200 && res.data.flag) {
+      yield put(actions.ShowCeo_OK(res.data))
+      //把获取到的数据发送到state，展示在页面上
+    }
+    else{
+      yield put(actions.ShowCeo_NO())
+    }
+  })
+  yield takeEvery('VoteForCeo', function* () {
+    const action = yield select()
+    const res = yield call(StudentApi.VoteCeo, action.payload)
+    console.log(res)
+    if (res.status === 200 && res.data.flag) {
+      yield put(actions.VoteForCeo_OK(res.data.message))
+      //把获取到的数据发送到state，展示在页面上
+    }
+    else{
+      yield put(actions.VoteForCeo_NO(res.data.message))
+    }
+  })
   /* CEO */
   // yield takeLatest('CEO_MEMBER', function* ceoSetMember(action) {
   //   action.cb && action.cb()

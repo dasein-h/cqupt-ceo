@@ -1,44 +1,175 @@
 import React, { Component } from 'react';
-import {HashRouter as Router, Switch, Route, Redirect,BrowserRouter} from 'react-router-dom';
-import { Link } from 'react-router-dom';
-import { withRouter } from 'react-router-dom'
-import Campaign from './Campaign'
-import changeNav from '../../until/changeNav'
-import Vote from './Vote'
-import {
-    UserOutlined,
-    UploadOutlined,
-    VideoCameraOutlined,
-    LockOutlined
-  } from '@ant-design/icons';
-import { 
-    Layout, 
-    Menu,
-    Button,
-    Modal,
-    Input,  } from 'antd';
+import { connect } from 'react-redux'
+import { Table, Tag, Space,pagination, message } from 'antd';
+import actions from '../../redux/actionCreators/creators'
+import changePage from '../../until/changePage'
+import '../../static/style/style.scss'
+// const columns = [
+//     {
+//       title: 'count',
+//       dataIndex: 'count',
+//       key: 'count',
+//     },
+//     {
+//       title: 'type',
+//       dataIndex: 'type',
+//       key: 'type',
+//     },
+//     {
+//       title: 'companyName',
+//       dataIndex: 'companyName',
+//       key: 'companyName',
+//     },
+//     {
+//       title: 'ceoName',
+//       key: 'ceoName',
+//       dataIndex: 'ceoName',
+
+//     },
+//     {
+//       title: 'Action',
+//       key: 'action',
+//       render: (text, record) => (
+//         <Space size="middle">
+//           <a>Invite {record.name}</a>
+//           <a>Delete</a>
+//         </Space>
+//       ),
+//     },
+//   ];
+
 class CEO extends Component {
     constructor(props) {
         super(props);
-        this.state = {  }
+        this.state = { 
+            totalNum:30,
+            currentPage:parseInt(sessionStorage.getItem("Page2"))||"1",
+            data : [
+              ],
+         }
+         this.onPageChange=this.onPageChange.bind(this)
+    }
+
+    UNSAFE_componentWillUpdate(newProps,newState){
+      if(newProps!==this.props){
+        try{
+          if(newProps.message){
+            if(newProps.isVoteForCeo === true )
+            message.success(newProps.message)
+            if(newProps.isVoteForCeo === false )
+            message.error(newProps.message)
+          }
+          const {data} = newProps
+          let newdata = data.object
+          for (let item in newdata){
+            newdata[item].key = item
+          }
+          this.setState({
+            currentPage: parseInt(sessionStorage.getItem("Page2"))||'1',
+            data:newdata,
+            totalNum:data.totalNumber
+          })
+        }
+        catch{
+          console.log("error")
+        }
+      }
+    }
+    componentDidMount() {
+      //如果要获取数据，最好在这里进行，组件在render之前不会返回数据
+      if(localStorage.getItem("userId")){
+        this.props.ShowCeo(parseInt(sessionStorage.getItem("Page2"))||'1',localStorage.getItem("userId"))
+      }
+      
+    }
+    shouldComponentUpdate(nextProps, nextState) {
+      if (nextProps !== this.props || nextState!== this.state) {
+        return true
+      }
+      else {
+        return false
+      }
+    }
+    
+    onPageChange (page,pageSize) {
+        this.props.ShowCeo(page,localStorage.getItem("userId"))
+        // let newdata = this.state.data.object
+        this.setState({
+            currentPage: page,
+            // data:newdata
+        })
+        changePage(2,page)
     }
     render() { 
-        return ( 
-            <div className="test_all">
- 
-            <div className="logo" />
-  <Menu theme="light" mode="horizontal" defaultSelectedKeys={[sessionStorage.getItem("count3")||'1']}>
-    <Menu.Item key="1"><Link to="/Student/CEO/Campaign" onClick={changeNav.bind(this,3,1)}>参与竞选</Link></Menu.Item>
-    <Menu.Item key="2"><Link to="/Student/CEO/Vote" onClick={changeNav.bind(this,3,2)}>提交志愿</Link></Menu.Item>
-  </Menu>
 
-            <div>
-            <Route path="/Student/CEO/Campaign" component={Campaign}></Route>
-    <Route path="/Student/CEO/Vote" component={Vote}></Route>
-            </div>
-            </div>
-         );
+      const columns = [
+        {
+            title: 'count',
+            dataIndex: 'count',
+            key: 'count',
+        },
+          {
+            title: 'userName',
+            dataIndex: 'userName',
+            key: 'userName',
+          },
+        {
+            title: 'studentId',
+            dataIndex: 'studentId',
+            key: 'studentId',
+        },
+        {
+            title: 'state',
+            key: 'state',
+            dataIndex: 'state',
+        render: (text) => {
+            if(text===1){
+                return(<p>已成为CEO</p>)
+            }            
+            if(text===0){
+                return(<p>未成为CEO</p>)
+            }
+    },
+        },
+
+        {
+          title: 'Action',
+          key: 'action',
+          render: (text, record) => (
+            <Space size="middle">
+              <a onClick={this.props.VoteForCeo.bind(this,record.studentId,localStorage.getItem("userId"))}>为{record.userName}投票</a>
+            </Space>
+          ),
+        },
+      ]
+      const pagination = {
+        pageSize: 8,
+        total:this.state.totalNum,
+        onChange:this.onPageChange,
+        current:this.state.currentPage,
     }
+        return ( 
+            <div className="table_div">
+            <Table columns={columns} dataSource={this.state.data} pagination={pagination}/>
+            </div>
+             );
+    } 
 }
-withRouter(CEO);
-export default CEO;
+ 
+const mapDispatchToProps = (dispatch) => {
+  //把发送action的方法绑定到当前组件的props
+  return {
+    ShowCeo: (page,studentId) => {
+        dispatch(actions.ShowCeo(page,studentId))
+    },
+    VoteForCeo: (ceoId,studentId) => {
+        dispatch(actions.VoteForCeo(ceoId,studentId))
+    }
+  }
+}
+const mapStateToProps = state => {
+  //把store里的state绑定到当前组件的props
+  return state
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CEO)
