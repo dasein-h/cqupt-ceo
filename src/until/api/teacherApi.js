@@ -64,21 +64,30 @@ function deleteClass(teacherId, cls) {
     }
   })
 }
+// 展示竞选ceo同学及投票数
+function showCeo(currentPage,teacherclass){
+  return Service.post('/student/showCeoVote',{
+    params:{
+      currentPage,
+      teacherclass
+    }
+  })
+}
 
 /*开启ceo投票*/
-function runCeo(teacherId) {
+function runCeo(teachclass) {
   return Service.get('/teacher/runceo', {
     params: {
-      teacherId
+      teachclass
     }
   })
 }
 
 /*关闭ceo投票*/
-function closeCeo(teacherId) {
-  return Service.post('/teacher/closeceo', {
+function closeCeo(teachclass) {
+  return Service.get('/teacher/closeceo', {
     params: {
-      teacherId
+      teachclass
     }
   })
 }
@@ -161,5 +170,6 @@ export{
   deleteCeo,
   putScore,
   voteStatus,
-  setScore
+  setScore,
+  showCeo
 }

@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { Menu } from 'antd';
 import { withRouter, Switch, Link} from 'react-router-dom';
 import { Router, Route, Redirect } from 'react-router';
-import ChosenStuClass from './ChosenStuClass';
-import UnChosenStuClass from './UnChosenStuClass';
+import ChosenStuClass from '../components/ChosenStuClass';
+import UnChosenStuClass from '../components/UnChosenStuClass';
 
 class StuClass extends React.Component { 
     constructor(props) { 

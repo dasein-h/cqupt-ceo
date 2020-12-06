@@ -9,7 +9,8 @@ import {
 import ComInfo from './ComInfo';
 import StuInfo from './StuInfo';
 import VotSit from './VotSit';
-import NewsCom from './news'
+import NewsCom from './news';
+import StuClass from './StuClass';
 import '../../teacher/style/contentNav.css';
 import {  Menu } from 'antd';
 import { UserOutlined, VideoCameraOutlined, EditOutlined, OrderedListOutlined } from '@ant-design/icons';
@@ -40,6 +41,9 @@ class Teacher extends Component {
                             <Menu.Item key="4" icon={<OrderedListOutlined />}>
                                 <Link to="/Teacher/news">消息</Link> 
                             </Menu.Item>
+                            <Menu.Item key="5" icon={<OrderedListOutlined />}>
+                                <Link to="/Teacher/StuClass">班级信息</Link> 
+                            </Menu.Item>
 
                         </Menu>
                         
@@ -59,6 +63,9 @@ class Teacher extends Component {
                             </Route>
                             <Route path="/Teacher/news">
                                   <NewsCom/>  
+                            </Route>
+                            <Route path="/Teacher/StuClass">
+                                  <StuClass/>  
                             </Route>
                         </Switch>
                     </div>

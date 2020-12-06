@@ -51,6 +51,6 @@ const StudentApi = {
                 ...payload
             }
         })
-    },
+    }
 }
 export default StudentApi
