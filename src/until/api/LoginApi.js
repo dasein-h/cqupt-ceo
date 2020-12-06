@@ -10,12 +10,12 @@ const LoginApi = {
   },
   KeepLogin: (payload) => {
     return Service.post('/login/keepLogin', {
-      ...payload
+      userId:payload
     })
   },
-  Exit: (payload) => {
+  Exit: (userId) => {
     return Service.post('/login/quituser', {
-      payload
+      userId
     })
   },
 }

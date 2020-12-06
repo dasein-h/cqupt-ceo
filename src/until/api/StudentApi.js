@@ -2,7 +2,7 @@ import Service from "../Service"
 const StudentApi = {
     ShowAllCompany : (payload) => {
         return Service.post('/student/showCompany',{
-            ...payload
+                ...payload
         })
     },
     RunCeo : (payload) => {
@@ -13,21 +13,16 @@ const StudentApi = {
         })
     },
     VoteCeo : (payload) => {
-        return Service.get('/student/voteForCeo',{
-            params:{
+        return Service.post('/student/voteForCeo',{
                 ...payload
-            }
         })
     },
 
-    // ShowCeo : (payload) => {
-    //     return Service.get('/application/addApplication',{
-    //         params:{
-    //             ...payload
-    //         }
-    //     })
-    // },
-    //后端的接口文档上面没有写地址，已经反映
+    ShowCeo : (payload) => {    
+        return Service.post('/student/showCeoVote',{
+                ...payload
+        })
+    },
 
     AddApplication : (payload) => {
         return Service.get('/application/addApplication',{
@@ -46,10 +41,8 @@ const StudentApi = {
     },
 
     VoteCompany : (payload) => {
-        return Service.get('/student/voteForCompany',{
-            params:{
+        return Service.post('/student/voteForCompany',{
                 ...payload
-            }
         })
     }
 }

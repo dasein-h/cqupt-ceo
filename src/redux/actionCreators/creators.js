@@ -58,7 +58,11 @@ const actions = {
       }
     }
   },
-
+  getAllCompanies_NO: () => {
+    return {
+      type: "getAllCompanies_NO",
+    }
+  },
   Exit: () => {
     return {
       type: "Exit",
@@ -77,6 +81,77 @@ const actions = {
       type: "Exit_NO",
     }
   },
-  
+  VoteForCompany: (studentId,ceoId) => {
+    return {
+      type:"VoteForCompany",
+      payload: {
+        studentId:studentId,
+        ceoId:ceoId
+      }
+    }
+  },
+  VoteForCompany_OK: (message) => {
+    return {
+      type:"VoteForCompany_OK",
+      payload:{
+        message:message
+      }
+    }
+  },
+  VoteForCompany_NO: (message) => {
+    return {
+      type:"VoteForCompany_NO",
+      payload:{
+        message:message
+      }
+    }
+  },
+  ShowCeo : (page,studentId) => {
+    return {
+      type:"ShowCeo",
+      payload:{
+        currentPage:page,
+        studentId:studentId
+      }
+    }
+  },
+  ShowCeo_OK : (data) => {
+    return {
+      type:"ShowCeo_OK",
+      payload:{
+        ...data
+      }
+    }
+  },
+  ShowCeo_NO : () => {
+    return {
+      type:"ShowCeo_NO",
+    }
+  },
+  VoteForCeo : (ceoId,studentId) => {
+    return {
+      type:"VoteForCeo",
+      payload:{
+        ceoId:ceoId,
+        studentId:studentId
+      }
+    }
+  },
+  VoteForCeo_OK : (message) => {
+    return {
+      type:"VoteForCeo_OK",
+      payload:{
+        message:message
+      }
+    }
+  },
+  VoteForCeo_NO : (message) => {
+    return {
+      type:"VoteForCeo_NO",
+      payload:{
+        message:message
+      }
+    }
+  },
 }
 export default actions

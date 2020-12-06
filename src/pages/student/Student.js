@@ -92,28 +92,23 @@ class Student extends Component {
 
 
   loginClick = () => {
-    
+
     if (this.state.userId !== "" && this.state.password !== "") {
       this.props.login(this.state.userId, this.state.password, this.state.chooseType)
-      if (this.props.isLogin) {
-        if (this.state.chooseType === "学生" && !/Student/.test(window.location)) {
-          window.location = "/Student"
-        }
-        else if (!/teacher/.test(window.location)) {
-          window.location = "/teacher"
-        }
-      }
+
+
       // window.location="/CEO"
       // this.props.history.push("/CEO")
     }
     else {
+
       this.setState({
         loginVisible: true
       })
     }
   }
   onChange3 = e => {
-    console.log('radio3 checked', e.target.value);
+
     this.setState({
       chooseType: e.target.value,
     });
@@ -131,38 +126,38 @@ class Student extends Component {
       password: value,
     })
   }
-  componentWillMount() {
-    //组件第一次render之前执行，每五秒查看一次登录状态
-    let that = this
-    console.log(that.props)
-
-    //这里this的指向会改变，先把this固定一下
-    setInterval(function () {
-      if (localStorage.getItem("userId")){
-
-        that.props.Login_Check()
-      if (!that.props.isLogin||that.props.isLogin===false) {
-        alert("请登录")
-      }
-      else {
-        if (localStorage.getItem("type") === "老师" && !/Teacher/.test(window.location)) {
-          window.location = "/Teacher"
-        }
-        if (localStorage.getItem("type") === "学生" && !/Student/.test(window.location)) {
+  componentDidUpdate(){
+    if(this.props.isLogin===true){
+        if (localStorage.getItem("type") === "学生" && !/Student/.test(window.location))
+        {
           window.location = "/Student"
         }
-      }
+        else if (localStorage.getItem("type") === "老师" && !/Teacher/.test(window.location))
+         {
+          window.location = "/teacher"
+        }
+      
+    }
+  }
+
+  componentDidMount() {
+    //组件第一次render之前执行，每五秒查看一次登录状态
+    let that = this
+
+    that.props.Login_Check()
+    //这里this的指向会改变，先把this固定一下
+
+    setInterval(function () {
+      if (localStorage.getItem("userId")){
+        that.props.Login_Check()
     }
       else {
-        // console.log('aaaa')
       }
     }, 5000)
-  }
-  componentDidMount() {
-    //如果要获取数据，最好在这里进行，组件在render之前不会返回数据
+  
   }
   render() {
-    if (!this.props.isLogin||this.props.isLogin===false)
+    if (!this.props.isLogin)
 
       return (
         <Layout>
@@ -304,18 +299,20 @@ class Student extends Component {
             }}>
             <Header className="site-layout-background" style={{ padding: 0 }}>
 
-              {/* <h4>名字</h4> */}
+          <p className="Name">欢迎你，{localStorage.getItem("userName")}</p>
               <Button className="login" type="primary" onClick={this.exit}>
                 退出登陆</Button>
 
             </Header>
             <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
               <div className="site-layout-background" style={{ padding: 24, textAlign: 'center', borderRadius: 10 }}>
-                <Route path="/Student/AllCompanies" component={AllCompanies} />
-                <Redirect to="/Student/AllCompanies/ChosenClasses" from='/Student/AllCompanies' />
-                <Route path="/Student/Join" component={Join} />
-                <Route path="/Student/MyCompany" component={MyCompany} />
-                <Route path="/Student/CEO" component={CEO} />
+              <Switch>
+                  <Route path="/Student/AllCompanies" component={AllCompanies} />
+                  <Route path="/Student/Join" component={Join} />
+                  <Route path="/Student/MyCompany" component={MyCompany} />
+                  <Route path="/Student/CEO" component={CEO} />
+                  <Redirect to="/Student/AllCompanies" />
+                </Switch>  
               </div>
             </Content>
             <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
@@ -330,15 +327,14 @@ const mapDispatchToProps = (dispatch) => {
   return {
     login: (userId, password, type) => {
       const action = actions.loginAction(userId, password, type)
-      console.log(action);
       dispatch(action)
     },
     Login_Check: () => {
-      console.log('Login_Check')
+
       dispatch(actions.Login_Check())
     },
     Exit: () => {
-      console.log('Exit')
+
       dispatch(actions.Exit())
     }
   }

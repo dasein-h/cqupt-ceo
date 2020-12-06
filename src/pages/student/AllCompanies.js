@@ -16,20 +16,11 @@ class AllCompanies extends Component {
   render() {
     // this.props.AllCompanies()
     return (
-      <div className="test_all">
+      <div>
 
-        <div className="logo" />
-        <Menu theme="light" mode="horizontal" defaultSelectedKeys={[sessionStorage.getItem("count1") || '1']}>
 
-        </Menu>
-
-        <div>
-          <Switch>
             <Route path="/Student/AllCompanies/ChosenClasses" component={ChosenClasses}></Route>
 
-            <Redirect to="/Student/AllCompanies/ChosenClasses" />
-          </Switch>
-        </div>
       </div>
     );
   }
@@ -42,8 +33,7 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 const mapStateToProps = state => {
-  console.log("AllCompanies", state)
-  console.log(store.getState())
+
   return state
 }
 
