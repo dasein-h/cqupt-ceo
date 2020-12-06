@@ -57,7 +57,7 @@ export default function* defSaga() {
       
     }
     else {
-      yield put(actions.Login_Fail());
+      yield put(actions.Login_Fail(res.data));
     }
 
   })
@@ -154,6 +154,30 @@ export default function* defSaga() {
     }
     else{
       yield put(actions.VoteForCeo_NO(res.data.message))
+    }
+  })
+  yield takeEvery('RunCeo', function* () {
+    const action = yield select()
+    const res = yield call(StudentApi.RunCeo, action.payload)
+    console.log(res)
+    if (res.status === 200 && res.data.flag) {
+      yield put(actions.RunCeo_OK(res.data.message))
+      //把获取到的数据发送到state，展示在页面上
+    }
+    else{
+      yield put(actions.RunCeo_NO(res.data.message))
+    }
+  })
+  yield takeEvery('ShowApplication', function* () {
+    const action = yield select()
+    const res = yield call(StudentApi.ShowApplication, action.payload)
+    console.log(res)
+    if (res.status === 200 && res.data.flag) {
+      yield put(actions.ShowApplication_OK(res.data))
+      //把获取到的数据发送到state，展示在页面上
+    }
+    else{
+      yield put(actions.ShowApplication())
     }
   })
   /* CEO */

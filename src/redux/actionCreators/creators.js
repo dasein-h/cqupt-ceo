@@ -18,9 +18,12 @@ const actions = {
       }
     }
   },
-  Login_Fail: () => {
+  Login_Fail: (data) => {
     return {
       type: "Login_Fail",
+      payload:{
+        ...data
+      }
     }
   },
   Login_Check: () => {
@@ -151,6 +154,52 @@ const actions = {
       payload:{
         message:message
       }
+    }
+  },
+  RunCeo : () => {
+    return {
+      type:"RunCeo",
+      payload:{
+        studentId:localStorage.getItem("userId")
+      }
+    }
+  },
+  RunCeo_OK : (message) => {
+    return {
+      type:"RunCeo_OK",
+      payload:{
+        message:message
+      }
+    }
+  },  
+  RunCeo_NO : (message) => {
+    return {
+      type:"RunCeo_NO",
+      payload:{
+        message:message
+      }
+    }
+  },
+  ShowApplication : (page,studentId) => {
+    return {
+      type:"ShowApplication",
+      payload:{
+        currentPage:page,
+        studentId:studentId
+      }
+    }
+  },
+  ShowApplication_OK : (data) => {
+    return {
+      type:"ShowApplication_OK",
+      payload:{
+        ...data
+      }
+    }
+  },
+  ShowApplication_NO : () => {
+    return {
+      type:"ShowApplication_NO",
     }
   },
 }

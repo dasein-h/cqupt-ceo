@@ -126,6 +126,21 @@ class Student extends Component {
       password: value,
     })
   }
+  UNSAFE_componentWillUpdate(newProps,newState){
+    // this.setState()
+    if(newProps.isLogin!==this.props.isLogin){
+      try{
+        if(newProps.message){
+          if(newProps.isLogin === true && newProps.payload === undefined )
+          message.success(newProps.message)
+          if(newProps.isLogin === false && newProps.payload === undefined )
+          message.error(newProps.message)
+        }
+      }
+      catch{
+      }
+    }
+  }
   componentDidUpdate(){
     if(this.props.isLogin===true){
         if (localStorage.getItem("type") === "学生" && !/Student/.test(window.location))
@@ -177,10 +192,10 @@ class Student extends Component {
                 <Link to="/Student/AllCompanies/ChosenClasses" onClick={changeNav.bind(this, 0, 1)}>所有公司</Link>
               </Menu.Item>
               <Menu.Item key="2" icon={<VideoCameraOutlined />}>
-                <Link to="/Student/Join" onClick={changeNav.bind(this, 0, 2)}>提交日志</Link>
+                <Link to="/Student/Join" onClick={changeNav.bind(this, 0, 2)}>我的申请</Link>
               </Menu.Item>
               <Menu.Item key="3" icon={<EditOutlined />}>
-                <Link to="/Student/MyCompany/WriteWant" onClick={changeNav.bind(this, 0, 3)}>评分</Link>
+                <Link to="/Student/MyCompany/WriteWant" onClick={changeNav.bind(this, 0, 3)}>申请加入公司</Link>
               </Menu.Item>
               <Menu.Item key="4" icon={<OrderedListOutlined />}>
                 <Link to="/Student/CEO/Campaign" onClick={changeNav.bind(this, 0, 4)}>CEO</Link>
@@ -282,10 +297,10 @@ class Student extends Component {
                 <Link to="/Student/AllCompanies/ChosenClasses" onClick={changeNav.bind(this, 0, 1)}>所有公司</Link>
               </Menu.Item>
               <Menu.Item key="2" icon={<VideoCameraOutlined />}>
-                <Link to="/Student/Join" onClick={changeNav.bind(this, 0, 2)}>提交日志</Link>
+                <Link to="/Student/Join" onClick={changeNav.bind(this, 0, 2)}>我的申请</Link>
               </Menu.Item>
               <Menu.Item key="3" icon={<EditOutlined />}>
-                <Link to="/Student/MyCompany/WriteWant" onClick={changeNav.bind(this, 0, 3)}>评分</Link>
+                <Link to="/Student/MyCompany/WriteWant" onClick={changeNav.bind(this, 0, 3)}>申请加入公司</Link>
               </Menu.Item>
               <Menu.Item key="4" icon={<OrderedListOutlined />}>
                 <Link to="/Student/CEO/Campaign" onClick={changeNav.bind(this, 0, 4)}>CEO</Link>
@@ -297,7 +312,7 @@ class Student extends Component {
             style={{
               marginLeft: 300,
             }}>
-            <Header className="site-layout-background" style={{ padding: 0 }}>
+            <Header className="site-layout-background Head" style={{ padding: 0 }}>
 
           <p className="Name">欢迎你，{localStorage.getItem("userName")}</p>
               <Button className="login" type="primary" onClick={this.exit}>

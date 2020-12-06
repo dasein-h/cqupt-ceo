@@ -37,9 +37,21 @@ export default (state = newstate, action) => {
     case "VoteForCeo":
       return {isLogin:state.isLogin,...action}
     case "VoteForCeo_OK":
-        return {isVoteForCeo:true, isLogin:state.isLogin, ...action.payload}
+      return {isVoteForCeo:true, isLogin:state.isLogin, ...action.payload}
     case "VoteForCeo_NO":
-        return {isVoteForCeo:false, isLogin:state.isLogin, ...action.payload}
+      return {isVoteForCeo:false, isLogin:state.isLogin, ...action.payload}
+    case "RunCeo":
+      return {isLogin:state.isLogin,...action.payload}
+    case "RunCeo_OK":
+      return {isRunCeo:true, isLogin:state.isLogin, ...action.payload}
+    case "RunCeo_NO":
+      return {isRunCeo:false, isLogin:state.isLogin, ...action.payload}
+    case "ShowApplication":
+      return {isLogin:state.isLogin,...action}
+    case "ShowApplication_OK":
+      return {isShowApplication:true, isLogin:state.isLogin, ...action.payload}
+    case "ShowApplication_NO":
+      return {isShowApplication:false, isLogin:state.isLogin, ...action.payload}
     case "CEO_SET_MEMBER":
       return {
         ...state,

@@ -6,10 +6,8 @@ const StudentApi = {
         })
     },
     RunCeo : (payload) => {
-        return Service.get('/student/runForCeo',{
-            params:{
-                ...payload
-            }
+        return Service.post('/student/runForCeo',{
+            ...payload
         })
     },
     VoteCeo : (payload) => {
@@ -33,10 +31,8 @@ const StudentApi = {
     },
     ShowApplication : (payload) => {
             //CEO和学生均可以调用，返回不同的数据
-        return Service.get('/application/showApplication',{
-            params:{
+        return Service.post('/application/showApplication',{
                 ...payload
-            }
         })
     },
 

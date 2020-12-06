@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { Table, Tag, Space,pagination, message } from 'antd';
+import { Table, Tag, Space,pagination, message, Button } from 'antd';
 import actions from '../../redux/actionCreators/creators'
 import changePage from '../../until/changePage'
 import '../../static/style/style.scss'
@@ -42,7 +42,7 @@ class CEO extends Component {
     constructor(props) {
         super(props);
         this.state = { 
-            totalNum:30,
+            totalNum:0,
             currentPage:parseInt(sessionStorage.getItem("Page2"))||"1",
             data : [
               ],
@@ -54,10 +54,12 @@ class CEO extends Component {
       if(newProps!==this.props){
         try{
           if(newProps.message){
-            if(newProps.isVoteForCeo === true )
-            message.success(newProps.message)
-            if(newProps.isVoteForCeo === false )
-            message.error(newProps.message)
+            if(newProps.isVoteForCeo === true || newProps.isRunCeo === true ){
+              message.success(newProps.message)
+            }
+            else if(newProps.isVoteForCeo === false || newProps.isRunCeo === false ){
+              message.error(newProps.message)
+            }
           }
           const {data} = newProps
           let newdata = data.object
@@ -150,6 +152,7 @@ class CEO extends Component {
     }
         return ( 
             <div className="table_div">
+            <Button type="primary" className="RunCeo" onClick={this.props.RunCeo}>成为CEO</Button>
             <Table columns={columns} dataSource={this.state.data} pagination={pagination}/>
             </div>
              );
@@ -164,6 +167,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     VoteForCeo: (ceoId,studentId) => {
         dispatch(actions.VoteForCeo(ceoId,studentId))
+    },
+    RunCeo: () => {
+      dispatch(actions.RunCeo())
     }
   }
 }
