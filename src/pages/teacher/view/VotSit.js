@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Table, Space,Input,Button, Pagination } from 'antd'; 
 import { AudioOutlined } from '@ant-design/icons';
-import '../style/VoSit.css';
+// import '../style/VoSit.css';
 import {showCeo, runCeo, closeCeo} from '../../../until/api/teacherApi';
 
 //table的静态内容
