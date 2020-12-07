@@ -9,14 +9,11 @@ import {
 import ComInfo from './ComInfo';
 import StuInfo from './StuInfo';
 import VotSit from './VotSit';
-import NewsCom from './News'
+import NewsCom from './news'
 import SignCom from './Sign'
 import '../../teacher/style/contentNav.css';
-<<<<<<< Updated upstream
-=======
 import {  Menu } from 'antd';
 import { UserOutlined, VideoCameraOutlined, EditOutlined, OrderedListOutlined,CarryOutOutlined } from '@ant-design/icons';
->>>>>>> Stashed changes
 
 class Teacher extends Component { 
     constructor(props) {
@@ -36,35 +33,6 @@ class Teacher extends Component {
             <Router>
                 <div id="All">
                     <div className="nav-div">
-<<<<<<< Updated upstream
-                        <Link to="/"> 
-                            <div className={this.state.displayStu ? 'nav' : 'nav-point'}
-                                onClick={this.handleNavStyChanStu}>
-                            学生信息
-                            </div>
-                        </Link>
-                        
-                        <Link to="/ComInfo">
-                            <div className={this.state.displayCom ? 'nav' : 'nav-point'}
-                            onClick={this.handleNavStyChanCom}>
-                            公司情况
-                            </div>
-                        </Link>
-                        
-                        <Link to="/VotSit">
-                            <div className={this.state.displayVot ? 'nav' : 'nav-point'}
-                            onClick={this.handleNavStyChanVot}>
-                            投票情况
-                            </div>
-                            
-                        </Link>
-                        <Link to="/Teacher/news">
-                        <div className={this.state.displayNews ? 'nav' : 'nav-point'}
-                            onClick={this.handleNavStyChanNews}>
-                            消息
-                            </div>
-                        </Link>
-=======
                         <Menu theme="light" mode="inline">
                             <Menu.Item key="1" icon={<UserOutlined />}>
                                 <Link to="/Teacher/StuInfo">学生信息</Link>
@@ -82,7 +50,6 @@ class Teacher extends Component {
                                 <Link to="/Teacher/Sign">签到</Link> 
                             </Menu.Item>
                         </Menu>
->>>>>>> Stashed changes
                         
                     </div>
 
@@ -99,16 +66,15 @@ class Teacher extends Component {
                             <Route path="/VotSit">
                                 <VotSit/>
                             </Route>
-<<<<<<< Updated upstream
-                            <Route path="/Teacher/news" component={NewsCom}></Route>
-=======
                             <Route path="/Teacher/News">
                                 <NewsCom/>  
                             </Route>
                             <Route path="/Teacher/Sign">
                                 <SignCom/>  
                             </Route>
->>>>>>> Stashed changes
+                            <Route path="/Teacher/StuInfo">
+                                <StuInfo/>  
+                            </Route>
                         </Switch>
                     </div>
                     
