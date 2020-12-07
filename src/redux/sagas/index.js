@@ -52,7 +52,7 @@ export default function* defSaga() {
       // yield put(actions.getAllCompanies(localStorage.getItem("userId")))
       // yield put(actions.ShowCeo(1,localStorage.getItem("userId")))
       // location.reload()
-      window.location="/Student/AllCompanies/ChosenClasses"
+      // window.location="/Student/AllCompanies/ChosenClasses"
       
     }
     else {
