@@ -95,7 +95,7 @@ class StuClass extends React.Component{
       
     }
     handleIntoClass = (text,record) => {
-      console.log(record.teachclass);
+      // console.log(record.teachclass);
       sessionStorage.setItem('teachclass',record.teachclass);
       this.props.handleDisTeach();
     }
