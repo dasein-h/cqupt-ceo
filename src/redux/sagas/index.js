@@ -3,7 +3,6 @@ import actions from '../actionCreators/creators'
 import LoginApi from '../../until/api/LoginApi.js'
 import StudentApi from '../../until/api/StudentApi'
 import {getMember, setPosition} from "../../until/api/ceo";
-
 function setLocalStorage(config) {
   Reflect.ownKeys(config).forEach(key => {
     localStorage.setItem(key, config[key])
@@ -53,7 +52,7 @@ export default function* defSaga() {
       // yield put(actions.getAllCompanies(localStorage.getItem("userId")))
       // yield put(actions.ShowCeo(1,localStorage.getItem("userId")))
       // location.reload()
-      // window.location="/Student/AllCompanies/ChosenClasses"
+      window.location="/Student/AllCompanies/ChosenClasses"
       
     }
     else {
@@ -177,7 +176,19 @@ export default function* defSaga() {
       //把获取到的数据发送到state，展示在页面上
     }
     else{
-      yield put(actions.ShowApplication())
+      yield put(actions.ShowApplication_NO())
+    }
+  })
+  yield takeEvery('AddApplication', function* () {
+    const action = yield select()
+    const res = yield call(StudentApi.AddApplication, action.payload)
+    console.log(res)
+    if (res.status === 200 && res.data.flag) {
+      yield put(actions.AddApplication_OK(res.data.message))
+      //把获取到的数据发送到state，展示在页面上
+    }
+    else{
+      yield put(actions.AddApplication_NO(res.data.message))
     }
   })
   /* CEO */

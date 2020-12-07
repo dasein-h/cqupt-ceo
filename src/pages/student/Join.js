@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { Table, Tag, Space,pagination, message, Button } from 'antd';
+import { Table, Tag, Space,pagination, message, Button , Empty} from 'antd';
 import actions from '../../redux/actionCreators/creators'
 import changePage from '../../until/changePage'
+import changeNav from '../../until/changeNav'
 import '../../static/style/style.scss'
 // const columns = [
 //     {
@@ -53,6 +54,7 @@ class Join extends Component {
     UNSAFE_componentWillUpdate(newProps,newState){
       if(newProps!==this.props){
         try{
+          if(newProps.isShowApplication === true){
           const {data} = newProps
           let newdata = data.object
           for (let item in newdata){
@@ -63,6 +65,7 @@ class Join extends Component {
             data:newdata,
             totalNum:data.totalNumber
           })
+        }
         }
         catch{
           console.log("error")
@@ -95,7 +98,7 @@ class Join extends Component {
         changePage(3,page)
     }
     render() { 
-
+      changeNav(1, 1)
       const columns = [
         {
             title: 'level',
@@ -137,11 +140,17 @@ class Join extends Component {
         onChange:this.onPageChange,
         current:this.state.currentPage,
     }
+    if(localStorage.getItem("userId"))
         return ( 
             <div className="table_div">
             <Table columns={columns} dataSource={this.state.data} pagination={pagination}/>
             </div>
-             );
+             )
+    else return(
+            <div className="table_div">
+              <Empty image={Empty.PRESENTED_IMAGE_SIMPLE}>请登录后查看</Empty>
+            </div>
+            )
     } 
 }
  

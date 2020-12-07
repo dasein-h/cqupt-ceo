@@ -52,6 +52,12 @@ export default (state = newstate, action) => {
       return {isShowApplication:true, isLogin:state.isLogin, ...action.payload}
     case "ShowApplication_NO":
       return {isShowApplication:false, isLogin:state.isLogin, ...action.payload}
+    case "AddApplication":
+      return {isLogin:state.isLogin,...action}
+    case "AddApplication_OK":
+      return {isAddApplication:true, isLogin:state.isLogin, ...action.payload}
+    case "AddApplication_NO":
+      return {isAddApplication:false, isLogin:state.isLogin, ...action.payload}
     case "CEO_SET_MEMBER":
       return {
         ...state,

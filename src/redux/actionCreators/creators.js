@@ -44,12 +44,11 @@ const actions = {
       type: "Login_Check_NO",
     }
   },
-  getAllCompanies: (userId, page) => {
+  getAllCompanies: (userId) => {
     return {
       type: "getAllCompanies",
       payload: {
         studentId: userId,
-        currentPage: page,
       }
     }
   },
@@ -200,6 +199,28 @@ const actions = {
   ShowApplication_NO : () => {
     return {
       type:"ShowApplication_NO",
+    }
+  },
+  AddApplication : (applications) => {
+    return {
+      type:"AddApplication",
+      payload:applications
+    }
+  },
+  AddApplication_OK : (message) => {
+    return {
+      type:"AddApplication_OK",
+      payload:{
+        message:message
+      }
+    }
+  },
+  AddApplication_NO : (message) => {
+    return {
+      type:"AddApplication_NO",
+      payload:{
+        message:message
+      }
     }
   },
 }

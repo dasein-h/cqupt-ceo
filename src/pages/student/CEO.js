@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { Table, Tag, Space,pagination, message, Button } from 'antd';
+import { Table, Tag, Space,pagination, message, Button, Empty } from 'antd';
 import actions from '../../redux/actionCreators/creators'
 import changePage from '../../until/changePage'
 import '../../static/style/style.scss'
@@ -61,6 +61,7 @@ class CEO extends Component {
               message.error(newProps.message)
             }
           }
+          if(newProps.isShowCeo === true){
           const {data} = newProps
           let newdata = data.object
           for (let item in newdata){
@@ -71,6 +72,7 @@ class CEO extends Component {
             data:newdata,
             totalNum:data.totalNumber
           })
+        }
         }
         catch{
           console.log("error")
@@ -94,7 +96,9 @@ class CEO extends Component {
     }
     
     onPageChange (page,pageSize) {
+      if (localStorage.getItem("userId")){
         this.props.ShowCeo(page,localStorage.getItem("userId"))
+      }
         // let newdata = this.state.data.object
         this.setState({
             currentPage: page,
@@ -150,12 +154,21 @@ class CEO extends Component {
         onChange:this.onPageChange,
         current:this.state.currentPage,
     }
+    if (localStorage.getItem("userId")){
         return ( 
             <div className="table_div">
             <Button type="primary" className="RunCeo" onClick={this.props.RunCeo}>成为CEO</Button>
             <Table columns={columns} dataSource={this.state.data} pagination={pagination}/>
             </div>
-             );
+             )
+        }
+        else{
+          return ( 
+            <div className="table_div">
+              <Empty image={Empty.PRESENTED_IMAGE_SIMPLE}>请登录后查看</Empty>
+            </div>
+             )
+        }
     } 
 }
  
