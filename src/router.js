@@ -15,26 +15,26 @@ class RouteMap extends React.Component {
                             <Provider store={store}>
         <BrowserRouter >
 
-     <Route path="/" component={App}>
-     <Switch>
-            <Route path="/Student" component={Student}/>
-            <Route path="/CEO" component={CEO}/>
-            <Route path="/Teacher" component={Teacher}/>
-          <Redirect to="/Student" />
-        </Switch>
-         </Route>
-      {/* <Route path="/AllCompanies" component={AllCompanies}/>
+            <Route path="/" component={App}>
+              <Switch>
+                <Route path="/Student" component={Student}/>
+                <Route path="/Teacher" component={Teacher}/>
+                <Route path="/CEO" component={CEO}></Route>
+                {/* <Redirect to="/Student"/> */}
+              </Switch>
+            </Route>
+            {/* <Route path="/AllCompanies" component={AllCompanies}/>
       <Route path="/Join" component={Join}/>
       <Route path="/MyCompany" component={MyCompany}/> */}
         {/* <Route path="/MyCompany/WriteWant" component={WriteWant}></Route>
         <Route path="/MyCompany/Detail" component={Detail}></Route>
         <Route path="/MyCompany/Participants" component={Participants}></Route> */}
-                <Redirect from="/index" to="/index/Student/AllCompanies/ChosenClasses"/>
-  </BrowserRouter> 
-  </Provider>
-  </div>
-        )
-    }
+            {/* <Redirect from="/index" to="/Teacher/news"/> */}
+          </BrowserRouter>
+        </Provider>
+      </div>
+    )
+  }
 }
  
 

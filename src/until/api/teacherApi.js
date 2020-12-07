@@ -65,6 +65,12 @@ function deleteClass(teacherId, cls) {
   })
 }
 
+// 展示所有学生信息
+function showAll(teachclass,currentPage){
+  return Service.post('/teacher/showall',{
+      teachclass,currentPage
+  })
+}
 /*开启ceo投票*/
 function runCeo(teacherId) {
   return Service.get('/teacher/runceo', {
@@ -84,10 +90,10 @@ function closeCeo(teacherId) {
 }
 
 /*老师展示ceo发起的公司改名字申请*/
-function changeCompanyName(teacherId, currentPage, studentId) {
+function changeCompanyName(teachclass, currentPage, studentId) {
   return Service.get('/teacher/changeName', {
     params: {
-      teacherId,
+      teachclass,
       currentPage,
       studentId
     }
@@ -95,17 +101,17 @@ function changeCompanyName(teacherId, currentPage, studentId) {
 }
 
 /*同意修改公司名*/
-function agreeChange(teacherId, ceo, companyName) {
+function agreeChange(ceo) {
   return Service.get('/teacher/agree', {
-    params: {teacherId, ceo, companyName}
+    params: {ceo}
   })
 }
 
 /*拒绝修改公司名*/
-function rejectChange(teacherId, ceo) {
+function rejectChange(ceo) {
   return Service.get('/teacher/refuse', {
     params: {
-      teacherId, ceo
+      ceo
     }
   })
 }
@@ -146,6 +152,13 @@ function setScore(teacherId, studentId, teacherScore) {
     teacherId, studentId, teacherScore
   })
 }
+
+// 导出
+function exportExc(teachclass){
+  return Service.post('/upload/export',{
+    teachclass
+  })
+}
 export{
   selectedClassTeacher,
   unSelectedClassTeacher,
@@ -161,5 +174,7 @@ export{
   deleteCeo,
   putScore,
   voteStatus,
-  setScore
+  setScore,
+  showAll,
+  exportExc
 }
