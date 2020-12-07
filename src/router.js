@@ -2,6 +2,7 @@ import React from 'react';
 import App from './pages/App';
 import Student from './pages/student/Student'
 import Teacher from './pages/teacher/view/Teacher'
+import Manager from './pages/manager/Manager'
 import CEO from './pages/ceo/CEO'
 import {Provider} from 'react-redux'
 import store from './redux/store'
