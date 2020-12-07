@@ -223,5 +223,10 @@ const actions = {
       }
     }
   },
+  Exist : () => {
+    return {
+      type:"Exist",
+    }
+  }
 }
 export default actions

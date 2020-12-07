@@ -6,11 +6,12 @@ const newstate = {
   }
 }
 export default (state = newstate, action) => {
+  var data = {data1:state.data1,data2:state.data2,data3:state.data3,}
   switch (action.type) {
     case "getAllCompanies":
-      return { isLogin:state.isLogin,   ...action}
+      return { isLogin:state.isLogin, ...data,  ...action}
     case "getAllCompanies_OK":
-      return { isgetAllCompanies:true, isLogin:state.isLogin,  ...action.payload}
+      return { isgetAllCompanies:true, isLogin:state.isLogin,  data1:action.payload.data,data2:state.data2,data3:state.data3,}
     case "login":
       return {   isLogin:state.isLogin,  ...action}
     case "Login_Success":
@@ -18,46 +19,48 @@ export default (state = newstate, action) => {
     case "Login_Fail":
       return {isLogin: false, ...action.payload, };
     case "Login_Check_OK":
-      return {isLogin: true, ...action.payload, };
+      return {isLogin: true, ...data,...action.payload, };
     case "Login_Check_NO":
       return {isLogin: false, ...action.payload, };
     case "Exit_OK":
       return {isLogin: false, ...action.payload, }
     case "VoteForCompany":
-      return {isLogin:state.isLogin, ...action}
+      return {isLogin:state.isLogin,...data, ...action}
     case "VoteForCompany_OK":
-      return {isVoteForCompany:true, isLogin:state.isLogin, ...action.payload}
+      return {isVoteForCompany:true,...data, isLogin:state.isLogin, ...action.payload}
     case "VoteForCompany_NO":
-      return {isVoteForCompany:false, isLogin:state.isLogin, ...action.payload}
+      return {isVoteForCompany:false, ...data,isLogin:state.isLogin, ...action.payload}
     case "ShowCeo_OK":
-      return {isShowCeo:true, isLogin:state.isLogin, ...action.payload}
+      return {isShowCeo:true, isLogin:state.isLogin, data2:action.payload.data,data1:state.data1,data3:state.data3}
     case "ShowCeo_NO":
-      return {isShowCeo:false, isLogin:state.isLogin, ...action.payload}
+      return {isShowCeo:false,...data, isLogin:state.isLogin, ...action.payload}
     /* CEO */
     case "VoteForCeo":
-      return {isLogin:state.isLogin,...action}
+      return {isLogin:state.isLogin,...data, ...action}
     case "VoteForCeo_OK":
-      return {isVoteForCeo:true, isLogin:state.isLogin, ...action.payload}
+      return {isVoteForCeo:true, isLogin:state.isLogin,...data,  ...action.payload}
     case "VoteForCeo_NO":
-      return {isVoteForCeo:false, isLogin:state.isLogin, ...action.payload}
+      return {isVoteForCeo:false, isLogin:state.isLogin, ...data, ...action.payload}
     case "RunCeo":
-      return {isLogin:state.isLogin,...action.payload}
+      return {isLogin:state.isLogin,...data, ...action.payload}
     case "RunCeo_OK":
-      return {isRunCeo:true, isLogin:state.isLogin, ...action.payload}
+      return {isRunCeo:true, isLogin:state.isLogin,...data,  ...action.payload}
     case "RunCeo_NO":
-      return {isRunCeo:false, isLogin:state.isLogin, ...action.payload}
+      return {isRunCeo:false, isLogin:state.isLogin,...data,  ...action.payload}
     case "ShowApplication":
-      return {isLogin:state.isLogin,...action}
+      return {isLogin:state.isLogin,...data, ...action}
     case "ShowApplication_OK":
-      return {isShowApplication:true, isLogin:state.isLogin, ...action.payload}
+      return {isShowApplication:true, isLogin:state.isLogin, data3:action.payload.data,data1:state.data1,data2:state.data2}
     case "ShowApplication_NO":
-      return {isShowApplication:false, isLogin:state.isLogin, ...action.payload}
+      return {isShowApplication:false, ...data,isLogin:state.isLogin, ...action.payload}
     case "AddApplication":
-      return {isLogin:state.isLogin,...action}
+      return {isLogin:state.isLogin,...data,...action}
     case "AddApplication_OK":
-      return {isAddApplication:true, isLogin:state.isLogin, ...action.payload}
+      return {isAddApplication:true, isLogin:state.isLogin,...data, ...action.payload}
     case "AddApplication_NO":
-      return {isAddApplication:false, isLogin:state.isLogin, ...action.payload}
+      return {isAddApplication:false, isLogin:state.isLogin,...data, ...action.payload}
+    case "Exist" :
+      return {...data,...action,isLogin:state.isLogin}
     case "CEO_SET_MEMBER":
       return {
         ...state,
@@ -99,6 +102,6 @@ export default (state = newstate, action) => {
         ]
       }
     default:
-      return {...action,isLogin:state.isLogin};
+      return {...action,isLogin:state.isLogin,...data,};
   }
 }

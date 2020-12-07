@@ -61,18 +61,17 @@ class CEO extends Component {
               message.error(newProps.message)
             }
           }
-          if(newProps.isShowCeo === true){
-          const {data} = newProps
-          let newdata = data.object
+          const {data2} = newProps
+          let newdata = data2.object
           for (let item in newdata){
             newdata[item].key = item
           }
           this.setState({
             currentPage: parseInt(sessionStorage.getItem("Page2"))||'1',
             data:newdata,
-            totalNum:data.totalNumber
+            totalNum:data2.totalNumber
           })
-        }
+        
         }
         catch{
           console.log("error")
@@ -81,10 +80,12 @@ class CEO extends Component {
     }
     componentDidMount() {
       //如果要获取数据，最好在这里进行，组件在render之前不会返回数据
-      if(localStorage.getItem("userId")){
+      if(localStorage.getItem("userId") && !this.props.data2){
         this.props.ShowCeo(parseInt(sessionStorage.getItem("Page2"))||'1',localStorage.getItem("userId"))
       }
-      
+      if(this.props.data2){
+        this.props.Exist()
+      }
     }
     shouldComponentUpdate(nextProps, nextState) {
       if (nextProps !== this.props || nextState!== this.state) {
@@ -183,7 +184,10 @@ const mapDispatchToProps = (dispatch) => {
     },
     RunCeo: () => {
       dispatch(actions.RunCeo())
-    }
+    },
+    Exist: () => {
+      dispatch(actions.Exist())
+    },
   }
 }
 const mapStateToProps = state => {

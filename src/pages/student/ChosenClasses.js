@@ -43,8 +43,7 @@ class ChosenClasses extends Component {
         super(props);
         this.state = { 
             currentPage:parseInt(sessionStorage.getItem("Page1"))||"1",
-            data : [
-              ],
+            data : [],
          }
         //  this.onPageChange=this.onPageChange.bind(this)
     }
@@ -59,16 +58,15 @@ class ChosenClasses extends Component {
             if(newProps.isVoteForCompany === false )
             message.error(newProps.message)
           }
-          if(newProps.isgetAllCompanies === true ){
-          const {data} = newProps
-          let newdata = data.object
+          const {data1} = newProps
+          let newdata = data1.object
           for (let item in newdata){
             newdata[item].key = item
           }
           this.setState({
             currentPage: parseInt(sessionStorage.getItem("Page1"))||'1',
             data:newdata
-          })}
+          })
         }
         catch{
           console.log("error")
@@ -77,8 +75,11 @@ class ChosenClasses extends Component {
     }
     componentDidMount() {
       //如果要获取数据，最好在这里进行，组件在render之前不会返回数据
-      if(localStorage.getItem("userId")){
+      if(localStorage.getItem("userId") && !this.props.data1){
         this.props.getAllCompanies(localStorage.getItem("userId"))
+      }
+      if(this.props.data1){
+        this.props.Exist()
       }
     }
     shouldComponentUpdate(nextProps, nextState) {
@@ -159,7 +160,10 @@ const mapDispatchToProps = (dispatch) => {
     },
     VoteForCompany: (studentId,ceoId) => {
       dispatch(actions.VoteForCompany(studentId,ceoId))
-    }
+    },
+    Exist: () => {
+      dispatch(actions.Exist())
+    },
   }
 }
 const mapStateToProps = state => {
