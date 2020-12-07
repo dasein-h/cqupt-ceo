@@ -2,6 +2,7 @@ import React from 'react';
 import App from './pages/App';
 import Student from './pages/student/Student'
 import Teacher from './pages/teacher/view/Teacher'
+import Manager from './pages/manager/Manager'
 import CEO from './pages/ceo/CEO'
 import {Provider} from 'react-redux'
 import store from './redux/store'
@@ -18,7 +19,8 @@ class RouteMap extends React.Component {
      <Route path="/" component={App}>
      <Switch>
             <Route path="/Student" component={Student}/>
-            <Route path="/Teacher" component={Teacher}/>
+            <Route path="/Teacher" component={Teacher} />
+            <Route path="/Manager" component={Manager} />        
           <Redirect to="/Student" />
         </Switch>
          </Route>
