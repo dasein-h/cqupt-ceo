@@ -155,6 +155,13 @@ function setScore(teacherId, studentId, teacherScore) {
     teacherId, studentId, teacherScore
   })
 }
+
+// 查看公司信息
+function ShowComInfo(teachclass) { 
+  return  Service.post('/student/showCompany', {
+    "teachclass":teachclass
+  })
+}
 export{
   selectedClassTeacher,
   unSelectedClassTeacher,
@@ -171,5 +178,6 @@ export{
   putScore,
   voteStatus,
   setScore,
-  showCeo
+  showCeo,
+  ShowComInfo
 }
