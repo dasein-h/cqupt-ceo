@@ -18,9 +18,12 @@ const actions = {
       }
     }
   },
-  Login_Fail: () => {
+  Login_Fail: (data) => {
     return {
       type: "Login_Fail",
+      payload:{
+        ...data
+      }
     }
   },
   Login_Check: () => {
@@ -58,7 +61,11 @@ const actions = {
       }
     }
   },
-
+  getAllCompanies_NO: () => {
+    return {
+      type: "getAllCompanies_NO",
+    }
+  },
   Exit: () => {
     return {
       type: "Exit",
@@ -77,6 +84,123 @@ const actions = {
       type: "Exit_NO",
     }
   },
-  
+  VoteForCompany: (studentId,ceoId) => {
+    return {
+      type:"VoteForCompany",
+      payload: {
+        studentId:studentId,
+        ceoId:ceoId
+      }
+    }
+  },
+  VoteForCompany_OK: (message) => {
+    return {
+      type:"VoteForCompany_OK",
+      payload:{
+        message:message
+      }
+    }
+  },
+  VoteForCompany_NO: (message) => {
+    return {
+      type:"VoteForCompany_NO",
+      payload:{
+        message:message
+      }
+    }
+  },
+  ShowCeo : (page,studentId) => {
+    return {
+      type:"ShowCeo",
+      payload:{
+        currentPage:page,
+        studentId:studentId
+      }
+    }
+  },
+  ShowCeo_OK : (data) => {
+    return {
+      type:"ShowCeo_OK",
+      payload:{
+        ...data
+      }
+    }
+  },
+  ShowCeo_NO : () => {
+    return {
+      type:"ShowCeo_NO",
+    }
+  },
+  VoteForCeo : (ceoId,studentId) => {
+    return {
+      type:"VoteForCeo",
+      payload:{
+        ceoId:ceoId,
+        studentId:studentId
+      }
+    }
+  },
+  VoteForCeo_OK : (message) => {
+    return {
+      type:"VoteForCeo_OK",
+      payload:{
+        message:message
+      }
+    }
+  },
+  VoteForCeo_NO : (message) => {
+    return {
+      type:"VoteForCeo_NO",
+      payload:{
+        message:message
+      }
+    }
+  },
+  RunCeo : () => {
+    return {
+      type:"RunCeo",
+      payload:{
+        studentId:localStorage.getItem("userId")
+      }
+    }
+  },
+  RunCeo_OK : (message) => {
+    return {
+      type:"RunCeo_OK",
+      payload:{
+        message:message
+      }
+    }
+  },  
+  RunCeo_NO : (message) => {
+    return {
+      type:"RunCeo_NO",
+      payload:{
+        message:message
+      }
+    }
+  },
+  ShowApplication : (page,studentId) => {
+    return {
+      type:"ShowApplication",
+      payload:{
+        currentPage:page,
+        studentId:studentId
+      }
+    }
+  },
+  ShowApplication_OK : (data) => {
+    return {
+      type:"ShowApplication_OK",
+      payload:{
+        ...data
+      }
+    }
+  },
+  ShowApplication_NO : () => {
+    return {
+      type:"ShowApplication_NO",
+    }
+  },
 }
 export default actions

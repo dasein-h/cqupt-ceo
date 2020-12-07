@@ -2,32 +2,25 @@ import Service from "../Service"
 const StudentApi = {
     ShowAllCompany : (payload) => {
         return Service.post('/student/showCompany',{
-            ...payload
+                ...payload
         })
     },
     RunCeo : (payload) => {
-        return Service.get('/student/runForCeo',{
-            params:{
-                ...payload
-            }
+        return Service.post('/student/runForCeo',{
+            ...payload
         })
     },
     VoteCeo : (payload) => {
-        return Service.get('/student/voteForCeo',{
-            params:{
+        return Service.post('/student/voteForCeo',{
                 ...payload
-            }
         })
     },
 
-    // ShowCeo : (payload) => {
-    //     return Service.get('/application/addApplication',{
-    //         params:{
-    //             ...payload
-    //         }
-    //     })
-    // },
-    //后端的接口文档上面没有写地址，已经反映
+    ShowCeo : (payload) => {    
+        return Service.post('/student/showCeoVote',{
+                ...payload
+        })
+    },
 
     AddApplication : (payload) => {
         return Service.get('/application/addApplication',{
@@ -38,19 +31,15 @@ const StudentApi = {
     },
     ShowApplication : (payload) => {
             //CEO和学生均可以调用，返回不同的数据
-        return Service.get('/application/showApplication',{
-            params:{
+        return Service.post('/application/showApplication',{
                 ...payload
-            }
         })
     },
 
     VoteCompany : (payload) => {
-        return Service.get('/student/voteForCompany',{
-            params:{
+        return Service.post('/student/voteForCompany',{
                 ...payload
-            }
         })
-    },
+    }
 }
 export default StudentApi

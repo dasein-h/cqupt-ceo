@@ -47,7 +47,7 @@ class ChosenStuClass extends Component{
     render() {
         return (
         <div>
-            <Table dataSource={this.state.contentList} columns={columns}/>
+            <Table dataSource={this.state.contentList} columns={columns} rowkey={this.state.contentList.teachclass}/>
         </div>
   );
 };

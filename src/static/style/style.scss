@@ -1,4 +1,7 @@
 $lmargin:20px;
+body {
+  min-width: 969px;
+  } 
 .test_ul{
   width:100px;
   margin:0;
@@ -64,4 +67,16 @@ Modal{
 }
 Content{
   height:870px;
+}
+.Name{
+  float:right;
+  margin-right:20px;
+  min-width:104px;
+}
+.table_div{
+  height:750px;
+}
+.RunCeo{
+  float:left;
+  margin-bottom:10px;
 }

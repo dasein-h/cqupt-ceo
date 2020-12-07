@@ -45,16 +45,30 @@ const dataSource = [
 ];
 
 class UnChosenStuClass extends Component{
+    constructor(prop){
+      super(prop);
+      this.state = {
+        contentList : ''
+      }
+    }
     render() {
         return (
         <div>
-            <Table dataSource={dataSource} columns={columns}  rowSelection={{type:"checkbox"}}/>
+            <Table dataSource={this.state.contentList} columns={columns} rowKey={this.state.contentList.teachclass}/>
         </div>
         );
     };
 
     componentWillMount(){
-        unSelectedClassTeacher("1","79")
+        let repro = unSelectedClassTeacher("1","79")
+        console.log(repro.then((res)=>{
+          this.setState(
+            this.state.contentList = res.data.data
+          )
+          console.log(res.data.data);
+        },(err) => {
+          console.log(err);
+        }));
     }
 }
 
