@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Space,Button, Table,Menu } from 'antd'; 
-import {selectedClassTeacher} from "../../../until/api/teacherApi";
+import { Menu,Space,Button,Table } from 'antd';
+import {selectedClassTeacher} from '../../../until/api/teacherApi';
 
 
 const dataSource = [
@@ -95,7 +95,7 @@ class StuClass extends React.Component{
       
     }
     handleIntoClass = (text,record) => {
-      // console.log(record.teachclass);
+      console.log(record.teachclass);
       sessionStorage.setItem('teachclass',record.teachclass);
       this.props.handleDisTeach();
     }
