@@ -195,7 +195,7 @@ class Student extends Component {
                 <Link to="/Student/AllCompanies/ChosenClasses" onClick={changeNav.bind(this, 0, 1)}>所有公司</Link>
               </Menu.Item>
               <Menu.Item key="2" icon={<VideoCameraOutlined />}>
-                <Link to="/Student/Join" onClick={changeNav.bind(this, 0, 2)}>文件下载</Link>
+                <Link to="/Student/Join" onClick={changeNav.bind(this, 0, 2)}>文件</Link>
               </Menu.Item>
               <Menu.Item key="3" icon={<EditOutlined />}>
                 <Link to="/Student/MyCompany" onClick={changeNav.bind(this, 0, 3)}>申请加入公司</Link>
@@ -300,7 +300,7 @@ class Student extends Component {
                 <Link to="/Student/AllCompanies/ChosenClasses" onClick={changeNav.bind(this, 0, 1)}>所有公司</Link>
               </Menu.Item>
               <Menu.Item key="2" icon={<VideoCameraOutlined />}>
-                <Link to="/Student/Join" onClick={changeNav.bind(this, 0, 2)}>文件下载</Link>
+                <Link to="/Student/Join" onClick={changeNav.bind(this, 0, 2)}>文件</Link>
               </Menu.Item>
               <Menu.Item key="3" icon={<EditOutlined />}>
                 <Link to="/Student/MyCompany" onClick={changeNav.bind(this, 0, 3)}>申请加入公司</Link>

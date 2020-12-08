@@ -66,7 +66,6 @@ export default function* defSaga() {
     const action = yield select()
 
     const res = yield call(LoginApi.KeepLogin, localStorage.getItem("userId"))
-    console.log(res)
     // if (res.status == 200 && res.data.flag)
     if (res.status == 200 && res.data.flag)
     //flag不对，向后端反映
@@ -109,7 +108,6 @@ export default function* defSaga() {
   yield takeEvery('getAllCompanies', function* () {
     const action = yield select()
     const res = yield call(StudentApi.ShowAllCompany, action.payload)
-    console.log(res)
     if (res.status === 200 && res.data.flag) {
       yield put(actions.getAllCompanies_OK(res.data))
       //把获取到的数据发送到state，展示在页面上
@@ -122,7 +120,6 @@ export default function* defSaga() {
   yield takeEvery('VoteForCompany', function* () {
     const action = yield select()
     const res = yield call(StudentApi.VoteCompany, action.payload)
-    console.log(res)
     if (res.status === 200 && res.data.flag) {
       yield put(actions.VoteForCompany_OK(res.data.message))
       yield put(actions.getAllCompanies(localStorage.getItem("userId"),parseInt(sessionStorage.getItem("Page1"))||"1"))
@@ -135,7 +132,6 @@ export default function* defSaga() {
   yield takeEvery('ShowCeo', function* () {
     const action = yield select()
     const res = yield call(StudentApi.ShowCeo, action.payload)
-    console.log(res)
     if (res.status === 200 && res.data.flag) {
       yield put(actions.ShowCeo_OK(res.data))
       //把获取到的数据发送到state，展示在页面上
@@ -147,7 +143,6 @@ export default function* defSaga() {
   yield takeEvery('VoteForCeo', function* () {
     const action = yield select()
     const res = yield call(StudentApi.VoteCeo, action.payload)
-    console.log(res)
     if (res.status === 200 && res.data.flag) {
       yield put(actions.VoteForCeo_OK(res.data.message))
       //把获取到的数据发送到state，展示在页面上
@@ -159,7 +154,6 @@ export default function* defSaga() {
   yield takeEvery('RunCeo', function* () {
     const action = yield select()
     const res = yield call(StudentApi.RunCeo, action.payload)
-    console.log(res)
     if (res.status === 200 && res.data.flag) {
       yield put(actions.RunCeo_OK(res.data.message))
       //把获取到的数据发送到state，展示在页面上
@@ -171,7 +165,6 @@ export default function* defSaga() {
   yield takeEvery('ShowApplication', function* () {
     const action = yield select()
     const res = yield call(StudentApi.ShowApplication, action.payload)
-    console.log(res)
     if (res.status === 200 && res.data.flag) {
       yield put(actions.ShowApplication_OK(res.data))
       //把获取到的数据发送到state，展示在页面上
@@ -183,7 +176,6 @@ export default function* defSaga() {
   yield takeEvery('AddApplication', function* () {
     const action = yield select()
     const res = yield call(StudentApi.AddApplication, action.payload)
-    console.log(res)
     if (res.status === 200 && res.data.flag) {
       yield put(actions.AddApplication_OK(res.data.message))
       //把获取到的数据发送到state，展示在页面上

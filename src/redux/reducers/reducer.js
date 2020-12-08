@@ -6,12 +6,12 @@ const newstate = {
   }
 }
 export default (state = newstate, action) => {
-  var data = {CompanyData:state.CompanyData,CeoData:state.CeoData,ApplicationData:state.ApplicationData}
+  var data = {CompanyData:state.CompanyData,CeoData:state.CeoData,ApplicationData:state.ApplicationData,FileData:state.FileData}
   switch (action.type) {
     case "getAllCompanies":
       return { isLogin:state.isLogin, ...data,  ...action}
     case "getAllCompanies_OK":
-      return { isgetAllCompanies:true, isLogin:state.isLogin,  CompanyData:action.payload.data,CeoData:state.CeoData,ApplicationData:state.ApplicationData,}
+      return { isgetAllCompanies:true, isLogin:state.isLogin,  ...data,CompanyData:action.payload.data,}
     case "login":
       return {   isLogin:state.isLogin,  ...action}
     case "Login_Success":
@@ -31,7 +31,7 @@ export default (state = newstate, action) => {
     case "VoteForCompany_NO":
       return {isVoteForCompany:false, ...data,isLogin:state.isLogin, ...action.payload}
     case "ShowCeo_OK":
-      return {isShowCeo:true, isLogin:state.isLogin, CeoData:action.payload.data,CompanyData:state.CompanyData,ApplicationData:state.ApplicationData}
+      return {isShowCeo:true, isLogin:state.isLogin,...data, CeoData:action.payload.data,}
     case "ShowCeo_NO":
       return {isShowCeo:false,...data, isLogin:state.isLogin, ...action.payload}
     /* CEO */
@@ -50,7 +50,7 @@ export default (state = newstate, action) => {
     case "ShowApplication":
       return {isLogin:state.isLogin,...data, ...action}
     case "ShowApplication_OK":
-      return {isShowApplication:true, isLogin:state.isLogin, ApplicationData:action.payload.data,CompanyData:state.CompanyData,CeoData:state.CeoData}
+      return {isShowApplication:true, isLogin:state.isLogin,...data, ApplicationData:action.payload.data}
     case "ShowApplication_NO":
       return {isShowApplication:false, ...data,isLogin:state.isLogin, ...action.payload}
     case "AddApplication":
@@ -59,6 +59,24 @@ export default (state = newstate, action) => {
       return {isAddApplication:true, isLogin:state.isLogin,...data, ...action.payload}
     case "AddApplication_NO":
       return {isAddApplication:false, isLogin:state.isLogin,...data, ...action.payload}
+    case "ShowFile":
+      return {isLogin:state.isLogin,...data, ...action}
+    case "ShowFile_OK":
+      return {isShowFile:true, isLogin:state.isLogin,...data, FileData:action.payload.data}
+    case "ShowFile_NO":
+      return {isShowFile:false, ...data,isLogin:state.isLogin, ...action.payload}
+    case "UploadFile":
+      return {isLogin:state.isLogin,...data,...action}
+    case "UploadFile_OK":
+      return {isUploadFile:true, isLogin:state.isLogin,...data, ...action.payload}
+    case "UploadFile_NO":
+      return {isUploadFile:false, isLogin:state.isLogin,...data, ...action.payload}
+    case "DownloadFile":
+      return {isLogin:state.isLogin,...data,...action}
+    case "DownloadFile_OK":
+      return {isDownloadFile:true, isLogin:state.isLogin,...data, ...action.payload}
+    case "DownloadFile_NO":
+      return {isDownloadFile:false, isLogin:state.isLogin,...data, ...action.payload}
     case "Exist" :
       return {...data,...action,isLogin:state.isLogin}
     case "CEO_SET_MEMBER":
