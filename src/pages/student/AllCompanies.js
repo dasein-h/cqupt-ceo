@@ -20,7 +20,7 @@ class AllCompanies extends Component {
 
 
             <Route path="/Student/AllCompanies/ChosenClasses" component={ChosenClasses}></Route>
-
+            <Redirect to="/Student/AllCompanies/ChosenClasses"/>
       </div>
     );
   }

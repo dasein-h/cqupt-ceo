@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { Table, Tag, Space,pagination, message, Button } from 'antd';
+import { Table, Tag, Space,pagination, message, Button, Empty } from 'antd';
 import actions from '../../redux/actionCreators/creators'
 import changePage from '../../until/changePage'
 import '../../static/style/style.scss'
@@ -61,16 +61,17 @@ class CEO extends Component {
               message.error(newProps.message)
             }
           }
-          const {data} = newProps
-          let newdata = data.object
+          const {CeoData} = newProps
+          let newdata = CeoData.object
           for (let item in newdata){
             newdata[item].key = item
           }
           this.setState({
             currentPage: parseInt(sessionStorage.getItem("Page2"))||'1',
             data:newdata,
-            totalNum:data.totalNumber
+            totalNum:CeoData.totalNumber
           })
+        
         }
         catch{
           console.log("error")
@@ -79,10 +80,12 @@ class CEO extends Component {
     }
     componentDidMount() {
       //如果要获取数据，最好在这里进行，组件在render之前不会返回数据
-      if(localStorage.getItem("userId")){
+      if(localStorage.getItem("userId") && !this.props.CeoData){
         this.props.ShowCeo(parseInt(sessionStorage.getItem("Page2"))||'1',localStorage.getItem("userId"))
       }
-      
+      if(this.props.CeoData){
+        this.props.Exist()
+      }
     }
     shouldComponentUpdate(nextProps, nextState) {
       if (nextProps !== this.props || nextState!== this.state) {
@@ -94,7 +97,9 @@ class CEO extends Component {
     }
     
     onPageChange (page,pageSize) {
+      if (localStorage.getItem("userId")){
         this.props.ShowCeo(page,localStorage.getItem("userId"))
+      }
         // let newdata = this.state.data.object
         this.setState({
             currentPage: page,
@@ -150,12 +155,21 @@ class CEO extends Component {
         onChange:this.onPageChange,
         current:this.state.currentPage,
     }
+    if (localStorage.getItem("userId")){
         return ( 
             <div className="table_div">
             <Button type="primary" className="RunCeo" onClick={this.props.RunCeo}>成为CEO</Button>
             <Table columns={columns} dataSource={this.state.data} pagination={pagination}/>
             </div>
-             );
+             )
+        }
+        else{
+          return ( 
+            <div className="table_div">
+              <Empty image={Empty.PRESENTED_IMAGE_SIMPLE}>请登录后查看</Empty>
+            </div>
+             )
+        }
     } 
 }
  
@@ -170,7 +184,10 @@ const mapDispatchToProps = (dispatch) => {
     },
     RunCeo: () => {
       dispatch(actions.RunCeo())
-    }
+    },
+    Exist: () => {
+      dispatch(actions.Exist())
+    },
   }
 }
 const mapStateToProps = state => {

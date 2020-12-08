@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { Table, Tag, Space,pagination, message } from 'antd';
+import { Table, Tag, Space,pagination, message , Empty } from 'antd';
 import actions from '../../redux/actionCreators/creators'
 import changePage from '../../until/changePage'
 import '../../static/style/style.scss'
@@ -43,8 +43,7 @@ class ChosenClasses extends Component {
         super(props);
         this.state = { 
             currentPage:parseInt(sessionStorage.getItem("Page1"))||"1",
-            data : [
-              ],
+            data : [],
          }
         //  this.onPageChange=this.onPageChange.bind(this)
     }
@@ -59,8 +58,8 @@ class ChosenClasses extends Component {
             if(newProps.isVoteForCompany === false )
             message.error(newProps.message)
           }
-          const {data} = newProps
-          let newdata = data.object
+          const {CompanyData} = newProps
+          let newdata = CompanyData.object
           for (let item in newdata){
             newdata[item].key = item
           }
@@ -76,10 +75,12 @@ class ChosenClasses extends Component {
     }
     componentDidMount() {
       //如果要获取数据，最好在这里进行，组件在render之前不会返回数据
-      if(localStorage.getItem("userId")){
+      if(localStorage.getItem("userId") && !this.props.CompanyData){
         this.props.getAllCompanies(localStorage.getItem("userId"))
       }
-      this.setState()
+      if(this.props.CompanyData){
+        this.props.Exist()
+      }
     }
     shouldComponentUpdate(nextProps, nextState) {
       if (nextProps !== this.props || nextState!== this.state) {
@@ -91,11 +92,8 @@ class ChosenClasses extends Component {
     }
     
     onPageChange (page,pageSize) {
-        // this.props.getAllCompanies(localStorage.getItem("userId"),page)
-        // let newdata = this.state.data.object
         this.setState({
             currentPage: page,
-            // data:newdata
         })
 
 
@@ -139,11 +137,17 @@ class ChosenClasses extends Component {
           ),
         },
       ]
-        return ( 
+      if(localStorage.getItem("userId"))
+        return (
           <div className="table_div">
             <Table columns={columns} dataSource={this.state.data}/>
             </div>
              )
+      else return(
+        <div className="table_div">
+        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE}>请登录后查看</Empty>
+        </div>
+      )
 
     } 
 }
@@ -152,11 +156,14 @@ const mapDispatchToProps = (dispatch) => {
   //把发送action的方法绑定到当前组件的props
   return {
     getAllCompanies: (userId, page) => {
-      dispatch(actions.getAllCompanies(userId,page))
+      dispatch(actions.getAllCompanies(userId))
     },
     VoteForCompany: (studentId,ceoId) => {
       dispatch(actions.VoteForCompany(studentId,ceoId))
-    }
+    },
+    Exist: () => {
+      dispatch(actions.Exist())
+    },
   }
 }
 const mapStateToProps = state => {

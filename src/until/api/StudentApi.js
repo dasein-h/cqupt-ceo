@@ -23,11 +23,9 @@ const StudentApi = {
     },
 
     AddApplication : (payload) => {
-        return Service.get('/application/addApplication',{
-            params:{
-                ...payload
-            }
-        })
+        return Service.post('/application/addApplication',
+               payload
+            )
     },
     ShowApplication : (payload) => {
             //CEO和学生均可以调用，返回不同的数据
@@ -40,6 +38,23 @@ const StudentApi = {
         return Service.post('/student/voteForCompany',{
                 ...payload
         })
-    }
+    },
+    DownloadFile : (payload) => {
+        return Service.get('/upload/download',{
+            params:{
+                ...payload
+            }
+        })
+    },
+    UploadFile : (payload) => {
+        return Service.post('/upload/up',{
+                ...payload
+        })
+    },
+    ShowFile : (payload) => {
+        return Service.post('/upload/showall',{
+                ...payload
+        })
+    },
 }
 export default StudentApi

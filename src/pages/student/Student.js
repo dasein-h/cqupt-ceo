@@ -143,7 +143,7 @@ class Student extends Component {
   }
   componentDidUpdate(){
     if(this.props.isLogin===true){
-        if (localStorage.getItem("type") === "学生" && !/Student/.test(window.location))
+        if (localStorage.getItem("type") === "学生" && !/Student/.test(window.location) && localStorage.getItem("ceo") !== '1')
         {
           window.location = "/Student"
         }
@@ -151,7 +151,10 @@ class Student extends Component {
          {
           window.location = "/teacher"
         }
-      
+        else if (localStorage.getItem("ceo") === '1' && !/CEO/.test(window.location))
+        {
+         window.location = "/CEO"
+       }
     }
   }
 
@@ -192,10 +195,10 @@ class Student extends Component {
                 <Link to="/Student/AllCompanies/ChosenClasses" onClick={changeNav.bind(this, 0, 1)}>所有公司</Link>
               </Menu.Item>
               <Menu.Item key="2" icon={<VideoCameraOutlined />}>
-                <Link to="/Student/Join" onClick={changeNav.bind(this, 0, 2)}>我的申请</Link>
+                <Link to="/Student/Join" onClick={changeNav.bind(this, 0, 2)}>文件</Link>
               </Menu.Item>
               <Menu.Item key="3" icon={<EditOutlined />}>
-                <Link to="/Student/MyCompany/WriteWant" onClick={changeNav.bind(this, 0, 3)}>申请加入公司</Link>
+                <Link to="/Student/MyCompany" onClick={changeNav.bind(this, 0, 3)}>申请加入公司</Link>
               </Menu.Item>
               <Menu.Item key="4" icon={<OrderedListOutlined />}>
                 <Link to="/Student/CEO/Campaign" onClick={changeNav.bind(this, 0, 4)}>CEO</Link>
@@ -297,15 +300,14 @@ class Student extends Component {
                 <Link to="/Student/AllCompanies/ChosenClasses" onClick={changeNav.bind(this, 0, 1)}>所有公司</Link>
               </Menu.Item>
               <Menu.Item key="2" icon={<VideoCameraOutlined />}>
-                <Link to="/Student/Join" onClick={changeNav.bind(this, 0, 2)}>我的申请</Link>
+                <Link to="/Student/Join" onClick={changeNav.bind(this, 0, 2)}>文件</Link>
               </Menu.Item>
               <Menu.Item key="3" icon={<EditOutlined />}>
-                <Link to="/Student/MyCompany/WriteWant" onClick={changeNav.bind(this, 0, 3)}>申请加入公司</Link>
+                <Link to="/Student/MyCompany" onClick={changeNav.bind(this, 0, 3)}>申请加入公司</Link>
               </Menu.Item>
               <Menu.Item key="4" icon={<OrderedListOutlined />}>
                 <Link to="/Student/CEO/Campaign" onClick={changeNav.bind(this, 0, 4)}>CEO</Link>
               </Menu.Item>
-
             </Menu>
           </Sider>
           <Layout className="site-layout"
