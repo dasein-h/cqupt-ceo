@@ -58,8 +58,8 @@ class ChosenClasses extends Component {
             if(newProps.isVoteForCompany === false )
             message.error(newProps.message)
           }
-          const {data1} = newProps
-          let newdata = data1.object
+          const {CompanyData} = newProps
+          let newdata = CompanyData.object
           for (let item in newdata){
             newdata[item].key = item
           }
@@ -75,10 +75,10 @@ class ChosenClasses extends Component {
     }
     componentDidMount() {
       //如果要获取数据，最好在这里进行，组件在render之前不会返回数据
-      if(localStorage.getItem("userId") && !this.props.data1){
+      if(localStorage.getItem("userId") && !this.props.CompanyData){
         this.props.getAllCompanies(localStorage.getItem("userId"))
       }
-      if(this.props.data1){
+      if(this.props.CompanyData){
         this.props.Exist()
       }
     }

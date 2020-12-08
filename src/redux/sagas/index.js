@@ -43,9 +43,10 @@ export default function* defSaga() {
         })
       }
       setLocalStorage({
-        userName:res.data.data.userName
+        userName:res.data.data.userName,
+        ceo:res.data.error
       })
-      if(localStorage.getItem("type")==="学生"){
+      if(localStorage.getItem("type")==="学生" && localStorage.getItem("ceo") !== '1'){
         window.location="/Student/AllCompanies/ChosenClasses"
       }
       sessionStorage.clear()

@@ -6,12 +6,12 @@ const newstate = {
   }
 }
 export default (state = newstate, action) => {
-  var data = {data1:state.data1,data2:state.data2,data3:state.data3,}
+  var data = {CompanyData:state.CompanyData,CeoData:state.CeoData,ApplicationData:state.ApplicationData}
   switch (action.type) {
     case "getAllCompanies":
       return { isLogin:state.isLogin, ...data,  ...action}
     case "getAllCompanies_OK":
-      return { isgetAllCompanies:true, isLogin:state.isLogin,  data1:action.payload.data,data2:state.data2,data3:state.data3,}
+      return { isgetAllCompanies:true, isLogin:state.isLogin,  CompanyData:action.payload.data,CeoData:state.CeoData,ApplicationData:state.ApplicationData,}
     case "login":
       return {   isLogin:state.isLogin,  ...action}
     case "Login_Success":
@@ -31,7 +31,7 @@ export default (state = newstate, action) => {
     case "VoteForCompany_NO":
       return {isVoteForCompany:false, ...data,isLogin:state.isLogin, ...action.payload}
     case "ShowCeo_OK":
-      return {isShowCeo:true, isLogin:state.isLogin, data2:action.payload.data,data1:state.data1,data3:state.data3}
+      return {isShowCeo:true, isLogin:state.isLogin, CeoData:action.payload.data,CompanyData:state.CompanyData,ApplicationData:state.ApplicationData}
     case "ShowCeo_NO":
       return {isShowCeo:false,...data, isLogin:state.isLogin, ...action.payload}
     /* CEO */
@@ -50,7 +50,7 @@ export default (state = newstate, action) => {
     case "ShowApplication":
       return {isLogin:state.isLogin,...data, ...action}
     case "ShowApplication_OK":
-      return {isShowApplication:true, isLogin:state.isLogin, data3:action.payload.data,data1:state.data1,data2:state.data2}
+      return {isShowApplication:true, isLogin:state.isLogin, ApplicationData:action.payload.data,CompanyData:state.CompanyData,CeoData:state.CeoData}
     case "ShowApplication_NO":
       return {isShowApplication:false, ...data,isLogin:state.isLogin, ...action.payload}
     case "AddApplication":

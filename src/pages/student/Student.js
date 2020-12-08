@@ -143,7 +143,7 @@ class Student extends Component {
   }
   componentDidUpdate(){
     if(this.props.isLogin===true){
-        if (localStorage.getItem("type") === "学生" && !/Student/.test(window.location))
+        if (localStorage.getItem("type") === "学生" && !/Student/.test(window.location) && localStorage.getItem("ceo") !== '1')
         {
           window.location = "/Student"
         }
@@ -151,7 +151,10 @@ class Student extends Component {
          {
           window.location = "/teacher"
         }
-      
+        else if (localStorage.getItem("ceo") === '1' && !/CEO/.test(window.location))
+        {
+         window.location = "/CEO"
+       }
     }
   }
 

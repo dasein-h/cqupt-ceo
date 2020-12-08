@@ -54,15 +54,15 @@ class Join extends Component {
     UNSAFE_componentWillUpdate(newProps,newState){
       if(newProps!==this.props){
         try{
-          const {data3} = newProps
-          let newdata = data3.object
+          const {ApplicationData} = newProps
+          let newdata = ApplicationData.object
           for (let item in newdata){
             newdata[item].key = item
           }
           this.setState({
             currentPage: parseInt(sessionStorage.getItem("Page3"))||'1',
             data:newdata,
-            totalNum:data3.totalNumber
+            totalNum:ApplicationData.totalNumber
           })
         
         }
@@ -73,10 +73,10 @@ class Join extends Component {
     }
     componentDidMount() {
       //如果要获取数据，最好在这里进行，组件在render之前不会返回数据
-      if(localStorage.getItem("userId") && !this.props.data3){
+      if(localStorage.getItem("userId") && !this.props.ApplicationData){
         this.props.ShowApplication(parseInt(sessionStorage.getItem("Page3"))||'1',localStorage.getItem("userId"))
       }
-      if(this.props.data3){
+      if(this.props.ApplicationData){
         this.props.Exist()
       }
     }

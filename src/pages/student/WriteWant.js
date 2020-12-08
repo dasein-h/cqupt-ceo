@@ -75,15 +75,15 @@ class WriteWant extends Component {
             if(!newProps.message && newProps.isAddApplication === true){
                 message.success("申请成功")
             }
-            if(newProps.isgetAllCompanies === true ){
-                const {data} = newProps
-                let newdata = data.object
+
+                const {CompanyData} = newProps
+                let newdata = CompanyData.object
                 for (let item in newdata){
                     newdata[item].key = item
                   }
                 this.setState({
                   data:newdata
-                })}
+                })
           }
           catch{
             console.log("error")
@@ -91,8 +91,11 @@ class WriteWant extends Component {
         }
       }
       componentDidMount() {
-        if(localStorage.getItem("userId")){
+        if(localStorage.getItem("userId") && !this.props.CompanyData){
             this.props.getAllCompanies(localStorage.getItem("userId"))
+        }
+        if(this.props.CompanyData){
+          this.props.Exist()
         }
       }
       render() {
@@ -196,6 +199,9 @@ const mapDispatchToProps = (dispatch) => {
       },
       getAllCompanies: (userId) => {
         dispatch(actions.getAllCompanies(userId))
+      },
+      Exist: () => {
+        dispatch(actions.Exist())
       },
     }
   }
