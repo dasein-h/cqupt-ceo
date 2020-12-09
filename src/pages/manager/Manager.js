@@ -13,7 +13,7 @@ import ChoseClass from './view/ChoseClass'
 import Set from './view/Set'
 import ImData from './view/ImData'
 import './style/Nav.css';
-import {  Menu } from 'antd';
+import {  Menu,Button } from 'antd';
 import { UserOutlined, VideoCameraOutlined, EditOutlined, OrderedListOutlined } from '@ant-design/icons';
 
 class Manager extends Component { 
@@ -21,7 +21,7 @@ class Manager extends Component {
         super(props);
         
         this.state = {
-            
+            username: ''
           }
     }
     render() {
@@ -29,6 +29,15 @@ class Manager extends Component {
             <Router>
                 <div id="All">
                     <div className="nav-div">
+                        <div className="login">
+                                <span >欢迎您,{this.state.username}</span>
+                                <Button 
+                                    type="primary" 
+                                    ghost size="small" 
+                                    style={{marginLeft:'15px'}}
+                                    onClick = {this.handleExit}
+                                >退出登录</Button>
+                            </div>
                         <Menu theme="light" mode="inline">
                             <Menu.Item key="1" icon={<UserOutlined />}>
                                 <Link to="/Manager/choseclass">选择班级</Link>

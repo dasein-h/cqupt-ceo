@@ -64,13 +64,12 @@ function deleteClass(teacherId, cls) {
     }
   })
 }
+
 // 展示竞选ceo同学及投票数
-function showCeo(currentPage,teacherclass){
+function showCeo(currentPage,teachclass){
   return Service.post('/student/showCeoVote',{
-    params:{
       currentPage,
-      teacherclass
-    }
+      teachclass
   })
 }
 
@@ -133,7 +132,7 @@ function deleteCompany(ceo) {
 
 /*撤销ceo*/
 function deleteCeo(studentId) {
-  return Service.post('/teacher/deletecompany', {
+  return Service.post('/teacher/deleteceo', {
     studentId
   })
 }
