@@ -52,7 +52,7 @@ const StudentApi = {
         })
     },
     ShowFile : (payload) => {
-        return Service.post('/upload/showall',{
+        return Service.post('/upload/showAll',{
                 ...payload
         })
     },

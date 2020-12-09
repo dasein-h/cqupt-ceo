@@ -42,7 +42,7 @@ class ChosenClasses extends Component {
     constructor(props) {
         super(props);
         this.state = { 
-            currentPage:parseInt(sessionStorage.getItem("Page1"))||"1",
+            currentPage:parseInt(sessionStorage.getItem("Page1"))||1,
             data : [],
          }
         //  this.onPageChange=this.onPageChange.bind(this)
@@ -64,7 +64,7 @@ class ChosenClasses extends Component {
             newdata[item].key = item
           }
           this.setState({
-            currentPage: parseInt(sessionStorage.getItem("Page1"))||'1',
+            currentPage: parseInt(sessionStorage.getItem("Page1"))||1,
             data:newdata
           })
         }

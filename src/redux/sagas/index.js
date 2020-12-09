@@ -33,27 +33,24 @@ export default function* defSaga() {
 
         setLocalStorage({
           userId: action.payload.studentId,
-          type: "学生"
+          type: res.data.data.type
         })
       }
       else{
         setLocalStorage({
           userId: action.payload.teacherId,
-          type: "老师"
+          type: res.data.data.type
         })
       }
       setLocalStorage({
         userName:res.data.data.userName,
-        ceo:res.data.error
+        ceo:res.data.error,
+        class:res.data.teachclass,
       })
-      if(localStorage.getItem("type")==="学生" && localStorage.getItem("ceo") !== '1'){
+      if(localStorage.getItem("type")==="student" && localStorage.getItem("ceo") !== '1'){
         window.location="/Student/AllCompanies/ChosenClasses"
       }
       sessionStorage.clear()
-      // yield put(actions.getAllCompanies(localStorage.getItem("userId")))
-      // yield put(actions.ShowCeo(1,localStorage.getItem("userId")))
-      // location.reload()
-      // window.location="/Student/AllCompanies/ChosenClasses"
       
     }
     else {
@@ -182,6 +179,43 @@ export default function* defSaga() {
     }
     else{
       yield put(actions.AddApplication_NO(res.data.message))
+    }
+  })
+  yield takeEvery('ShowFlie', function* () {
+    const action = yield select()
+    const res = yield call(StudentApi.ShowFile, action.payload)
+    console.log(res)
+    if (res.status === 200 ) {
+
+      yield put(actions.ShowFile_OK(JSON.parse(res.data)))
+      //把获取到的数据发送到state，展示在页面上
+    }
+    else{
+      yield put(actions.ShowFile_NO())
+    }
+  })
+  yield takeEvery('UploadFile', function* () {
+    const action = yield select()
+    const res = yield call(StudentApi.UploadFile,action.payload)
+    console.log(res)
+    if (res.status === 200 && res.data.flag) {
+      yield put(actions.UploadFile_OK(res.data))
+      //把获取到的数据发送到state，展示在页面上
+    }
+    else{
+      yield put(actions.UploadFile_NO())
+    }
+  })
+  yield takeEvery('DownloadFile', function* () {
+    const action = yield select()
+    const res = yield call(StudentApi.DownloadFile,action.payload)
+    console.log(res)
+    if (res.status === 200 && res.data.flag) {
+      yield put(actions.DownloadFile_OK(res.data.message))
+      //把获取到的数据发送到state，展示在页面上
+    }
+    else{
+      yield put(actions.DownloadFile_NO(res.data.message))
     }
   })
   /* CEO */

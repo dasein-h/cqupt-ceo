@@ -44,7 +44,7 @@ class Join extends Component {
         super(props);
         this.state = { 
             totalNum:0,
-            currentPage:parseInt(sessionStorage.getItem("Page4"))||"1",
+            currentPage:parseInt(sessionStorage.getItem("Page3"))||1,
             data : [
               ],
          }
@@ -54,15 +54,15 @@ class Join extends Component {
     UNSAFE_componentWillUpdate(newProps,newState){
       if(newProps!==this.props){
         try{
-          const {FileData} = newProps
-          let newdata = FileData.object
+          const {ApplicationData} = newProps
+          let newdata = ApplicationData.object
           for (let item in newdata){
             newdata[item].key = item
           }
           this.setState({
-            currentPage: parseInt(sessionStorage.getItem("Page4"))||'1',
+            currentPage: parseInt(sessionStorage.getItem("Page3"))||1,
             data:newdata,
-            totalNum:FileData.totalNumber
+            totalNum:ApplicationData.totalNumber
           })
         
         }
@@ -73,10 +73,10 @@ class Join extends Component {
     }
     componentDidMount() {
       //如果要获取数据，最好在这里进行，组件在render之前不会返回数据
-      if(localStorage.getItem("userId") && !this.props.FileData){
-        this.props.ShowFile(localStorage.getItem("userId"))
+      if(localStorage.getItem("userId") && !this.props.ApplicationData){
+        this.props.ShowApplication(parseInt(sessionStorage.getItem("Page3"))||1,localStorage.getItem("userId"))
       }
-      if(this.props.FileData){
+      if(this.props.ApplicationData){
         this.props.Exist()
       }
     }
@@ -90,13 +90,13 @@ class Join extends Component {
     }
     
     onPageChange (page,pageSize) {
-        this.props.ShowFile(localStorage.getItem("userId"))
+        this.props.ShowApplication(page,localStorage.getItem("userId"))
         // let newdata = this.state.data.object
         this.setState({
             currentPage: page,
             // data:newdata
         })
-        changePage(4,page)
+        changePage(3,page)
     }
     render() { 
       changeNav(1, 1)
@@ -158,14 +158,8 @@ class Join extends Component {
 const mapDispatchToProps = (dispatch) => {
   //把发送action的方法绑定到当前组件的props
   return {
-    ShowFile: (studentId) => {
-        dispatch(actions.ShowFile(studentId))
-    },
-    UploadFile: (file,studentId,teachclass) => {
-      dispatch(actions.UploadFile(file,studentId,teachclass))
-    },
-    DownloadFile: (id) => {
-      dispatch(actions.DownloadFile(id))
+    ShowApplication: (page,studentId) => {
+        dispatch(actions.ShowApplication(page,studentId))
     },
     Exist: () => {
       dispatch(actions.Exist())
