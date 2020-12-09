@@ -11,6 +11,7 @@ import StuInfo from './StuInfo';
 import VotSit from './VotSit';
 import NewsCom from './news';
 import SignCom from './Sign'
+import SetCom from './Set'
 import StuClass from './StuClass';
 import '../../teacher/style/contentNav.css';
 import {  Menu,Button } from 'antd';
@@ -59,6 +60,9 @@ class Teacher extends Component {
                                 <Menu.Item key="5" icon={<CarryOutOutlined />}>
                                     <Link to="/Teacher/Sign">签到</Link> 
                                 </Menu.Item>
+                                <Menu.Item key="6" icon={<CarryOutOutlined />}>
+                                    <Link to="/Teacher/Set">修改配置</Link> 
+                                </Menu.Item>
                             </Menu>
                             
                         </div>
@@ -79,6 +83,9 @@ class Teacher extends Component {
                                     </Route> 
                                     <Route path="/Teacher/Sign">
                                         <SignCom />  
+                                    </Route>
+                                    <Route path="/Teacher/Set">
+                                        <SetCom></SetCom>
                                     </Route>
                                 </Switch>
                             </div> 

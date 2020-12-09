@@ -1,19 +1,19 @@
 import React from 'react'
 import { changeCompanyName, agreeChange, rejectChange } from '../../../until/api/teacherApi'
-import { Table, Space, Button, notification,Input,Select } from 'antd'
-import store from '../../../redux/store'
-const {Search} = Input
+import { Table, Space, Button, notification, Input, Select } from 'antd'
+const { Search } = Input
 const { Option } = Select;
 class newLists extends React.Component {
   constructor(...props) {
     super(...props)
     this.state = {
-      select:"name",
-      value:"",
+      teachclass: localStorage.getItem("teachclass"),
+      select: "name",
+      value: "",
       loading: true,
       data: [],
       pagination: {
-        showSizeChanger:false,
+        showSizeChanger: false,
         pageSize: 7,
         current: 1,
         total: "",
@@ -24,14 +24,14 @@ class newLists extends React.Component {
           console.log(this.state.pagination.current);
         }
       },
-      columns:[
+      columns: [
         {
           title: '申请人姓名',
           dataIndex: 'name',
         },
         {
-          title:'申请人学号',
-          dataIndex:'id'
+          title: '申请人学号',
+          dataIndex: 'id'
         },
         {
           title: '原公司名',
@@ -46,13 +46,13 @@ class newLists extends React.Component {
           dataIndex: 'agree',
           render: (text, record, index) => (
             <Space size="middle">
-              <Button size="small" type="primary" ghost onClick={() => { this.clickAgree(text,record,index) }}>同意</Button>
-              <Button size="small" danger="true" onClick={() => { this.clickReject(text,record,index) }}>拒绝</Button>
+              <Button size="small" type="primary" ghost onClick={() => { this.clickAgree(text, record, index) }}>同意</Button>
+              <Button size="small" danger="true" onClick={() => { this.clickReject(text, record, index) }}>拒绝</Button>
             </Space>
           ),
         },
       ],
-      
+
     }
   }
   render() {
@@ -66,11 +66,11 @@ class newLists extends React.Component {
           <Search
             placeholder="请输入搜索信息"
             enterButton="搜索"
-            style={{ width: 200, marginBottom:10 }}
-            onChange={(e) => {this.inputChange(e)}}
+            style={{ width: 200, marginBottom: 10 }}
+            onChange={(e) => { this.inputChange(e) }}
             value={this.state.value}
-        ></Search>
-        </div>    
+          ></Search>
+        </div>
         <div className="header">
           <Table
             columns={this.state.columns}
@@ -84,7 +84,7 @@ class newLists extends React.Component {
     )
 
   }
-  clickAgree = (text,record,index) => {
+  clickAgree = (text, record, index) => {
     // let newData = [...this.state.data];
     // let pagination = {...this.state.pagination};
     // pagination.total = pagination.total-1;
@@ -97,37 +97,42 @@ class newLists extends React.Component {
     //直接用 this.state.pagination.current 调用数据？
     console.log(record);//这是这一行的数据
     // console.log(store.getState());
-    agreeChange(record.id).then((rs)=>{
-      let res = JSON.parse(rs);
-      if(res.flag==="true"){
+    agreeChange(record.id, record.error).then((rs) => {
+      let res = rs.data;
+      console.log(res);
+      if (res.flag === true) {
+        console.log(this.state.pagination.current);
+        this.changePage(this.state.pagination.current)
         notification.open({
           message: '提示',
           placement: "bottomRight",
           description:
             '同意改名成功!',
         });
-      }else{
+
+      } else {
         notification.open({
           message: '提示',
           placement: "bottomRight",
           description:
             '同意改名失败!',
-        })}
+        })
+      }
     })
-    this.changePage(this.state.pagination.current)
+
   }
-  clickReject = (text,record,index) => {
-    console.log(record);//这是这一行的数据
-    rejectChange(record.id).then((rs)=>{
-      let res = JSON.parse(rs);
-      if(res.flag==="true"){
+  clickReject = (text, record, index) => {
+    rejectChange(record.id, record.error).then((rs) => {
+      let res = rs.data;
+      console.log(res);
+      if (res.flag === true) {
         notification.open({
           message: '提示',
           placement: "bottomRight",
           description:
             '拒绝改名成功!',
         });
-      }else{
+      } else {
         notification.open({
           message: '提示',
           placement: "bottomRight",
@@ -166,57 +171,61 @@ class newLists extends React.Component {
     // })
     this.changePage(1)
   }
-  changePage = (page,news) =>{
+  changePage = (page, news) => {
     let lists = [];
     let newPage = page;
-    if(page===0){
-      newPage = 1;
-    }
-   changeCompanyName('SJ00201A2031780003', newPage, "1").then(
-    res => {
-      this.setState({ loading: false })
-      let rs = JSON.parse(res.data);
-      for(let i = 0;i<rs.length;i++){
-        lists.push({
-          "message":rs[i].message,
-          "error":rs[i].error,
-          "name":rs[i].data.userName,
-          "id":rs[i].data.userId,
-          "index":i
-        })
-      }
+    // if(page===0){
+    //   newPage = 1;
+    // }
+    changeCompanyName(this.state.teachclass, newPage, "1").then(
+      res => {
+        this.setState({ loading: false })
+        let rs = JSON.parse(res.data);
+        if (rs.length === 0) {
+          this.setState({
+            data: []
+          })
+        } else {
+          for (let i = 0; i < rs.length; i++) {
+            lists.push({
+              "message": rs[i].message,
+              "error": rs[i].error,
+              "name": rs[i].data.userName,
+              "id": rs[i].data.userId,
+              "index": i
+            })
+          }
+          let pagination = { ...this.state.pagination };
+          pagination.total = rs[0].page
+          this.setState({ data: lists, pagination: pagination });
+          console.log(this.state.data);
+        }
 
-      if(rs.length !== 0){
-       let pagination = {...this.state.pagination};
-       pagination.total = rs[0].page
-      this.setState({ data: lists,pagination:pagination });
-      console.log(this.state.data);
-     }
-    }).catch(err => {
-      console.log(err)
-      this.setState({ loading: false })
-      notification.open({
-        message: '警告',
-        placement: "bottomRight",
-        description:
-          '请求超时或服务器异常,请检查网络或联系管理员!',
-        onClick: () => {
-          console.log('Notification Clicked!');
-        },
-      });
-    })
+      }).catch(err => {
+        console.log(err)
+        this.setState({ loading: false })
+        notification.open({
+          message: '警告',
+          placement: "bottomRight",
+          description:
+            '请求超时或服务器异常,请检查网络或联系管理员!',
+          onClick: () => {
+            console.log('Notification Clicked!');
+          },
+        });
+      })
   }
   search = () => {
-    if(this.state.select == "id"){
+    if (this.state.select == "id") {
 
-    }else if(this.state.select == "name"){
+    } else if (this.state.select == "name") {
 
     }
     //根据value调用接口 搜索 改变data的值
   }
   inputChange = (e) => {
     this.setState({
-      value:e.target.value
+      value: e.target.value
     })
   }
 }

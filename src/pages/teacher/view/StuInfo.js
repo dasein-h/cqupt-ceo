@@ -1,9 +1,7 @@
 import React, { Component} from 'react'
 import { Button, Input, Table, notification, Select, Radio } from 'antd';
 import { DownloadOutlined } from '@ant-design/icons';
-import axios from 'axios';
 import { showAll} from '../../../until/api/teacherApi'
-import '../../teacher/style/ComInfo.css';
 import '../../../static/style/teacherStyle.scss'
 const { Search } = Input
 const { Option } = Select;
@@ -44,6 +42,7 @@ class StuInfo extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      teachclass:localStorage.getItem("teachclass"),
       select: "name",
       value: "",
       data: [],
@@ -69,7 +68,7 @@ class StuInfo extends Component {
   }
   changePage = (page) => {
     let lists = [];
-    showAll("SJ00201A2031780003",page).then((res) => {
+    showAll(this.state.teachclass,page).then((res) => {
       this.setState({loading:false});
       let rs = JSON.parse(res.data);
       for(let i = 0;i<rs.length;i++){
@@ -101,7 +100,7 @@ class StuInfo extends Component {
     return (
       <div id="StuInfo">
         <div className='header'>
-          <div>
+          <div className='left'>
             <Select defaultValue="name"
               style={{ width: 100 }}
               onSelect={(value) => { this.changeSelect(value) }} >
