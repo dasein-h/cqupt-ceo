@@ -9,20 +9,21 @@ import {HashRouter as Router, Switch, Route, Redirect,BrowserRouter} from 'react
 
 class RouteMap extends React.Component {
 
-    render() {
-        return (
-            <div>
-                            <Provider store={store}>
-        <BrowserRouter >
-
-     <Route path="/" component={App}>
-     <Switch>
-            <Route path="/Student" component={Student}/>
-            <Route path="/Teacher" component={Teacher}/>
-          <Redirect to="/Student" />
-        </Switch>
-         </Route>
-      {/* <Route path="/AllCompanies" component={AllCompanies}/>
+  render() {
+    return (
+      <div>
+        <Provider store={store}>
+          <BrowserRouter>
+            <Route path="/" component={App}>
+              <Switch>
+                <Route path="/Student" component={Student}/>
+                <Route path="/Teacher" component={Teacher}/>
+                <Route path="/Manager" component={Manager}/>
+                <Route path="/CEO" component={CEO}></Route>
+                <Redirect to="/Student"/>
+              </Switch>
+            </Route>
+            {/* <Route path="/AllCompanies" component={AllCompanies}/>
       <Route path="/Join" component={Join}/>
       <Route path="/MyCompany" component={MyCompany}/> */}
         {/* <Route path="/MyCompany/WriteWant" component={WriteWant}></Route>

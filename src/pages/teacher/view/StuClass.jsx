@@ -60,7 +60,7 @@ class StuClass extends React.Component{
             <Table 
               dataSource={this.state.contentList} 
               columns={this.state.columns} 
-              rowkey={this.state.contentList.teachclass}
+              rowkey={record => record.teachclass}
               rowSelection={this.state.rowSelectionProps}
               />
         </div>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Table, Space,Input,Button, Pagination } from 'antd'; 
+import { Table, Space,Input,Button, notification } from 'antd'; 
 import { AudioOutlined } from '@ant-design/icons';
 // import '../style/VoSit.css';
 import {showCeo, runCeo, closeCeo,decideCeo,deleteCeo} from '../../../until/api/teacherApi';
@@ -16,14 +16,18 @@ class VotSit extends Component {
           startCeo:'任命为CEO',
           isCeo:false,
           teachclass:'',
+          loading:true,
+          totalNumber:'',
           pagination:{
             showSizeChanger:false,
             defaultCurrent:1,
             current: 1,
             pageSize: 7,
-            total:"",
+            total:'',
             hideOnSinglePage: true,
             onChange: (page, pageSize) => {
+              console.log(this.changePage);
+              this.changePage(page);
               this.state.pagination.current = page
             }
           },
@@ -96,6 +100,7 @@ class VotSit extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleDecideCeo = this.handleDecideCeo.bind(this);
         this.addAction = this.addAction.bind(this);
+        this.changePage = this.changePage.bind(this);
     }
  
     render() { 
@@ -116,6 +121,8 @@ class VotSit extends Component {
                   columns={this.state.columns} 
                   style={{marginTop:"10px"}}
                   pagination={this.state.pagination}
+                  loading={this.state.loading}
+                  rowKey={record => record.id}
                 />;
             </div>
         );
@@ -126,19 +133,47 @@ class VotSit extends Component {
         teachclass:teachClass
       })
     }
+
     componentDidMount () {
       
       //展示竞选ceo的同学以及其的票数
-      showCeo(this.state.pagination.current,this.state.teachclass).then(
+      this.changePage(1);
+    }
+
+
+    changePage = (currentPage) => {
+      showCeo(currentPage,this.state.teachclass).then(
         (res) => {
           this.setState({
-            dataSource : res.data.data.object
-          })
-          this.addAction(this.state.dataSource);
-          console.log(this.state.dataSource);
+            loading:true
+            })
+          if(res.data.data.object.length != 0){ 
+            let pagination = {...this.state.pagination};
+            pagination.total = res.data.data.totalNumber;
+            this.setState({
+            dataSource : res.data.data.object,
+            loading:false,
+            pagination
+            })
+           
+            this.addAction(this.state.dataSource);
+          }else{
+            this.setState({
+            dataSource : []
+            })
+            notification.success({
+              description : '到底了',
+              message : '提示：',
+              placement:'bottomRight'
+            })
+          }
         },
         (err) => {
-          console.log(err);
+          notification.success({
+              description : '请求超时或服务器异常,请检查网络或联系管理员!',
+              message : '警告',
+              placement:'bottomRight'
+            })
         }
       )
 
@@ -151,7 +186,7 @@ class VotSit extends Component {
            btuValue:"关闭投票",
            isVote:!this.state.isVote
         })
-        runCeo("SJ00201A2031780003").then(
+        runCeo(this.state.teachclass).then(
         (res) => {
           console.log(res);
         },
@@ -164,7 +199,7 @@ class VotSit extends Component {
           btuValue:"开启投票",
           isVote:!this.state.isVote
         })
-        closeCeo("SJ00201A2031780003").then(
+        closeCeo(this.state.teachclass).then(
         (res) => {
           console.log(res);
         },
@@ -178,7 +213,7 @@ class VotSit extends Component {
     //任命为CEO
     handleDecideCeo = (text,record) => {
       if(record.action == "任命为CEO"){
-        record.action = "取消CEO"
+        record.action = "取消为CEO"
         this.setState({
           dataSource: this.state.dataSource
         })
@@ -222,5 +257,7 @@ class VotSit extends Component {
           dataSource:dataSource
         })
     }
+
+    
 }
 export default VotSit;
