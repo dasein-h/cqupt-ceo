@@ -13,15 +13,9 @@ import NewsCom from './news';
 import SignCom from './Sign'
 import StuClass from './StuClass';
 import '../../teacher/style/contentNav.css';
-<<<<<<< HEAD
-import {  Menu } from 'antd';
-import { UserOutlined, VideoCameraOutlined, EditOutlined, OrderedListOutlined,CarryOutOutlined} from '@ant-design/icons';
-import '../style/Teacher.css'
-=======
 import {  Menu,Button } from 'antd';
 import LoginApi from '../../../until/api/LoginApi'
 import { UserOutlined, VideoCameraOutlined, EditOutlined, OrderedListOutlined,CarryOutOutlined} from '@ant-design/icons';
->>>>>>> ry
 
 class Teacher extends Component { 
     constructor(props) {
@@ -89,32 +83,7 @@ class Teacher extends Component {
                                 </Switch>
                             </div> 
 
-<<<<<<< HEAD
-                        <div className="content">
-                            <Switch>
-                                <Route exact path="/Teacher/StuInfo">
-                                    <StuInfo/>
-                                </Route>
-                                <Route path="/Teacher/ComInfo">
-                                    <ComInfo/>
-                                </Route>
-                                <Route path="/Teacher/VotSit">
-                                    <VotSit/>
-                                </Route>
-                                <Route path="/Teacher/News">
-                                    <NewsCom/>  
-                                </Route> 
-                                <Route path="/Teacher">
-                                    <StuClass />  
-                                </Route>
-                                <Route path="/Teacher/Sign">
-                                    <SignCom />  
-                                </Route>
-                            </Switch>
-                        </div>
-=======
                        
->>>>>>> ry
                         
                     </div>
                 </Router>
