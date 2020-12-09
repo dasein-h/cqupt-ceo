@@ -19,7 +19,7 @@ class Set extends React.Component {
             person:"",
             company:"",
             other:"",
-            teachclass: sessionStorage.getItem("teachclass")
+            teachclass: localStorage.getItem("teachclass")
         }
     }
     render() {
@@ -59,7 +59,17 @@ class Set extends React.Component {
         )
     }
     componentDidMount() {
-
+        showConfig(this.state.teachclass).then(rs => {
+           let res = rs.data.data
+           console.log(res);
+           this.setState({
+            ceoScore:res.ceoScore,
+                memberScore:res.memberScore,
+                signScore:res.signScore
+           })
+                
+           
+        })
     }
 }
 export default Set

@@ -1,5 +1,11 @@
 import React from 'react'
-import { Tabs} from "antd"
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link,
+} from "react-router-dom";
+import { Tabs, Menu } from "antd"
 import SignedCom from "../components/SignedCom"
 import UnsignCom from "../components/UnsignCom"
 const { TabPane } = Tabs;
@@ -12,14 +18,18 @@ class Sign extends React.Component {
         return (
             <div>
                 <div>
-                    <Tabs defaultActiveKey="1" size="middle" style={{marginTop:-15}}>
-                        <TabPane tab="选择未签到学生" key="1">
+                    <Menu theme="light" mode="horizontal"  defaultSelectedKeys="1" style={{marginTop:-10}}>
+                        <Menu.Item key="1"><Link to="/Teacher/Sign">选择缺勤的学生</Link></Menu.Item>
+                        <Menu.Item key="2"><Link to="/Teacher/Sign/UnSign">缺勤学生情况</Link></Menu.Item>
+                    </Menu>
+                    <Switch>
+                        <Route path="/Teacher/Sign" exact>
                             <SignedCom></SignedCom>
-                        </TabPane>
-                        <TabPane tab="未签到学生情况" key="2">
+                        </Route>
+                        <Route path="/Teacher/Sign/UnSign" exact>
                             <UnsignCom></UnsignCom>
-                        </TabPane>
-                    </Tabs>
+                        </Route>
+                    </Switch>
                 </div>
             </div>
         )
