@@ -7,10 +7,5 @@ const ManagerApi = {
   }
 }
 
-function showTeacher(currentPage) {
-  return Service.post('/admin/showteacher', {
-    currentPage
-  })
-}
 
 export default ManagerApi;
