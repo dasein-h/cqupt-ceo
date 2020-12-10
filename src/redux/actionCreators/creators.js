@@ -223,11 +223,12 @@ const actions = {
       }
     }
   },
-  ShowFile : (studentId) => {
+  ShowFile : (teachclass,currentPage) => {
     return {
       type:"ShowFlie",
       payload:{
-        studentId:studentId
+        teachclass:teachclass,
+        currentPage:currentPage
       }
     }
   },
@@ -235,7 +236,7 @@ const actions = {
     return {
       type:"ShowFile_OK",
       payload:{
-        ...data
+        data
       }
     }
   },
@@ -244,13 +245,13 @@ const actions = {
       type:"ShowFile_NO",
     }
   },
-  UploadFile : (file,studentId,teachclass) => {
+  UploadFile : (file) => {
     return {
       type:"UploadFile",
       payload:{
         file:file,
-        studentId:studentId,
-        teachclass:teachclass
+        studentId:localStorage.getItem("userId"),
+        teachClass:localStorage.getItem("class")
       }
     }
   },

@@ -43,7 +43,7 @@ class CEO extends Component {
         super(props);
         this.state = { 
             totalNum:0,
-            currentPage:parseInt(sessionStorage.getItem("Page2"))||"1",
+            currentPage:parseInt(sessionStorage.getItem("Page2"))||1,
             data : [
               ],
          }
@@ -67,7 +67,7 @@ class CEO extends Component {
             newdata[item].key = item
           }
           this.setState({
-            currentPage: parseInt(sessionStorage.getItem("Page2"))||'1',
+            currentPage: parseInt(sessionStorage.getItem("Page2"))||1,
             data:newdata,
             totalNum:CeoData.totalNumber
           })
@@ -81,7 +81,7 @@ class CEO extends Component {
     componentDidMount() {
       //如果要获取数据，最好在这里进行，组件在render之前不会返回数据
       if(localStorage.getItem("userId") && !this.props.CeoData){
-        this.props.ShowCeo(parseInt(sessionStorage.getItem("Page2"))||'1',localStorage.getItem("userId"))
+        this.props.ShowCeo(parseInt(sessionStorage.getItem("Page2"))||1,localStorage.getItem("userId"))
       }
       if(this.props.CeoData){
         this.props.Exist()

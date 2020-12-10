@@ -3,10 +3,9 @@ import { Link } from 'react-router-dom';
 import { withRouter } from 'react-router-dom'
 import '../../static/style/style.scss'
 import AllCompanies from './AllCompanies';
-import Join from './Join';
 import MyCompany from './MyCompany';
 import { HashRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
-import store from '../../redux/store'
+import Detail from './Detail'
 import { connect } from 'react-redux'
 import changeNav from '../../until/changeNav'
 import {
@@ -50,7 +49,7 @@ class Student extends Component {
       userId: '',
       password: '',
       chooseType: '老师',
-      checkVisible: false,
+      loginVisible:false
     }
     this.exit = this.exit.bind(this)
     this.loginClick = this.loginClick.bind(this)
@@ -143,17 +142,21 @@ class Student extends Component {
   }
   componentDidUpdate(){
     if(this.props.isLogin===true){
-        if (localStorage.getItem("type") === "学生" && !/Student/.test(window.location) && localStorage.getItem("ceo") !== '1')
+        if (localStorage.getItem("type") === "student" && !/Student/.test(window.location) && localStorage.getItem("ceo") !== '1')
         {
           window.location = "/Student"
         }
-        else if (localStorage.getItem("type") === "老师" && !/Teacher/.test(window.location))
+        else if (localStorage.getItem("type") === "teacher" && !/Teacher/.test(window.location))
          {
           window.location = "/teacher"
         }
         else if (localStorage.getItem("ceo") === '1' && !/CEO/.test(window.location))
         {
          window.location = "/CEO"
+       }
+       if (localStorage.getItem("type") === "admin" && !/Manager/.test(window.location))
+       {
+         window.location = "/Manager"
        }
     }
   }
@@ -195,13 +198,13 @@ class Student extends Component {
                 <Link to="/Student/AllCompanies/ChosenClasses" onClick={changeNav.bind(this, 0, 1)}>所有公司</Link>
               </Menu.Item>
               <Menu.Item key="2" icon={<VideoCameraOutlined />}>
-                <Link to="/Student/Join" onClick={changeNav.bind(this, 0, 2)}>文件</Link>
+                <Link to="/Student/Detail" onClick={changeNav.bind(this, 0, 2)}>文件</Link>
               </Menu.Item>
               <Menu.Item key="3" icon={<EditOutlined />}>
                 <Link to="/Student/MyCompany" onClick={changeNav.bind(this, 0, 3)}>申请加入公司</Link>
               </Menu.Item>
               <Menu.Item key="4" icon={<OrderedListOutlined />}>
-                <Link to="/Student/CEO/Campaign" onClick={changeNav.bind(this, 0, 4)}>CEO</Link>
+                <Link to="/Student/CEO" onClick={changeNav.bind(this, 0, 4)}>CEO</Link>
               </Menu.Item>
 
             </Menu>
@@ -269,7 +272,7 @@ class Student extends Component {
               <div className="site-layout-background" style={{ padding: 24, textAlign: 'center', borderRadius: 10 }}>
                 <Switch>
                   <Route path="/Student/AllCompanies" component={AllCompanies} />
-                  <Route path="/Student/Join" component={Join} />
+                  <Route path="/Student/Detail" component={Detail} />
                   <Route path="/Student/MyCompany" component={MyCompany} />
                   <Route path="/Student/CEO" component={CEO} />
                   <Redirect to="/Student/AllCompanies" />
@@ -300,13 +303,13 @@ class Student extends Component {
                 <Link to="/Student/AllCompanies/ChosenClasses" onClick={changeNav.bind(this, 0, 1)}>所有公司</Link>
               </Menu.Item>
               <Menu.Item key="2" icon={<VideoCameraOutlined />}>
-                <Link to="/Student/Join" onClick={changeNav.bind(this, 0, 2)}>文件</Link>
+                <Link to="/Student/Detail" onClick={changeNav.bind(this, 0, 2)}>文件</Link>
               </Menu.Item>
               <Menu.Item key="3" icon={<EditOutlined />}>
                 <Link to="/Student/MyCompany" onClick={changeNav.bind(this, 0, 3)}>申请加入公司</Link>
               </Menu.Item>
               <Menu.Item key="4" icon={<OrderedListOutlined />}>
-                <Link to="/Student/CEO/Campaign" onClick={changeNav.bind(this, 0, 4)}>CEO</Link>
+                <Link to="/Student/CEO" onClick={changeNav.bind(this, 0, 4)}>CEO</Link>
               </Menu.Item>
             </Menu>
           </Sider>
@@ -325,7 +328,7 @@ class Student extends Component {
               <div className="site-layout-background" style={{ padding: 24, textAlign: 'center', borderRadius: 10 }}>
               <Switch>
                   <Route path="/Student/AllCompanies" component={AllCompanies} />
-                  <Route path="/Student/Join" component={Join} />
+                  <Route path="/Student/Detail" component={Detail} />
                   <Route path="/Student/MyCompany" component={MyCompany} />
                   <Route path="/Student/CEO" component={CEO} />
                   <Redirect to="/Student/AllCompanies" />
