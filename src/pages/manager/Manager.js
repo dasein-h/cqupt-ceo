@@ -1,6 +1,3 @@
-
-
-
 import React, { Component } from 'react';
 import {
     BrowserRouter as Router,
@@ -37,10 +34,10 @@ class Manager extends Component {
                                     style={{marginLeft:'15px'}}
                                     onClick = {this.handleExit}
                                 >退出登录</Button>
-                            </div>
+                        </div>
                         <Menu theme="light" mode="inline">
                             <Menu.Item key="1" icon={<UserOutlined />}>
-                                <Link to="/Manager/choseclass">选择班级</Link>
+                                <Link to="/Manager/ChoseClass">选择班级</Link>
                             </Menu.Item>
                             <Menu.Item key="2" icon={<VideoCameraOutlined />}>
                                 <Link to="/Manager/Set">配置比例</Link> 
@@ -57,7 +54,7 @@ class Manager extends Component {
 
                     <div className="content">
                         <Switch>
-                            <Route exact path="/Manager/choseclass">
+                            <Route exact path="/Manager/ChoseClass">
                                 <ChoseClass/>
                             </Route>
                             <Route path="/Manager/Set">
