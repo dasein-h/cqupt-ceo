@@ -113,7 +113,7 @@ class Detail extends Component {
         fileList:[]
       })
       const { fileList } = this.state;
-      const formData = new FormData();
+      const formData = new FormData()
       fileList.forEach(file => {
         formData.append('file', file)
       })
@@ -121,19 +121,22 @@ class Detail extends Component {
       formData.append("teachclass",localStorage.getItem("class"))
       this.setState({
         uploading: true,
-      });
+      })
       var ajax = new XMLHttpRequest()
       ajax.open("post", baseurl+"/upload/up", true)
       ajax.onload = function () {
-      console.log(ajax.responseText);
+      console.log(ajax.responseText)
       }
       ajax.send(formData);
       ajax.onreadystatechange = function() {
 				if(ajax.readyState == 4){
 					if(ajax.status == 200){
-						console.log(ajax.responseText);
+            message.success("上传成功")
 					}
-				}
+        }
+        else{
+          message.error("上传失败")
+        }
 			}
      
       // $.ajax({
@@ -213,14 +216,14 @@ class Detail extends Component {
           newFileList.splice(index, 1);
           return {
             fileList: newFileList,
-          };
-        });
+          }
+        })
       },
       beforeUpload: file => {
         this.setState({
           fileList:[file]
         });
-        return false;
+        return false
       },
       fileList,
     };

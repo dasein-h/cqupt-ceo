@@ -3,6 +3,7 @@ import actions from '../actionCreators/creators'
 import LoginApi from '../../until/api/LoginApi.js'
 import StudentApi from '../../until/api/StudentApi'
 import {getMember, setPosition} from "../../until/api/ceo";
+import baseurl from '../../until/BaseUrl'
 function setLocalStorage(config) {
   Reflect.ownKeys(config).forEach(key => {
     localStorage.setItem(key, config[key])
@@ -210,9 +211,11 @@ export default function* defSaga() {
     const action = yield select()
     const res = yield call(StudentApi.DownloadFile,action.payload)
     console.log(res)
-    if (res.status === 200 && res.data.flag) {
+    if (res.status === 200) {
       yield put(actions.DownloadFile_OK(res.data.message))
-      //把获取到的数据发送到state，展示在页面上
+      let download = document.createElement('a')
+      download.href = "http://120.79.207.60:8089/upload/download?id="+action.payload.id
+      download.click()
     }
     else{
       yield put(actions.DownloadFile_NO(res.data.message))
