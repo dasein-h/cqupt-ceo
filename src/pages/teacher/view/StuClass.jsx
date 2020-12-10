@@ -1,20 +1,8 @@
+  
 import React, { Component } from 'react';
-import { Space,Button, Table,Menu } from 'antd'; 
-import {selectedClassTeacher} from "../../../until/api/teacherApi";
+import { Menu,Space,Button,Table } from 'antd';
+import {selectedClassTeacher} from '../../../until/api/teacherApi';
 
-
-const dataSource = [
-  {
-    key: '1',
-    teachclass: 42342,
-    age: 32,
-  },
-  {
-    key: '2',
-    teachclass: 12445,
-    age: 42,
-  },
-];
 
 
 
@@ -73,7 +61,7 @@ class StuClass extends React.Component{
             <Table 
               dataSource={this.state.contentList} 
               columns={this.state.columns} 
-              rowkey={this.state.contentList.teachclass}
+              rowkey={record => record.teachclass}
               rowSelection={this.state.rowSelectionProps}
               />
         </div>
@@ -91,12 +79,11 @@ class StuClass extends React.Component{
       },(err) => {
         console.log(err);
       })
-      console.log(repro);
       
     }
     handleIntoClass = (text,record) => {
-      // console.log(record.teachclass);
-      sessionStorage.setItem('teachclass',record.teachclass);
+      console.log(record.teachclass);
+      localStorage.setItem('teachclass',record.teachclass);
       this.props.handleDisTeach();
     }
 }

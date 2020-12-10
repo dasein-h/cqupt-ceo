@@ -223,5 +223,82 @@ const actions = {
       }
     }
   },
+  ShowFile : (teachclass,currentPage) => {
+    return {
+      type:"ShowFlie",
+      payload:{
+        teachclass:teachclass,
+        currentPage:currentPage
+      }
+    }
+  },
+  ShowFile_OK : (data) => {
+    return {
+      type:"ShowFile_OK",
+      payload:{
+        data
+      }
+    }
+  },
+  ShowFile_NO : () => {
+    return {
+      type:"ShowFile_NO",
+    }
+  },
+  UploadFile : (file) => {
+    return {
+      type:"UploadFile",
+      payload:{
+        file:file,
+        studentId:localStorage.getItem("userId"),
+        teachClass:localStorage.getItem("class")
+      }
+    }
+  },
+  UploadFile_OK : (message) => {
+    return {
+      type:"UploadFile_OK",
+      payload:{
+        message:message
+      }
+    }
+  },
+  UploadFile_NO : (message) => {
+    return {
+      type:"UploadFile_NO",
+      payload:{
+        message:message
+      }
+    }
+  },
+  DownloadFile : (id) => {
+    return {
+      type:"DownloadFile",
+      payload:{
+        id:id
+      }
+    }
+  },
+  DownloadFile_OK : (message) => {
+    return {
+      type:"DownloadFile_OK",
+      payload:{
+        message:message
+      }
+    }
+  },
+  DownloadFile_NO : (message) => {
+    return {
+      type:"DownloadFile_NO",
+      payload:{
+        message:message
+      }
+    }
+  },
+  Exist : () => {
+    return {
+      type:"Exist",
+    }
+  },
 }
 export default actions

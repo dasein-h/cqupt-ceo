@@ -38,6 +38,23 @@ const StudentApi = {
         return Service.post('/student/voteForCompany',{
                 ...payload
         })
-    }
+    },
+    DownloadFile : (payload) => {
+        return Service.get('/upload/download',{
+            params:{
+                ...payload
+            }
+        })
+    },
+    UploadFile : (payload) => {
+        return Service.post('/upload/up',{
+                ...payload
+        })
+    },
+    ShowFile : (payload) => {
+        return Service.post('/upload/showAll',{
+                ...payload
+        })
+    },
 }
 export default StudentApi

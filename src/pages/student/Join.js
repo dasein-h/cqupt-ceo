@@ -44,7 +44,7 @@ class Join extends Component {
         super(props);
         this.state = { 
             totalNum:0,
-            currentPage:parseInt(sessionStorage.getItem("Page3"))||"1",
+            currentPage:parseInt(sessionStorage.getItem("Page3"))||1,
             data : [
               ],
          }
@@ -54,18 +54,17 @@ class Join extends Component {
     UNSAFE_componentWillUpdate(newProps,newState){
       if(newProps!==this.props){
         try{
-          if(newProps.isShowApplication === true){
-          const {data} = newProps
-          let newdata = data.object
+          const {ApplicationData} = newProps
+          let newdata = ApplicationData.object
           for (let item in newdata){
             newdata[item].key = item
           }
           this.setState({
-            currentPage: parseInt(sessionStorage.getItem("Page3"))||'1',
+            currentPage: parseInt(sessionStorage.getItem("Page3"))||1,
             data:newdata,
-            totalNum:data.totalNumber
+            totalNum:ApplicationData.totalNumber
           })
-        }
+        
         }
         catch{
           console.log("error")
@@ -74,10 +73,12 @@ class Join extends Component {
     }
     componentDidMount() {
       //如果要获取数据，最好在这里进行，组件在render之前不会返回数据
-      if(localStorage.getItem("userId")){
-        this.props.ShowApplication(parseInt(sessionStorage.getItem("Page3"))||'1',localStorage.getItem("userId"))
+      if(localStorage.getItem("userId") && !this.props.ApplicationData){
+        this.props.ShowApplication(parseInt(sessionStorage.getItem("Page3"))||1,localStorage.getItem("userId"))
       }
-      
+      if(this.props.ApplicationData){
+        this.props.Exist()
+      }
     }
     shouldComponentUpdate(nextProps, nextState) {
       if (nextProps !== this.props || nextState!== this.state) {
@@ -160,7 +161,9 @@ const mapDispatchToProps = (dispatch) => {
     ShowApplication: (page,studentId) => {
         dispatch(actions.ShowApplication(page,studentId))
     },
-
+    Exist: () => {
+      dispatch(actions.Exist())
+    },
   }
 }
 const mapStateToProps = state => {

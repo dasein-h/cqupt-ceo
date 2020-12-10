@@ -73,7 +73,6 @@ function showCeo(currentPage,teacherclass){
     }
   })
 }
-
 // 展示所有学生信息
 function showAll(teachclass,currentPage){
   return Service.post('/teacher/showall',{
@@ -100,28 +99,24 @@ function closeCeo(teachclass) {
 
 /*老师展示ceo发起的公司改名字申请*/
 function changeCompanyName(teachclass, currentPage, studentId) {
-  return Service.get('/teacher/changeName', {
-    params: {
+  return Service.post('/teacher/changeName', {
       teachclass,
       currentPage,
       studentId
-    }
   })
 }
 
 /*同意修改公司名*/
-function agreeChange(ceo) {
-  return Service.get('/teacher/agree', {
-    params: {ceo}
+function agreeChange(ceo,companyName) {
+  return Service.post('/teacher/agree', {
+    ceo,companyName
   })
 }
 
 /*拒绝修改公司名*/
-function rejectChange(ceo) {
-  return Service.get('/teacher/refuse', {
-    params: {
-      ceo
-    }
+function rejectChange(ceo,companyName) {
+  return Service.post('/teacher/refuse', {
+      ceo,companyName
   })
 }
 /*删除公司*/
@@ -133,7 +128,7 @@ function deleteCompany(ceo) {
 
 /*撤销ceo*/
 function deleteCeo(studentId) {
-  return Service.post('/teacher/deletecompany', {
+  return Service.post('/teacher/deleteceo', {
     studentId
   })
 }
@@ -174,6 +169,28 @@ function exportExc(teachclass){
     teachclass
   })
 }
+
+//展示未签到学生
+function noSign(teachclass){
+  return Service.post('/teacher/noSign',{
+    teachclass
+  })
+}
+
+//设置为未签到
+function setNosign(teachclass,studentId,scoreSign,sign){
+  return Service.post('teacher/sign',{
+    teachclass,studentId,scoreSign,sign
+  })
+}
+
+//展示配置
+function showConfig(teachclass){
+  return Service.post('/admin/showConfig',{
+    teachclass
+  })
+}
+
 export{
   selectedClassTeacher,
   unSelectedClassTeacher,
@@ -191,7 +208,10 @@ export{
   voteStatus,
   setScore,
   showCeo,
-  ShowComInfo,
   showAll,
-  exportExc
+  exportExc,
+  noSign,
+  setNosign,
+  showConfig,
+  ShowComInfo
 }
