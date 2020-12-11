@@ -8,40 +8,6 @@ import baseurl from '../../until/BaseUrl'
 // import $ from 'jquery';
 import '../../static/style/style.scss'
 
-// const columns = [
-//     {
-//       title: 'count',
-//       dataIndex: 'count',
-//       key: 'count',
-//     },
-//     {
-//       title: 'type',
-//       dataIndex: 'type',
-//       key: 'type',
-//     },
-//     {
-//       title: 'companyName',
-//       dataIndex: 'companyName',
-//       key: 'companyName',
-//     },
-//     {
-//       title: 'ceoName',
-//       key: 'ceoName',
-//       dataIndex: 'ceoName',
-
-//     },
-//     {
-//       title: 'Action',
-//       key: 'action',
-//       render: (text, record) => (
-//         <Space size="middle">
-//           <a>Invite {record.name}</a>
-//           <a>Delete</a>
-//         </Space>
-//       ),
-//     },
-//   ];
-
 class Detail extends Component {
     constructor(props) {
         super(props);
@@ -71,9 +37,7 @@ class Detail extends Component {
           })
         
         }
-        catch{
-          console.log("error")
-        }
+        catch{}
       }
     }
     componentDidMount() {
@@ -125,7 +89,6 @@ class Detail extends Component {
       var ajax = new XMLHttpRequest()
       ajax.open("post", baseurl+"/upload/up", true)
       ajax.onload = function () {
-      console.log(ajax.responseText)
       }
       ajax.send(formData);
       ajax.onreadystatechange = function() {
@@ -172,27 +135,27 @@ class Detail extends Component {
     render() { 
       const columns = [
         {
-            title: 'fileName',
+            title: '文件名',
             dataIndex: 'fileName',
             key: 'fileName',
         },
           {
-            title: 'id',
+            title: '文件ID',
             dataIndex: 'id',
             key: 'id',
           },
         {
-            title: 'studentId',
+            title: '上传学号',
             dataIndex: 'studentId',
             key: 'studentId',
         },
         {
-            title: 'teachclass',
+            title: '教学班',
             dataIndex: 'teachclass',
             key: 'teachclass',
         },
         {
-          title: 'Action',
+          title: '操作',
           key: 'action',
           render: (text, record) => (
             <Space size="middle">
@@ -253,7 +216,7 @@ class Detail extends Component {
           loading={uploading}
           style={{ marginTop: 16 }}
         >
-          {uploading ? 'Uploading' : 'Start Upload'}
+          {uploading ? '上传中' : '上传文件'}
         </Button>
               </Modal>
             <Table columns={columns} dataSource={this.state.data} pagination={pagination}/>
@@ -268,7 +231,6 @@ class Detail extends Component {
 }
  
 const mapDispatchToProps = (dispatch) => {
-  //把发送action的方法绑定到当前组件的props
   return {
     ShowFile: (teachClass,currentPage) => {
         dispatch(actions.ShowFile(teachClass,currentPage))

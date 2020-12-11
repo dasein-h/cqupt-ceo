@@ -1,42 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { Table, Tag, Space,pagination, message, Button, Empty } from 'antd';
+import { Table,  Space,   message, Button, Empty } from 'antd';
 import actions from '../../redux/actionCreators/creators'
 import changePage from '../../until/changePage'
 import '../../static/style/style.scss'
-// const columns = [
-//     {
-//       title: 'count',
-//       dataIndex: 'count',
-//       key: 'count',
-//     },
-//     {
-//       title: 'type',
-//       dataIndex: 'type',
-//       key: 'type',
-//     },
-//     {
-//       title: 'companyName',
-//       dataIndex: 'companyName',
-//       key: 'companyName',
-//     },
-//     {
-//       title: 'ceoName',
-//       key: 'ceoName',
-//       dataIndex: 'ceoName',
-
-//     },
-//     {
-//       title: 'Action',
-//       key: 'action',
-//       render: (text, record) => (
-//         <Space size="middle">
-//           <a>Invite {record.name}</a>
-//           <a>Delete</a>
-//         </Space>
-//       ),
-//     },
-//   ];
 
 class CEO extends Component {
     constructor(props) {
@@ -53,8 +20,10 @@ class CEO extends Component {
     UNSAFE_componentWillUpdate(newProps,newState){
       if(newProps!==this.props){
         try{
-          if(newProps.message){
-            if(newProps.isVoteForCeo === true || newProps.isRunCeo === true ){
+          if( newProps.isVoteForCeo === true )
+          message.success("投票成功")
+          if( newProps.message ){
+            if( newProps.isRunCeo === true ){
               message.success(newProps.message)
             }
             else if(newProps.isVoteForCeo === false || newProps.isRunCeo === false ){
@@ -73,13 +42,10 @@ class CEO extends Component {
           })
         
         }
-        catch{
-          console.log("error")
-        }
+        catch{}
       }
     }
     componentDidMount() {
-      //如果要获取数据，最好在这里进行，组件在render之前不会返回数据
       if(localStorage.getItem("userId") && !this.props.CeoData){
         this.props.ShowCeo(parseInt(sessionStorage.getItem("Page2"))||1,localStorage.getItem("userId"))
       }
@@ -111,22 +77,22 @@ class CEO extends Component {
 
       const columns = [
         {
-            title: 'count',
+            title: '票数',
             dataIndex: 'count',
             key: 'count',
         },
           {
-            title: 'userName',
+            title: '姓名',
             dataIndex: 'userName',
             key: 'userName',
           },
         {
-            title: 'studentId',
+            title: '学号',
             dataIndex: 'studentId',
             key: 'studentId',
         },
         {
-            title: 'state',
+            title: '状态',
             key: 'state',
             dataIndex: 'state',
         render: (text) => {
@@ -140,7 +106,7 @@ class CEO extends Component {
         },
 
         {
-          title: 'Action',
+          title: '操作',
           key: 'action',
           render: (text, record) => (
             <Space size="middle">
@@ -174,7 +140,6 @@ class CEO extends Component {
 }
  
 const mapDispatchToProps = (dispatch) => {
-  //把发送action的方法绑定到当前组件的props
   return {
     ShowCeo: (page,studentId) => {
         dispatch(actions.ShowCeo(page,studentId))
@@ -191,7 +156,6 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 const mapStateToProps = state => {
-  //把store里的state绑定到当前组件的props
   return state
 }
 

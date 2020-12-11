@@ -85,9 +85,7 @@ class WriteWant extends Component {
                   data:newdata
                 })
           }
-          catch{
-            console.log("error")
-          }
+          catch{}
         }
       }
       componentDidMount() {

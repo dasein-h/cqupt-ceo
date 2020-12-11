@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { withRouter } from 'react-router-dom'
 import '../../static/style/style.scss'
@@ -22,7 +22,6 @@ import actions from '../../redux/actionCreators/creators'
 
 import {
   UserOutlined,
-  UploadOutlined,
   VideoCameraOutlined,
   EditOutlined,
   OrderedListOutlined,
@@ -162,19 +161,15 @@ class Student extends Component {
   }
 
   componentDidMount() {
-    //组件第一次render之前执行，每五秒查看一次登录状态
     let that = this
-
     that.props.Login_Check()
-    //这里this的指向会改变，先把this固定一下
-
     setInterval(function () {
       if (localStorage.getItem("userId")){
         that.props.Login_Check()
     }
       else {
       }
-    }, 5000)
+    }, 30000)
   
   }
   render() {
@@ -343,7 +338,6 @@ class Student extends Component {
   }
 }
 const mapDispatchToProps = (dispatch) => {
-  //把发送action的方法绑定到当前组件的props
   return {
     login: (userId, password, type) => {
       const action = actions.loginAction(userId, password, type)
@@ -360,11 +354,8 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 const mapStateToProps = state => {
-  //把store里的state绑定到当前组件的props
-  console.log("Student", state)
   return state
 }
 
 withRouter(Student);
 export default connect(mapStateToProps, mapDispatchToProps)(Student)
-//将要使用mapStateToProps和mapDispatchToProps

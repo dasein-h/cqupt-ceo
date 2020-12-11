@@ -1,43 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { Table, Tag, Space,pagination, message, Button , Empty} from 'antd';
+import { Table,  Empty} from 'antd';
 import actions from '../../redux/actionCreators/creators'
 import changePage from '../../until/changePage'
 import changeNav from '../../until/changeNav'
 import '../../static/style/style.scss'
-// const columns = [
-//     {
-//       title: 'count',
-//       dataIndex: 'count',
-//       key: 'count',
-//     },
-//     {
-//       title: 'type',
-//       dataIndex: 'type',
-//       key: 'type',
-//     },
-//     {
-//       title: 'companyName',
-//       dataIndex: 'companyName',
-//       key: 'companyName',
-//     },
-//     {
-//       title: 'ceoName',
-//       key: 'ceoName',
-//       dataIndex: 'ceoName',
-
-//     },
-//     {
-//       title: 'Action',
-//       key: 'action',
-//       render: (text, record) => (
-//         <Space size="middle">
-//           <a>Invite {record.name}</a>
-//           <a>Delete</a>
-//         </Space>
-//       ),
-//     },
-//   ];
 
 class Join extends Component {
     constructor(props) {
@@ -66,13 +33,10 @@ class Join extends Component {
           })
         
         }
-        catch{
-          console.log("error")
-        }
+        catch{}
       }
     }
     componentDidMount() {
-      //如果要获取数据，最好在这里进行，组件在render之前不会返回数据
       if(localStorage.getItem("userId") && !this.props.ApplicationData){
         this.props.ShowApplication(parseInt(sessionStorage.getItem("Page3"))||1,localStorage.getItem("userId"))
       }
@@ -102,32 +66,32 @@ class Join extends Component {
       changeNav(1, 1)
       const columns = [
         {
-            title: 'level',
+            title: '志愿等级',
             dataIndex: 'level',
             key: 'level',
         },
           {
-            title: 'userName',
+            title: '姓名',
             dataIndex: 'userName',
             key: 'userName',
           },
         {
-            title: 'studentId',
+            title: '学号',
             dataIndex: 'studentId',
             key: 'studentId',
         },
         {
-            title: 'academy',
+            title: '专业',
             dataIndex: 'academy',
             key: 'academy',
         },
         {
-            title: 'companyName',
+            title: '公司名',
             dataIndex: 'companyName',
             key: 'companyName',
         },
         {
-            title: 'state',
+            title: '状态',
             key: 'state',
             dataIndex: 'state',
             render: (text) => {
@@ -156,7 +120,6 @@ class Join extends Component {
 }
  
 const mapDispatchToProps = (dispatch) => {
-  //把发送action的方法绑定到当前组件的props
   return {
     ShowApplication: (page,studentId) => {
         dispatch(actions.ShowApplication(page,studentId))
@@ -167,7 +130,6 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 const mapStateToProps = state => {
-  //把store里的state绑定到当前组件的props
   return state
 }
 
