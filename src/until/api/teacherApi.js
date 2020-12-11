@@ -139,9 +139,11 @@ function decideCeo(studentId) {
   })
 }
 /*给公司打分*/
-function putScore(teacherId,scoreTeacher,companyName) {
+function putScore(ceo,scoreTeacher) {
   return Service.post('/teacher/companyscore', {
-    teacherId,scoreTeacher,companyName
+    ceo,
+    scoreTeacher,
+    
   })
 }
 /*老师修改宣讲状态*/
@@ -152,7 +154,7 @@ function voteStatus(flag, teacherId) {
 }
 /*给学生打分*/
 function setScore(teacherId, studentId, teacherScore) {
-  return  Service.post('/teacher/setstuscore', {
+  return Service.post('/teacher/setstuscore', {
     teacherId, studentId, teacherScore
   })
 }
@@ -161,6 +163,12 @@ function setScore(teacherId, studentId, teacherScore) {
 function ShowComInfo(teachclass) {
   return Service.post('/student/showCompany', {
     teachclass
+  })
+}
+// 展示公司成员
+function ShowComMember(stuid) { 
+  return Service.post('/student/showCompanyMember', {
+    "studentId":stuid
   })
 }
 // 导出
@@ -210,6 +218,7 @@ export{
   showCeo,
   showAll,
   exportExc,
+  ShowComMember,
   noSign,
   setNosign,
   showConfig,
