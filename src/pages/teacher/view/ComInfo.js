@@ -4,7 +4,7 @@ import {
   Input, Button, InputNumber, Form, Popconfirm, message
 } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
-import '../../teacher/style/StuInfo.css';
+import '../../teacher/style/ComInfo.css';
 import { ShowComInfo, putScore,deleteCompany,ShowComMember } from '../../../until/api/teacherApi';
 
 // const menu = (
