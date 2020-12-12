@@ -8,40 +8,6 @@ import baseurl from '../../until/BaseUrl'
 // import $ from 'jquery';
 import '../../static/style/style.scss'
 
-// const columns = [
-//     {
-//       title: 'count',
-//       dataIndex: 'count',
-//       key: 'count',
-//     },
-//     {
-//       title: 'type',
-//       dataIndex: 'type',
-//       key: 'type',
-//     },
-//     {
-//       title: 'companyName',
-//       dataIndex: 'companyName',
-//       key: 'companyName',
-//     },
-//     {
-//       title: 'ceoName',
-//       key: 'ceoName',
-//       dataIndex: 'ceoName',
-
-//     },
-//     {
-//       title: 'Action',
-//       key: 'action',
-//       render: (text, record) => (
-//         <Space size="middle">
-//           <a>Invite {record.name}</a>
-//           <a>Delete</a>
-//         </Space>
-//       ),
-//     },
-//   ];
-
 class Detail extends Component {
     constructor(props) {
         super(props);
@@ -71,9 +37,7 @@ class Detail extends Component {
           })
         
         }
-        catch{
-          console.log("error")
-        }
+        catch{}
       }
     }
     componentDidMount() {
@@ -113,7 +77,7 @@ class Detail extends Component {
         fileList:[]
       })
       const { fileList } = this.state;
-      const formData = new FormData();
+      const formData = new FormData()
       fileList.forEach(file => {
         formData.append('file', file)
       })
@@ -121,19 +85,21 @@ class Detail extends Component {
       formData.append("teachclass",localStorage.getItem("class"))
       this.setState({
         uploading: true,
-      });
+      })
       var ajax = new XMLHttpRequest()
       ajax.open("post", baseurl+"/upload/up", true)
       ajax.onload = function () {
-      console.log(ajax.responseText);
       }
       ajax.send(formData);
       ajax.onreadystatechange = function() {
 				if(ajax.readyState == 4){
 					if(ajax.status == 200){
-						console.log(ajax.responseText);
+            message.success("上传成功")
 					}
-				}
+        }
+        else{
+          message.error("上传失败")
+        }
 			}
      
       // $.ajax({
@@ -169,27 +135,27 @@ class Detail extends Component {
     render() { 
       const columns = [
         {
-            title: 'fileName',
+            title: '文件名',
             dataIndex: 'fileName',
             key: 'fileName',
         },
           {
-            title: 'id',
+            title: '文件ID',
             dataIndex: 'id',
             key: 'id',
           },
         {
-            title: 'studentId',
+            title: '上传学号',
             dataIndex: 'studentId',
             key: 'studentId',
         },
         {
-            title: 'teachclass',
+            title: '教学班',
             dataIndex: 'teachclass',
             key: 'teachclass',
         },
         {
-          title: 'Action',
+          title: '操作',
           key: 'action',
           render: (text, record) => (
             <Space size="middle">
@@ -213,14 +179,14 @@ class Detail extends Component {
           newFileList.splice(index, 1);
           return {
             fileList: newFileList,
-          };
-        });
+          }
+        })
       },
       beforeUpload: file => {
         this.setState({
           fileList:[file]
         });
-        return false;
+        return false
       },
       fileList,
     };
@@ -250,7 +216,7 @@ class Detail extends Component {
           loading={uploading}
           style={{ marginTop: 16 }}
         >
-          {uploading ? 'Uploading' : 'Start Upload'}
+          {uploading ? '上传中' : '上传文件'}
         </Button>
               </Modal>
             <Table columns={columns} dataSource={this.state.data} pagination={pagination}/>
@@ -265,7 +231,6 @@ class Detail extends Component {
 }
  
 const mapDispatchToProps = (dispatch) => {
-  //把发送action的方法绑定到当前组件的props
   return {
     ShowFile: (teachClass,currentPage) => {
         dispatch(actions.ShowFile(teachClass,currentPage))

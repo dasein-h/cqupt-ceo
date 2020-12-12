@@ -7,7 +7,6 @@ import {
     Redirect
   } from "react-router-dom";
 import ChoseClass from './view/ChoseClass'
-import Set from './view/Set'
 import ImData from './view/ImData'
 import './style/Nav.css';
 import {  Menu,Button,message } from 'antd';
@@ -42,9 +41,7 @@ class Manager extends Component {
                             <Menu.Item key="1" icon={<UserOutlined />}>
                                 <Link to="/Manager/ChoseClass">选择班级</Link>
                             </Menu.Item>
-                            <Menu.Item key="2" icon={<VideoCameraOutlined />}>
-                                <Link to="/Manager/Set">配置比例</Link> 
-                            </Menu.Item>
+                            
                             <Menu.Item key="3" icon={<EditOutlined />}>
                                 <Link to="/Manager/data">导入数据</Link> 
                             </Menu.Item>
@@ -60,9 +57,7 @@ class Manager extends Component {
                             <Route path="/Manager/ChoseClass">
                                 <ChoseClass/>
                             </Route>
-                            <Route path="/Manager/Set">
-                                <Set/>
-                            </Route>
+                            
                             <Route path="/Manager/data">
                                 <ImData/>
                             </Route>
