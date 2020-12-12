@@ -9,7 +9,8 @@ import {
 import ChoseClass from './view/ChoseClass'
 import ImData from './view/ImData'
 import './style/Nav.css';
-import {  Menu,Button } from 'antd';
+import {  Menu,Button,message } from 'antd';
+import LoginApi from '../../until/api/LoginApi'
 import { UserOutlined, VideoCameraOutlined, EditOutlined, OrderedListOutlined } from '@ant-design/icons';
 
 class Manager extends Component { 
@@ -17,8 +18,10 @@ class Manager extends Component {
         super(props);
         
         this.state = {
-            username: ''
+            username: '',
+            userid:''
           }
+          this.handleExit = this.handleExit.bind(this);
     }
     render() {
         return (
@@ -51,7 +54,7 @@ class Manager extends Component {
 
                     <div className="content">
                         <Switch>
-                            <Route exact path="/Manager/ChoseClass">
+                            <Route path="/Manager/ChoseClass">
                                 <ChoseClass/>
                             </Route>
                             
@@ -67,7 +70,55 @@ class Manager extends Component {
 
         )
     }
-
+    componentDidMount(){
+        let userId = localStorage.getItem("userId");
+        let userName = localStorage.getItem('userName')
+        this.setState({
+            userid: userId,
+            username:userName
+        },()=>{
+            this.isLogin()
+        })
+        if(localStorage.hasOwnProperty("userId") && localStorage.getItem("type")=="admin"){
+           message.success("登录成功",1);
+        }else{
+            message.info("请先登录",1);
+            this.props.history.push('/Student/AllCompanies/ChosenClasses');
+        }
+    }
+    handleExit = () => {
+        LoginApi.Exit(this.state.userid).then(
+            (res) => {
+                console.log(res);
+                if(res.data.flag){
+                    message.success("退出成功",1)
+                    this.props.history.push('/Student/AllCompanies/ChosenClasses');
+                }else{
+                    message.info("退出失败，请重新登录",1)
+                }
+            },
+            (err) => {
+                console.log(err);
+            }
+        )
+    }
+    isLogin = () => {
+        setInterval(() => {
+            LoginApi.KeepLogin(this.state.userid).then(
+            (res) => {
+                console.log(1);
+                console.log(res);
+                if(!res.data.flag){
+                    this.props.history.push('/Student/AllCompanies/ChosenClasses');
+                }
+            },
+            (err) => {
+                console.log(err);
+            }
+        )
+        },30000);
+        
+    }
 }
 
 export default Manager

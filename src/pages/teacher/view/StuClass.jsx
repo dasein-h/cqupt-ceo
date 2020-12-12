@@ -1,70 +1,35 @@
-  
 import React, { Component } from 'react';
-import { Menu,Space,Button,Table } from 'antd';
-import {selectedClassTeacher} from '../../../until/api/teacherApi';
+import { Menu } from 'antd';
+import { withRouter, Switch, Link} from 'react-router-dom';
+import { Router, Route, Redirect } from 'react-router';
+import {selectedClassTeacher} from '../../../until/api/teacherApi'
+import ChosenStuClass from '../components/ChosenStuClass';
+import UnChosenStuClass from '../components/UnChosenStuClass';
 
-
-
-
-class StuClass extends React.Component{ 
+class StuClass extends React.Component { 
     constructor(props) { 
         super(props);
         this.state = {
-        contentList:"",
-        rowSelectionProps:{
-          type:'Radio',
-
-        },
-        columns: [
-          {
-            title: 'teachclass',
-            dataIndex: 'teachclass',
-            key: 'teachclass',
-          },
-          {
-            title: 'age',
-            dataIndex: 'age',
-            key: 'age',
-          },
-          {
-            title: 'age',
-            dataIndex: 'age',
-            key: 'ag',
-          },
-          {
-          title: '操作',
-          key: 'action',
-          align:'center',
-          render: (text, record) => (
-            <Space size="middle">
-              <Button 
-                type="primary" 
-                ghost 
-                onClick={() => {this.handleIntoClass(text,record)}}
-            >进入班级</Button>
-            </Space>
-            ),
-          },
-        ]
-      }
-        this.handleIntoClass = this.handleIntoClass.bind(this);
+            currentkeys:["unchoose","onchoosed"]
+        };
+      
     }
     render() { 
         return (
             <div>
                 <div className="topnav">
-                    <Menu theme="light"  mode="horizontal" defaultSelectedKeys="1">
-                        <Menu.Item key = "1">请选择的班级</Menu.Item>
+                    <Menu theme="light"  mode="horizontal" onClick={this.handleClick} defaultSelectedKeys="1">
+                        <Menu.Item key = "1"><Link to="/Teacher/StuClass/ChosenStuClass">已选择的班级</Link></Menu.Item>
+                        <Menu.Item key = "2"><Link to="/Teacher/StuClass/UnChosenStuClass">未选择的班级</Link></Menu.Item>
                     </Menu>
                 </div>
-                <div>
-            <Table 
-              dataSource={this.state.contentList} 
-              columns={this.state.columns} 
-              rowkey={record => record.teachclass}
-              rowSelection={this.state.rowSelectionProps}
-              />
-        </div>
+                <div className="table">
+                    <Switch>
+                        <Route path="/Teacher/StuClass/ChosenStuClass" component={ChosenStuClass} />
+                        <Route path="/Teacher/StuClass/UnChosenStuClass" component={UnChosenStuClass} />
+                        <Redirect to="/Teacher/StuClass/ChosenStuClass" />
+                    </Switch>
+                </div>
             </div>
         );
 

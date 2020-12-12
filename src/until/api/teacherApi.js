@@ -99,6 +99,12 @@ function closeCeo(teacherId) {
   })
 }
 
+function isRunVote(teachclass) {
+  return Service.post('/teacher/checkceo', {
+      teachclass
+  })
+}
+
 /*老师展示ceo发起的公司改名字申请*/
 function changeCompanyName(teachclass, currentPage, studentId) {
   return Service.post('/teacher/changeName', {
@@ -141,9 +147,11 @@ function decideCeo(studentId) {
   })
 }
 /*给公司打分*/
-function putScore(teacherId,scoreTeacher,companyName) {
+function putScore(ceo,scoreTeacher) {
   return Service.post('/teacher/companyscore', {
-    teacherId,scoreTeacher,companyName
+    ceo,
+    scoreTeacher,
+    
   })
 }
 /*老师修改宣讲状态*/
@@ -154,7 +162,7 @@ function voteStatus(flag, teacherId) {
 }
 /*给学生打分*/
 function setScore(teacherId, studentId, teacherScore) {
-  return  Service.post('/teacher/setstuscore', {
+  return Service.post('/teacher/setstuscore', {
     teacherId, studentId, teacherScore
   })
 }
@@ -240,13 +248,14 @@ export{
   showCeo,
   showAll,
   exportExc,
+  ShowComMember,
   noSign,
+  isRunVote,
   setNosign,
   showConfig,
   ShowComInfo,
+  showFile,
   updateConfigMember,
   updateConfigCompany,
   updateConfigOther,
-  ShowComMember,
-  showFile
 }
