@@ -13,10 +13,15 @@ import NewsCom from './news';
 import SignCom from './Sign'
 import SetCom from './Set'
 import StuClass from './StuClass';
+import Download from './Download';
 import '../../teacher/style/contentNav.css';
 import {  Menu,Button } from 'antd';
 import LoginApi from '../../../until/api/LoginApi'
-import { UserOutlined, VideoCameraOutlined, EditOutlined, OrderedListOutlined,CarryOutOutlined} from '@ant-design/icons';
+import {
+    UserOutlined, VideoCameraOutlined,
+    EditOutlined, OrderedListOutlined, CarryOutOutlined,
+    FolderOpenOutlined,SettingOutlined,BarsOutlined 
+} from '@ant-design/icons';
 
 class Teacher extends Component { 
     constructor(props) {
@@ -48,7 +53,7 @@ class Teacher extends Component {
                                 <Menu.Item key="1" icon={<UserOutlined />}>
                                     <Link to="/Teacher/StuInfo">学生信息</Link>
                                 </Menu.Item>
-                                <Menu.Item key="2" icon={<VideoCameraOutlined />}>
+                                <Menu.Item key="2" icon={<BarsOutlined />}>
                                     <Link to="/Teacher/ComInfo">公司情况</Link> 
                                 </Menu.Item>
                                 <Menu.Item key="3" icon={<EditOutlined />}>
@@ -60,8 +65,11 @@ class Teacher extends Component {
                                 <Menu.Item key="5" icon={<CarryOutOutlined />}>
                                     <Link to="/Teacher/Sign">签到</Link> 
                                 </Menu.Item>
-                                <Menu.Item key="6" icon={<CarryOutOutlined />}>
+                                <Menu.Item key="6" icon={<SettingOutlined />}>
                                     <Link to="/Teacher/Set">修改配置</Link> 
+                                </Menu.Item>
+                                <Menu.Item key="7" icon={<FolderOpenOutlined />}>
+                                    <Link to="/Teacher/Download">查看上传文件</Link> 
                                 </Menu.Item>
                             </Menu>
                             
@@ -87,6 +95,9 @@ class Teacher extends Component {
                                     <Route path="/Teacher/Set">
                                         <SetCom></SetCom>
                                     </Route>
+                                    <Route path="/Teacher/Download">
+                                        <Download />  
+                                    </Route>
                                 </Switch>
                             </div> 
 
@@ -94,11 +105,11 @@ class Teacher extends Component {
                         
                     </div>
                 </Router>
-                <div className="teachbackground">
+                {/* <div className="teachbackground">
                     <div className="chooseteachClass">
                         <StuClass handleDisTeach = {()=>{this.handleDisTeach()}}/>
                     </div>
-                </div>
+                </div> */}
             </div>
         )
     }

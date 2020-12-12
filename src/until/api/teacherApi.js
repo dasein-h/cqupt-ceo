@@ -199,6 +199,14 @@ function showConfig(teachclass){
   })
 }
 
+// 展示PPT
+function showFile(teachclass, currentPage) { 
+  return Service.post('/upload/showAll', {
+    teachclass,
+    currentPage
+  })
+}
+
 export{
   selectedClassTeacher,
   unSelectedClassTeacher,
@@ -222,5 +230,6 @@ export{
   noSign,
   setNosign,
   showConfig,
-  ShowComInfo
+  ShowComInfo,
+  showFile
 }
