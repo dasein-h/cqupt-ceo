@@ -256,9 +256,7 @@ export{
   ShowComInfo,
   showFile,
   isRunVote,
-  ShowComMember,
   updateConfigMember,
   updateConfigCompany,
   updateConfigOther,
-  showFile
 }

@@ -107,11 +107,11 @@ class Teacher extends Component {
                         
                     </div>
                 </Router>
-                {/* <div className="teachbackground">
+                <div className="teachbackground">
                     <div className="chooseteachClass">
                         <StuClass handleDisTeach = {()=>{this.handleDisTeach()}}/>
                     </div>
-                </div> */}
+                </div>
             </div>
         )
     }
