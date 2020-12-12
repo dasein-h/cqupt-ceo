@@ -65,7 +65,6 @@ class StuClass extends React.Component{
               rowkey={record => record.teachclass}
               pagination={this.state.pagination}
               loading={this.state.loading}
-
               />
         </div>
             </div>

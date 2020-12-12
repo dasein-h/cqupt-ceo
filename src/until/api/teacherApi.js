@@ -194,6 +194,10 @@ function showConfig(teachclass){
     teachclass
   })
 }
+function ShowComInfo(teachclass) {
+  return Service.post('/student/showCompany', {
+    teachclass})
+  }
 
 //个人配置
 function updateConfigMember(ceoScore,memberScore,signScore,teachclass){
@@ -211,11 +215,6 @@ function updateConfigCompany(companyScore,newsScore,bankScore,accountScore,trade
 function updateConfigOther(late,absence,sameClassMember,companyNum,teachclass){
   return Service.post('/admin/updateConfigOther',{
     late,absence,sameClassMember,companyNum,teachclass
-  })
-}
-function ShowComInfo(teachclass) {
-  return Service.post('/student/showCompany', {
-    teachclass
   })
 }
 function ShowComMember(stuid) { 
@@ -251,11 +250,11 @@ export{
   exportExc,
   ShowComMember,
   noSign,
+  isRunVote,
   setNosign,
   showConfig,
   ShowComInfo,
   showFile,
-  isRunVote,
   updateConfigMember,
   updateConfigCompany,
   updateConfigOther,
