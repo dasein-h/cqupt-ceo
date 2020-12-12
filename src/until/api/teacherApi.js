@@ -1,11 +1,12 @@
 import Service from "../Service";
 
 /*展示所有老师已经选择过的班级*/
-function selectedClassTeacher(teacherId, currentPage) {
+function selectedClassTeacher(teacherId, currentPage,pageSize1) {
   return Service.get('/teacher/exitclass', {
     params: {
       teacherId,
-      currentPage
+      currentPage,
+      pageSize1
     }
   })
 }
@@ -73,6 +74,7 @@ function showCeo(currentPage,teacherclass){
     }
   })
 }
+
 // 展示所有学生信息
 function showAll(teachclass,currentPage){
   return Service.post('/teacher/showall',{
@@ -80,19 +82,19 @@ function showAll(teachclass,currentPage){
   })
 }
 /*开启ceo投票*/
-function runCeo(teachclass) {
+function runCeo(teacherId) {
   return Service.get('/teacher/runceo', {
     params: {
-      teachclass
+      teacherId
     }
   })
 }
 
 /*关闭ceo投票*/
-function closeCeo(teachclass) {
-  return Service.get('/teacher/closeceo', {
+function closeCeo(teacherId) {
+  return Service.post('/teacher/closeceo', {
     params: {
-      teachclass
+      teacherId
     }
   })
 }
@@ -128,7 +130,7 @@ function deleteCompany(ceo) {
 
 /*撤销ceo*/
 function deleteCeo(studentId) {
-  return Service.post('/teacher/deleteceo', {
+  return Service.post('/teacher/deletecompany', {
     studentId
   })
 }
@@ -139,11 +141,9 @@ function decideCeo(studentId) {
   })
 }
 /*给公司打分*/
-function putScore(ceo,scoreTeacher) {
+function putScore(teacherId,scoreTeacher,companyName) {
   return Service.post('/teacher/companyscore', {
-    ceo,
-    scoreTeacher,
-    
+    teacherId,scoreTeacher,companyName
   })
 }
 /*老师修改宣讲状态*/
@@ -154,23 +154,11 @@ function voteStatus(flag, teacherId) {
 }
 /*给学生打分*/
 function setScore(teacherId, studentId, teacherScore) {
-  return Service.post('/teacher/setstuscore', {
+  return  Service.post('/teacher/setstuscore', {
     teacherId, studentId, teacherScore
   })
 }
 
-// 查看公司信息
-function ShowComInfo(teachclass) {
-  return Service.post('/student/showCompany', {
-    teachclass
-  })
-}
-// 展示公司成员
-function ShowComMember(stuid) { 
-  return Service.post('/student/showCompanyMember', {
-    "studentId":stuid
-  })
-}
 // 导出
 function exportExc(teachclass){
   return Service.post('/upload/export',{
@@ -186,9 +174,9 @@ function noSign(teachclass){
 }
 
 //设置为未签到
-function setNosign(teachclass,studentId,scoreSign,sign){
+function setNosign(teachclass,studentId,scoreSign,sign,addtime){
   return Service.post('teacher/sign',{
-    teachclass,studentId,scoreSign,sign
+    teachclass,studentId,scoreSign,sign,addtime
   })
 }
 
@@ -199,6 +187,34 @@ function showConfig(teachclass){
   })
 }
 
+//个人配置
+function updateConfigMember(ceoScore,memberScore,signScore,teachclass){
+  return Service.post('/admin/updateConfigMember',{
+    ceoScore,memberScore,signScore,teachclass
+  })
+}
+
+//公司配置
+function updateConfigCompany(companyScore,newsScore,bankScore,accountScore,tradeScore,revenueScore,agencyScore,fromCompanyScore,teachclass){
+  return Service.post('/admin/updateConfigCompany',{
+    companyScore,newsScore,bankScore,accountScore,tradeScore,revenueScore,agencyScore,fromCompanyScore,teachclass
+  })
+}
+function updateConfigOther(late,absence,sameClassMember,companyNum,teachclass){
+  return Service.post('/admin/updateConfigOther',{
+    late,absence,sameClassMember,companyNum,teachclass
+  })
+}
+function ShowComInfo(teachclass) {
+  return Service.post('/student/showCompany', {
+    teachclass
+  })
+}
+function ShowComMember(stuid) { 
+  return Service.post('/student/showCompanyMember', {
+    "studentId":stuid
+  })
+}
 // 展示PPT
 function showFile(teachclass, currentPage) { 
   return Service.post('/upload/showAll', {
@@ -206,7 +222,6 @@ function showFile(teachclass, currentPage) {
     currentPage
   })
 }
-
 export{
   selectedClassTeacher,
   unSelectedClassTeacher,
@@ -226,10 +241,13 @@ export{
   showCeo,
   showAll,
   exportExc,
-  ShowComMember,
   noSign,
   setNosign,
   showConfig,
   ShowComInfo,
+  ShowComMember,
+  updateConfigMember,
+  updateConfigCompany,
+  updateConfigOther,
   showFile
 }

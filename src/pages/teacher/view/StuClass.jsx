@@ -70,7 +70,7 @@ class StuClass extends React.Component{
 
     }
     componentDidMount(){
-      let repro = selectedClassTeacher("1","1");
+      let repro = selectedClassTeacher(localStorage.getItem("userId"),"1","5");
       repro.then((res) => {
         this.setState(
           this.state.contentList = res.data.data

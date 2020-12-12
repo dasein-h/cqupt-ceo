@@ -7,4 +7,5 @@ const ManagerApi = {
   }
 }
 
-export default ManagerApi
+
+export default ManagerApi;

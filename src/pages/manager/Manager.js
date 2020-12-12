@@ -7,7 +7,6 @@ import {
     Redirect
   } from "react-router-dom";
 import ChoseClass from './view/ChoseClass'
-import Set from './view/Set'
 import ImData from './view/ImData'
 import './style/Nav.css';
 import {  Menu,Button } from 'antd';
