@@ -1,11 +1,12 @@
 import Service from "../Service";
 
 /*展示所有老师已经选择过的班级*/
-function selectedClassTeacher(teacherId, currentPage) {
+function selectedClassTeacher(teacherId, currentPage, pageSize1) {
   return Service.get('/teacher/exitclass', {
     params: {
       teacherId,
-      currentPage
+      currentPage,
+      pageSize1
     }
   })
 }
@@ -20,50 +21,6 @@ function unSelectedClassTeacher(teacherId, currentPage) {
   })
 }
 
-/*
-老师批量选择的班级
-可以传集合，类似于这种格式
-{
-    "list": [
-        {
-            "teacherId":"1",
-            "cls":"0311203"
-        },
-        {
-            "teacherId":"1",
-            "cls":"0311201"
-        }
-    ]
-}
-* */
-function addClass(list) {
-  /*teacherId为集合
-  * [
-        {
-            "teacherId":"1",
-            "cls":"0311203"
-        },
-        {
-            "teacherId":"1",
-            "cls":"0311201"
-        }
-    ]
-  * */
-  const queryData = {
-    list
-  }
-  return Service.post('/teacher/addclass', queryData)
-}
-
-/*老师批量删除班级*/
-function deleteClass(teacherId, cls) {
-  return Service.get('/teacher/deleteclass', {
-    params: {
-      teacherId,
-      cls
-    }
-  })
-}
 // 展示竞选ceo同学及投票数
 function showCeo(currentPage,teacherclass){
   return Service.post('/student/showCeoVote',{
@@ -79,21 +36,24 @@ function showAll(teachclass,currentPage){
       teachclass,currentPage
   })
 }
-/*开启ceo投票*/
+/*开启ceo投票*/  
 function runCeo(teachclass) {
-  return Service.get('/teacher/runceo', {
-    params: {
+  return Service.post('/teacher/runceo', {
       teachclass
-    }
   })
 }
 
 /*关闭ceo投票*/
 function closeCeo(teachclass) {
-  return Service.get('/teacher/closeceo', {
-    params: {
+  return Service.post('/teacher/closeceo', {
       teachclass
-    }
+  })
+}
+
+//判断是否开启投票
+function isRunVote(teachclass){
+  return Service.post('/teacher/checkceo',{
+    teachclass
   })
 }
 
@@ -194,8 +154,6 @@ function showConfig(teachclass){
 export{
   selectedClassTeacher,
   unSelectedClassTeacher,
-  addClass,
-  deleteClass,
   runCeo,
   closeCeo,
   changeCompanyName,
@@ -208,10 +166,7 @@ export{
   voteStatus,
   setScore,
   showCeo,
-  showAll,
   exportExc,
-  noSign,
-  setNosign,
-  showConfig,
-  ShowComInfo
+  ShowComInfo,
+  isRunVote
 }

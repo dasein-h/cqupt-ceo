@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import { Table, Space,Input,Button, notification } from 'antd'; 
+import { Table, Space,Input,Button, notification,message } from 'antd'; 
 import { AudioOutlined } from '@ant-design/icons';
 // import '../style/VoSit.css';
-import {showCeo, runCeo, closeCeo,decideCeo,deleteCeo} from '../../../until/api/teacherApi';
+import {showCeo, runCeo, closeCeo,decideCeo,deleteCeo,isRunVote} from '../../../until/api/teacherApi';
 
 //table的静态内容
 
@@ -11,13 +11,11 @@ class VotSit extends Component {
     constructor(props) { 
         super(props);
         this.state = {
-          btuValue: '开启投票',
-          isVote: true,
+          btuValue: '',
           startCeo:'任命为CEO',
-          isCeo:false,
+          isrunvote:'',
           teachclass:'',
           loading:true,
-          totalNumber:'',
           pagination:{
             showSizeChanger:false,
             defaultCurrent:1,
@@ -68,39 +66,13 @@ class VotSit extends Component {
             },
           ],
           dataSource:[
-            // {
-            //   key: '1',
-            //   studentid: '胡彦斌',
-            //   name: 32,
-            //   teachclass: '西湖区湖底公园1号',
-            //   action:'任命为CEO'
-            // },
-            // {
-            //   key: '2',
-            //   studentid: '胡彦祖',
-            //   name: 42,
-            //   teachclass: '西湖区湖底公园1号',
-            //   action:'任命为CEO'
-            // },{
-            //   key: '3',
-            //   studentid: '胡彦斌',
-            //   name: 2,
-            //   teachclass: '西湖区湖底公园1号',
-            //   action:'任命为CEO'
-            // },
-            // {
-            //   key: '4',
-            //   studentid: '胡彦祖',
-            //   name: 42,
-            //   teachclass: '西湖区湖底公园1号',
-            //   action:'任命为CEO'
-            // },
           ]
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleDecideCeo = this.handleDecideCeo.bind(this);
         this.addAction = this.addAction.bind(this);
         this.changePage = this.changePage.bind(this);
+        this.isRunVote = this.isRunVote.bind(this);
     }
  
     render() { 
@@ -128,47 +100,42 @@ class VotSit extends Component {
         );
     }
     componentWillMount(){
-      let teachClass = localStorage.getItem('teachclass');
-      this.setState({
-        teachclass:teachClass
-      })
+      
     }
 
     componentDidMount () {
+      let teachClass = localStorage.getItem('teachclass');
+      this.setState({
+        teachclass:teachClass
+      },()=>{
+        //展示竞选ceo的同学以及其的票数
+        this.changePage(1);
+        this.isRunVote();
+      })
       
-      //展示竞选ceo的同学以及其的票数
-      this.changePage(1);
     }
 
 
     changePage = (currentPage) => {
+      this.setState({
+            loading:false
+      })
       showCeo(currentPage,this.state.teachclass).then(
         (res) => {
-          this.setState({
-            loading:true
-            })
-          if(res.data.data.object.length != 0){ 
+          
+          if(res.data.data.object.length !== 0){ 
             let pagination = {...this.state.pagination};
             pagination.total = res.data.data.totalNumber;
             this.setState({
             dataSource : res.data.data.object,
-            loading:false,
+            loading:true,
             pagination
             })
-           
             this.addAction(this.state.dataSource);
-          }else{
-            this.setState({
-            dataSource : []
-            })
-            notification.success({
-              description : '到底了',
-              message : '提示：',
-              placement:'bottomRight'
-            })
           }
         },
         (err) => {
+          this.setState({ loading: false })
           notification.success({
               description : '请求超时或服务器异常,请检查网络或联系管理员!',
               message : '警告',
@@ -179,29 +146,55 @@ class VotSit extends Component {
 
     }
 
+    isRunVote = () => {
+      isRunVote(this.state.teachclass).then(
+        (res)=>{
+          this.setState({
+            isrunvote:res.data.data
+          },
+          ()=>{
+            if(this.state.isrunvote){
+              this.setState({
+                btuValue:"关闭投票"
+              })
+            }else{
+              this.setState({
+                btuValue:"开启投票"
+              })
+            }
+          })
+          console.log(res);
+      }, (err) =>{
+        console.log(err);
+      })
+    }
+
     //开启投票\关闭投票
     handleChange = () => {
-      if(this.state.isVote){
-        this.setState({
-           btuValue:"关闭投票",
-           isVote:!this.state.isVote
-        })
-        runCeo(this.state.teachclass).then(
+      if(this.state.isrunvote){
+        
+        closeCeo(this.state.teachclass).then(
         (res) => {
           console.log(res);
+          this.setState({
+            btuValue:"开启投票",
+            isrunvote:!this.state.isrunvote
+          })
+          message.success("关闭成功",1)
         },
         (err) => {
           console.log(err);
         }
       )
-      }else{
-        this.setState({
-          btuValue:"开启投票",
-          isVote:!this.state.isVote
-        })
-        closeCeo(this.state.teachclass).then(
+      }else if(!this.state.isrunvote){
+        runCeo(this.state.teachclass).then(
         (res) => {
           console.log(res);
+          this.setState({
+            btuValue:"关闭投票",
+            isrunvote:!this.state.isrunvote
+          })
+          message.success("开启成功",1)
         },
         (err) => {
           console.log(err);
