@@ -12,9 +12,10 @@ import VotSit from './VotSit';
 import NewsCom from './news';
 import StuClass from './StuClass';
 import '../../teacher/style/contentNav.css';
-import {  Menu,Button } from 'antd';
+import {  Menu,Button,message } from 'antd';
 import LoginApi from '../../../until/api/LoginApi'
 import { UserOutlined, VideoCameraOutlined, EditOutlined, OrderedListOutlined,CarryOutOutlined} from '@ant-design/icons';
+
 
 class Teacher extends Component { 
     constructor(props) {
@@ -26,6 +27,7 @@ class Teacher extends Component {
           }
         this.handleDisTeach = this.handleDisTeach.bind(this);
         this.handleExit = this.handleExit.bind(this);
+        this.isLogin = this.isLogin.bind(this);
     }
     render() {
         return (
@@ -98,11 +100,21 @@ class Teacher extends Component {
         this.setState({
             userid: userId,
             username:userName
+        },()=>{
+            this.isLogin()
         })
+        
         if(localStorage.hasOwnProperty("teachclass")){
             this.handleDisTeach();
         }
+        if(localStorage.hasOwnProperty("userId") && localStorage.getItem("type")=="teacher"){
+            message.success("登录成功",1);
+        }else{
+            message.info("请先登录",1);
+            this.props.history.push('/Student/AllCompanies/ChosenClasses');
+        }
     }
+    
     handleDisTeach = () => {
         console.log(1);
         document.querySelector('.teachbackground').style.display = 'none';
@@ -112,15 +124,33 @@ class Teacher extends Component {
             (res) => {
                 console.log(res);
                 if(res.data.flag){
+                    message.success("退出成功",1)
                     this.props.history.push('/Student/AllCompanies/ChosenClasses');
                 }else{
-                    console.log('退出失败');
+                    message.info("退出失败，请重新登录",1)
                 }
             },
             (err) => {
                 console.log(err);
             }
         )
+    }
+    isLogin = () => {
+        setInterval(() => {
+            LoginApi.KeepLogin(this.state.userid).then(
+            (res) => {
+                console.log(1);
+                console.log(res);
+                if(!res.data.flag){
+                    this.props.history.push('/Student/AllCompanies/ChosenClasses');
+                }
+            },
+            (err) => {
+                console.log(err);
+            }
+        )
+        },300000);
+        
     }
 }
 

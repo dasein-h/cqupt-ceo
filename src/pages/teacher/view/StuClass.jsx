@@ -10,25 +10,12 @@ class StuClass extends React.Component{
         super(props);
         this.state = {
         contentList:"",
-        rowSelectionProps:{
-          type:'Radio',
-
-        },
         columns: [
           {
             title: 'teachclass',
             dataIndex: 'teachclass',
             key: 'teachclass',
-          },
-          {
-            title: 'age',
-            dataIndex: 'age',
-            key: 'age',
-          },
-          {
-            title: 'age',
-            dataIndex: 'age',
-            key: 'ag',
+            align:"center"
           },
           {
           title: '操作',
@@ -44,7 +31,21 @@ class StuClass extends React.Component{
             </Space>
             ),
           },
-        ]
+        ],
+        loading:true,
+            pagination:{
+                showSizeChanger:false,
+                defaultCurrent:1,
+                current: 1,
+                pageSize: 7,
+                total:'',
+                hideOnSinglePage: true,
+                onChange: (page, pageSize) => {
+                console.log(this.changePage);
+                this.changePage(page);
+                this.state.pagination.current = page
+            }
+            }
       }
         this.handleIntoClass = this.handleIntoClass.bind(this);
     }
@@ -61,7 +62,9 @@ class StuClass extends React.Component{
               dataSource={this.state.contentList} 
               columns={this.state.columns} 
               rowkey={record => record.teachclass}
-              rowSelection={this.state.rowSelectionProps}
+              pagination={this.state.pagination}
+              loading={this.state.loading}
+
               />
         </div>
             </div>
@@ -69,12 +72,13 @@ class StuClass extends React.Component{
 
     }
     componentDidMount(){
-      let repro = selectedClassTeacher("1","1");
+
+      let repro = selectedClassTeacher(localStorage.getItem("userId"),"1","5");
       repro.then((res) => {
-        this.setState(
-          this.state.contentList = res.data.data
-        )
-        console.log(res.data.data);
+        this.setState({
+          contentList : res.data.data,
+          loading:false
+        })
       },(err) => {
         console.log(err);
       })
