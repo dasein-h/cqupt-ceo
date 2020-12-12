@@ -16,7 +16,7 @@ import StuClass from './StuClass';
 import '../../teacher/style/contentNav.css';
 import {  Menu,Button } from 'antd';
 import LoginApi from '../../../until/api/LoginApi'
-import { UserOutlined, VideoCameraOutlined, EditOutlined, OrderedListOutlined,CarryOutOutlined} from '@ant-design/icons';
+import { UserOutlined, VideoCameraOutlined, EditOutlined, OrderedListOutlined,CarryOutOutlined,SettingOutlined} from '@ant-design/icons';
 
 class Teacher extends Component { 
     constructor(props) {
@@ -60,7 +60,7 @@ class Teacher extends Component {
                                 <Menu.Item key="5" icon={<CarryOutOutlined />}>
                                     <Link to="/Teacher/Sign">签到</Link> 
                                 </Menu.Item>
-                                <Menu.Item key="6" icon={<CarryOutOutlined />}>
+                                <Menu.Item key="6" icon={<SettingOutlined />}>
                                     <Link to="/Teacher/Set">修改配置</Link> 
                                 </Menu.Item>
                             </Menu>

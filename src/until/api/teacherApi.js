@@ -1,11 +1,12 @@
 import Service from "../Service";
 
 /*展示所有老师已经选择过的班级*/
-function selectedClassTeacher(teacherId, currentPage) {
+function selectedClassTeacher(teacherId, currentPage,pageSize1) {
   return Service.get('/teacher/exitclass', {
     params: {
       teacherId,
-      currentPage
+      currentPage,
+      pageSize1
     }
   })
 }
@@ -173,9 +174,9 @@ function noSign(teachclass){
 }
 
 //设置为未签到
-function setNosign(teachclass,studentId,scoreSign,sign){
+function setNosign(teachclass,studentId,scoreSign,sign,addtime){
   return Service.post('teacher/sign',{
-    teachclass,studentId,scoreSign,sign
+    teachclass,studentId,scoreSign,sign,addtime
   })
 }
 
@@ -185,10 +186,30 @@ function showConfig(teachclass){
     teachclass
   })
 }
+<<<<<<< Updated upstream
 //
 function ShowComInfo(teachclass) {
   return Service.post('/student/showCompany', {
     teachclass
+=======
+
+//个人配置
+function updateConfigMember(ceoScore,memberScore,signScore,teachclass){
+  return Service.post('/admin/updateConfigMember',{
+    ceoScore,memberScore,signScore,teachclass
+  })
+}
+
+//公司配置
+function updateConfigCompany(companyScore,newsScore,bankScore,accountScore,tradeScore,revenueScore,agencyScore,fromCompanyScore,teachclass){
+  return Service.post('/admin/updateConfigCompany',{
+    companyScore,newsScore,bankScore,accountScore,tradeScore,revenueScore,agencyScore,fromCompanyScore,teachclass
+  })
+}
+function updateConfigOther(late,absence,sameClassMember,companyNum,teachclass){
+  return Service.post('/admin/updateConfigOther',{
+    late,absence,sameClassMember,companyNum,teachclass
+>>>>>>> Stashed changes
   })
 }
 export{
@@ -213,5 +234,8 @@ export{
   noSign,
   setNosign,
   showConfig,
-  ShowComInfo
+  ShowComInfo,
+  updateConfigMember,
+  updateConfigCompany,
+  updateConfigOther
 }

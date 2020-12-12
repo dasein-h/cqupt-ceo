@@ -2,7 +2,7 @@ import React from 'react'
 import SetCompany from '../components/SetCompany'
 import SetPersonal from '../components/SetPersonal'
 import SetOther from '../components/SetOthers'
-import { Tabs,Menu } from 'antd'
+import { Tabs, Menu } from 'antd'
 import { showConfig } from '../../../until/api/teacherApi'
 import {
     BrowserRouter as Router,
@@ -16,9 +16,9 @@ class Set extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            person:"",
-            company:"",
-            other:"",
+            person: "",
+            company: "",
+            other: "",
             teachclass: localStorage.getItem("teachclass")
         }
     }
@@ -26,13 +26,13 @@ class Set extends React.Component {
         return (
             <div className="set">
                 <Menu theme="light" mode="horizontal" defaultSelectedKeys="1" style={{ marginTop: -10 }}>
-                    <Menu.Item key="1"><Link to="/Teacher/Set/Person">个人成绩占比</Link></Menu.Item>
+                    <Menu.Item key="1" style={{margin:'0'}}><Link to="/Teacher/Set/Person">个人成绩占比</Link></Menu.Item>
                     <Menu.Item key="2"><Link to="/Teacher/Set/Company">公司成绩占比</Link></Menu.Item>
                     <Menu.Item key="3"><Link to="/Teacher/Set/Other">其他占比</Link></Menu.Item>
                 </Menu>
                 <Switch>
                     <Route path="/Teacher/Set/Person" exact>
-                        <SetPersonal></SetPersonal>
+                        <SetPersonal person={this.state.person}></SetPersonal>
                     </Route>
                     <Route path="/Teacher/Set/Company" exact>
                         <SetCompany></SetCompany>
@@ -53,22 +53,21 @@ class Set extends React.Component {
                         <SetOther></SetOther>
                     </TabPane>
                 </Tabs> */}
-               
+
             </div>
-            
+
         )
     }
     componentDidMount() {
         showConfig(this.state.teachclass).then(rs => {
-           let res = rs.data.data
-           console.log(res);
-           this.setState({
-            ceoScore:res.ceoScore,
-                memberScore:res.memberScore,
-                signScore:res.signScore
-           })
-                
-           
+            let res = rs.data.data
+            console.log(res);
+            this.setState({
+                ceoScore: res.ceoScore,
+                memberScore: res.memberScore,
+                signScore: res.signScore
+            })
+
         })
     }
 }

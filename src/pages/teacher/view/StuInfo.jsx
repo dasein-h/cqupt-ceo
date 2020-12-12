@@ -152,7 +152,7 @@ class StuInfo extends Component {
     })
   }
   downLoad = () => {
-    window.location.href = "http://localhost:3000/api/upload/export?teachclass=SJ00201A2031780003"
+    window.location.href = "http://localhost:3000/api/upload/export?teachclass="+this.state.teachclass;
   }
 }
 
