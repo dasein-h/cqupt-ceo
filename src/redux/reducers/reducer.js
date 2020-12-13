@@ -42,7 +42,7 @@ export default (state = newstate, action) => {
     case "VoteForCeo_NO":
       return {isVoteForCeo:false, isLogin:state.isLogin, ...data, ...action.payload}
     case "RunCeo":
-      return {isLogin:state.isLogin,...data, ...action.payload}
+      return {isLogin:state.isLogin,...data, ...action}
     case "RunCeo_OK":
       return {isRunCeo:true, isLogin:state.isLogin,...data,  ...action.payload}
     case "RunCeo_NO":

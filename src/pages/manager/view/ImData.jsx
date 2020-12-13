@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Upload, Button, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import   ManagerApi  from '../../../until/api/managerApi';
-import reqwest from 'reqwest';
+// import reqwest from 'reqwest';
 import { InboxOutlined } from '@ant-design/icons';
 import '../style/ImData.css';
 const { Dragger } = Upload;

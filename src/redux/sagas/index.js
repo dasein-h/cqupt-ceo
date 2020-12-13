@@ -123,6 +123,7 @@ export default function* defSaga() {
   yield takeEvery('ShowApplication', function* () {
     const action = yield select()
     const res = yield call(StudentApi.ShowApplication, action.payload)
+    console.log(res)
     if (res.status === 200 && res.data.flag) {
       yield put(actions.ShowApplication_OK(res.data))
     }

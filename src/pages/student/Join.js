@@ -70,11 +70,6 @@ class Join extends Component {
             dataIndex: 'level',
             key: 'level',
         },
-          {
-            title: '姓名',
-            dataIndex: 'userName',
-            key: 'userName',
-          },
         {
             title: '学号',
             dataIndex: 'studentId',
