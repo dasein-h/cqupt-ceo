@@ -13,10 +13,16 @@ import NewsCom from './news';
 import SignCom from './Sign'
 import SetCom from './Set'
 import StuClass from './StuClass';
+import Download from './Download';
 import '../../teacher/style/contentNav.css';
-import {  Menu,Button } from 'antd';
+import {  Menu,Button,message } from 'antd';
 import LoginApi from '../../../until/api/LoginApi'
-import { UserOutlined, VideoCameraOutlined, EditOutlined, OrderedListOutlined,CarryOutOutlined} from '@ant-design/icons';
+import {
+    UserOutlined, VideoCameraOutlined,
+    EditOutlined, OrderedListOutlined, CarryOutOutlined,
+    FolderOpenOutlined,SettingOutlined,BarsOutlined 
+} from '@ant-design/icons';
+
 
 class Teacher extends Component { 
     constructor(props) {
@@ -28,6 +34,7 @@ class Teacher extends Component {
           }
         this.handleDisTeach = this.handleDisTeach.bind(this);
         this.handleExit = this.handleExit.bind(this);
+        this.isLogin = this.isLogin.bind(this);
     }
     render() {
         return (
@@ -48,7 +55,7 @@ class Teacher extends Component {
                                 <Menu.Item key="1" icon={<UserOutlined />}>
                                     <Link to="/Teacher/StuInfo">学生信息</Link>
                                 </Menu.Item>
-                                <Menu.Item key="2" icon={<VideoCameraOutlined />}>
+                                <Menu.Item key="2" icon={<BarsOutlined />}>
                                     <Link to="/Teacher/ComInfo">公司情况</Link> 
                                 </Menu.Item>
                                 <Menu.Item key="3" icon={<EditOutlined />}>
@@ -60,8 +67,11 @@ class Teacher extends Component {
                                 <Menu.Item key="5" icon={<CarryOutOutlined />}>
                                     <Link to="/Teacher/Sign">签到</Link> 
                                 </Menu.Item>
-                                <Menu.Item key="6" icon={<CarryOutOutlined />}>
+                                <Menu.Item key="6" icon={<SettingOutlined />}>
                                     <Link to="/Teacher/Set">修改配置</Link> 
+                                </Menu.Item>
+                                <Menu.Item key="7" icon={<FolderOpenOutlined />}>
+                                    <Link to="/Teacher/Download">查看上传文件</Link> 
                                 </Menu.Item>
                             </Menu>
                             
@@ -87,6 +97,9 @@ class Teacher extends Component {
                                     <Route path="/Teacher/Set">
                                         <SetCom></SetCom>
                                     </Route>
+                                    <Route path="/Teacher/Download">
+                                        <Download />  
+                                    </Route>
                                 </Switch>
                             </div> 
 
@@ -109,11 +122,21 @@ class Teacher extends Component {
         this.setState({
             userid: userId,
             username:userName
+        },()=>{
+            this.isLogin()
         })
+        
         if(localStorage.hasOwnProperty("teachclass")){
             this.handleDisTeach();
         }
+        if(localStorage.hasOwnProperty("userId") && localStorage.getItem("type")=="teacher"){
+            message.success("登录成功",1);
+        }else{
+            message.info("请先登录",1);
+            this.props.history.push('/Student/AllCompanies/ChosenClasses');
+        }
     }
+    
     handleDisTeach = () => {
         console.log(1);
         document.querySelector('.teachbackground').style.display = 'none';
@@ -123,15 +146,33 @@ class Teacher extends Component {
             (res) => {
                 console.log(res);
                 if(res.data.flag){
+                    message.success("退出成功",1)
                     this.props.history.push('/Student/AllCompanies/ChosenClasses');
                 }else{
-                    console.log('退出失败');
+                    message.info("退出失败，请重新登录",1)
                 }
             },
             (err) => {
                 console.log(err);
             }
         )
+    }
+    isLogin = () => {
+        setInterval(() => {
+            LoginApi.KeepLogin(this.state.userid).then(
+            (res) => {
+                console.log(1);
+                console.log(res);
+                if(!res.data.flag){
+                    this.props.history.push('/Student/AllCompanies/ChosenClasses');
+                }
+            },
+            (err) => {
+                console.log(err);
+            }
+        )
+        },300000);
+        
     }
 }
 

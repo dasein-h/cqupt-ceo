@@ -137,7 +137,7 @@ class SignedCom extends React.Component {
           message: '警告',
           placement: "bottomRight",
           description:
-            '设置失败!',
+          '设置失败（已经设置该同学今天出勤状态）!',
         });
       }
     })
@@ -160,7 +160,7 @@ class SignedCom extends React.Component {
           message: '警告',
           placement: "bottomRight",
           description:
-            '设置失败!',
+            '设置失败（已经设置该同学今天出勤状态）!',
         })
       }
     })
