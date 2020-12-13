@@ -71,12 +71,16 @@ class StuInfo extends Component {
     showAll(this.state.teachclass,page).then((res) => {
       this.setState({loading:false});
       let rs = JSON.parse(res.data);
+      let companyName
       for(let i = 0;i<rs.length;i++){
+        if(rs[i].companyName === undefined)
+          companyName = "无"
+        else companyName = rs[i].companyName
         lists.push({
           "name":rs[i].userName,
           "id":rs[i].studentId,
           "major":rs[i].academy,
-          "company":rs[i].companyName,
+          "company":companyName,
           "score":rs[i].personalScore
         })
       }
