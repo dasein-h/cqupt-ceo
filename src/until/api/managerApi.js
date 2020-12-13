@@ -4,23 +4,8 @@ const ManagerApi = {
     return Service.post('/admin/showteacher', {
       currentPage
     })
-  },
-  upLoadStu:(file)=> { 
-    return Service.post('/admin/stufile', {
-      processData: false,
-      file
-    })
-  },
-  upLoadClass:(file)=> { 
-    return Service.post('/admin/teafile', {
-      processData: false,
-      file
-    })
   }
 }
 
 
-
-
-
-export default ManagerApi
+export default ManagerApi;
