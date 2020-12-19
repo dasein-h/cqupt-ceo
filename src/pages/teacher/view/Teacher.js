@@ -131,7 +131,8 @@ class Teacher extends Component {
         }
         if(localStorage.hasOwnProperty("userId") && localStorage.getItem("type")=="teacher"){
             message.success("登录成功",1);
-        }else{
+        }
+        else {
             message.info("请先登录",1);
             this.props.history.push('/Student/AllCompanies/ChosenClasses');
         }

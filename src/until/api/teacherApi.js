@@ -222,6 +222,15 @@ function ShowComMember(stuid) {
     "studentId":stuid
   })
 }
+//给学生选择公司
+function ChoseCompany(ceoId, studentId, companyName) { 
+  return Service.post('/teacher/selectStu', {
+    "ceoId": ceoId,
+    "studentId": studentId,
+    "companyName":companyName
+  })
+}
+
 // 展示PPT
 function showFile(teachclass, currentPage) { 
   return Service.post('/upload/showAll', {
@@ -258,4 +267,5 @@ export{
   updateConfigMember,
   updateConfigCompany,
   updateConfigOther,
+  ChoseCompany
 }
