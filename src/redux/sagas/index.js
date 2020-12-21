@@ -167,7 +167,6 @@ export default function* defSaga() {
   yield takeEvery('DeleteFile', function* () {
     const action = yield select()
     const res = yield call(StudentApi.DeleteFile,action.payload)
-    console.log(res)
     if (res.status === 200 && res.data.flag) {
       yield put(actions.DeleteFile_OK(res.data.message))
     }

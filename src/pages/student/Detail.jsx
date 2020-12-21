@@ -106,14 +106,12 @@ class Detail extends Component {
             that.setState({
               uploading: false,
             })
-            console.log(ajax.response)
           }
           else{
             message.error("上传失败，文件可能为空")
             that.setState({
               uploading: false,
             })
-            console.log(ajax.response)
           }
         }
 			}
