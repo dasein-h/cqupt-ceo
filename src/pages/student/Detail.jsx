@@ -13,7 +13,7 @@ class Detail extends Component {
         super(props);
         this.state = { 
             totalNum:0,
-            currentPage:parseInt(sessionStorage.getItem("Page4"))||"1",
+            currentPage:parseInt(sessionStorage.getItem("Page4"))||1,
             data : [],
             visible:false,
             fileList:[],       
@@ -24,6 +24,13 @@ class Detail extends Component {
     UNSAFE_componentWillUpdate(newProps,newState){
       if(newProps!==this.props){
         try{
+          if( newProps.isDeleteFile === true )
+          message.success("删除成功")
+          if( newProps.message ){
+            if( newProps.isDeleteFile === false ){
+              message.error(newProps.message)
+            }
+          }
           const {FileData} = newProps
           let newdata = FileData
           for (let item in newdata){
@@ -31,7 +38,7 @@ class Detail extends Component {
             var totalNumber = newdata[item].filePath
           }
           this.setState({
-            currentPage: parseInt(sessionStorage.getItem("Page4"))||'1',
+            currentPage: parseInt(sessionStorage.getItem("Page4"))||1,
             data:newdata,
             totalNum:totalNumber
           })
@@ -42,7 +49,7 @@ class Detail extends Component {
     }
     componentDidMount() {
       if(localStorage.getItem("class") && !this.props.FileData){
-        this.props.ShowFile(localStorage.getItem("class"),parseInt(sessionStorage.getItem("Page4"))||'1')
+        this.props.ShowFile(localStorage.getItem("class"),parseInt(sessionStorage.getItem("Page4"))||1)
       }
       if(this.props.FileData){
         this.props.Exist()
@@ -87,18 +94,27 @@ class Detail extends Component {
         uploading: true,
       })
       var ajax = new XMLHttpRequest()
+      var that = this
       ajax.open("post", baseurl+"/upload/up", true)
       ajax.onload = function () {
       }
       ajax.send(formData);
       ajax.onreadystatechange = function() {
 				if(ajax.readyState == 4){
-					if(ajax.status == 200){
+					if(ajax.status == 200 && JSON.parse(ajax.response).flag){
             message.success("上传成功")
-					}
-        }
-        else{
-          message.error("上传失败")
+            that.setState({
+              uploading: false,
+            })
+            console.log(ajax.response)
+          }
+          else{
+            message.error("上传失败，文件可能为空")
+            that.setState({
+              uploading: false,
+            })
+            console.log(ajax.response)
+          }
         }
 			}
      
@@ -157,11 +173,20 @@ class Detail extends Component {
         {
           title: '操作',
           key: 'action',
-          render: (text, record) => (
+          render: (text, record) => {
+            if(record.studentId!==localStorage.getItem("userId"))
+              return(
             <Space size="middle">
               <a onClick={this.props.DownloadFile.bind(this,record.id)}>下载</a>
             </Space>
-          ),
+          )
+            else 
+              return(
+                <Space size="middle">
+                <a onClick={this.props.DownloadFile.bind(this,record.id)}>下载</a>
+                <a onClick={this.props.DeleteFile.bind(this,record.id)}>删除</a>
+              </Space>
+              )},
         },
       ]
       const pagination = {
@@ -207,7 +232,7 @@ class Detail extends Component {
                 }
                 >
         <Upload {...props}>
-          <Button icon={<UploadOutlined />}>Select File</Button>
+          <Button icon={<UploadOutlined />}>选择文件</Button>
         </Upload>
         <Button
           type="primary"
@@ -240,6 +265,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     DownloadFile: (id) => {
       dispatch(actions.DownloadFile(id))
+    },
+    DeleteFile: (id) => {
+      dispatch(actions.DeleteFile(id))
     },
     Exist: () => {
       dispatch(actions.Exist())

@@ -53,7 +53,13 @@ class WriteWant extends Component {
       }
       SubmitApplication = () => {
           let applications = new Array()
+          let flag = true
           for(let i = 1 ; i <= 6 ; i ++){
+            if(!this.state['value'+i])
+            flag = false
+          }
+          if(flag === true){
+            for(let i = 1 ; i <= 6 ; i ++){
               applications.push({
                   studentId:localStorage.getItem("userId"),
                   companyName:this.state['value'+i],
@@ -61,6 +67,10 @@ class WriteWant extends Component {
               })
           }
           this.props.AddApplication(applications)
+          }
+        else{
+          message.error("请补全信息")
+        }
       }
       UNSAFE_componentWillUpdate(newProps,newState){
         // this.setState()

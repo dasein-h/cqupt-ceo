@@ -18,11 +18,10 @@ const actions = {
       }
     }
   },
-  Login_Fail: (data) => {
+  Login_Fail: () => {
     return {
       type: "Login_Fail",
       payload:{
-        ...data
       }
     }
   },
@@ -290,6 +289,30 @@ const actions = {
   DownloadFile_NO : (message) => {
     return {
       type:"DownloadFile_NO",
+      payload:{
+        message:message
+      }
+    }
+  },
+  DeleteFile : (id) => {
+    return {
+      type:"DeleteFile",
+      payload:{
+        id:id
+      }
+    }
+  },
+  DeleteFile_OK : (message) => {
+    return {
+      type:"DeleteFile_OK",
+      payload:{
+        message:message
+      }
+    }
+  },
+  DeleteFile_NO : (message) => {
+    return {
+      type:"DeleteFile_NO",
       payload:{
         message:message
       }
