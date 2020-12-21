@@ -238,6 +238,12 @@ function showFile(teachclass, currentPage) {
     currentPage
   })
 }
+// 删除上传的文件
+function DeleteUpload(id) { 
+  return Service.post('/upload/delete', {
+    "id":id
+  })
+}
 export{
   selectedClassTeacher,
   unSelectedClassTeacher,
@@ -267,5 +273,6 @@ export{
   updateConfigMember,
   updateConfigCompany,
   updateConfigOther,
-  ChoseCompany
+  ChoseCompany,
+  DeleteUpload
 }

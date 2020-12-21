@@ -51,7 +51,7 @@ class StuClass extends React.Component{
         this.handleIntoClass = this.handleIntoClass.bind(this);
     }
     render() { 
-        return (
+      return (
             <div>
                 <div className="topnav">
                     <Menu theme="light"  mode="horizontal" defaultSelectedKeys="1">

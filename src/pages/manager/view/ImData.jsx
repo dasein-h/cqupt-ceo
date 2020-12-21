@@ -2,6 +2,7 @@ import React, { Component,Fragment } from 'react';
 import { Upload, Button, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import baseurl from '../../../until/BaseUrl';
+import axios from 'axios';
 import '../style/ImData.css';
 
 
@@ -17,43 +18,43 @@ class ImData extends Component {
     this.handleUploadStu = this.handleUploadStu.bind(this);
     this.handleUploadClass = this.handleUploadClass.bind(this);
     this.handleStatusStu = this.handleStatusStu.bind(this);
+    this.handleStatusClass = this.handleStatusClass.bind(this);
+    this.Ajax = this.Ajax.bind(this);
   }
-  
 
-  Ajax = (type, url, formData) => { 
-
+  Ajax (type, url, formData){
     let status = false;
-    var ajax = new XMLHttpRequest()
-    ajax.open("post", url, true)
-    ajax.onload = function () {
-    console.log(ajax.responseText)
-    }
-    ajax.send(formData);
-    ajax.onreadystatechange = function() {
-      if(ajax.readyState == 4){
-        if(ajax.status == 200){
+    axios({
+      method: 'post',
+      url: url,
+      data: formData,
+      processData: false,
+      contentType:false
+    }).then(
+      (result) => {
+        console.log(result);
+
+        if (result.data.flag == true) {
+          console.log('上传成功！');
           message.success("上传成功");
-          // status = true;
           status = true;
-          
+        }
+        else if (result.data.flag == false) {
+          console.log('上传失败');
+          message.error('上传失败！');
         }
       }
-      else{
-        message.error("上传失败");
-        status = false;
+    ).then(() => {
+      if (type == 0) {
+        this.handleStatusStu(status);
       }
-    }
+      else if (type == 1) {
+        this.handleStatusClass(status);
+      }
+    })
 
-    if (type == 0) {
-      this.handleStatusStu(status);
-      // console.log(this.state.stuList);
-    }
-    else if (type == 1) { 
-      this.handleStatusClass(status);
-      // console.log(this.state.classList);
-    }
-    
   }
+
 
   handleUploadStu = () => {
     const { stuList } = this.state;
@@ -74,12 +75,14 @@ class ImData extends Component {
 
   handleStatusStu = (status) => { 
     console.log(status);
-    
+    if (status == true) { 
       this.setState({
         uploadingStu: false,
         stuList:[]
       });
 
+    }
+      
   }
 
 
@@ -94,17 +97,19 @@ class ImData extends Component {
       uploadingClass: true,
     });
 
-    this.Ajax(1, baseurl+'/admin/teafile', formData);
+    this.Ajax(1, baseurl+'/admin/file', formData);
 
   };
 
   handleStatusClass = (status) => { 
     console.log(status);
-    this.setState({
-      uploadingClass: false,
-      classList:[]
-    })
-    console.log(this.state.classList);
+    if (status == true) { 
+      this.setState({
+        uploadingClass: false,
+        classList:[]
+      })
+    }
+    
   }
   
   render() {
@@ -128,6 +133,7 @@ class ImData extends Component {
       },
       stuList,
     };
+
     const classprops = {
       onRemove: file => {
         this.setState(state => {
@@ -153,7 +159,7 @@ class ImData extends Component {
         <div id="div">
           <div className="StuInfo">
               <Upload {...stuprops}>
-                  <Button icon={<UploadOutlined />} className="button">导入学生信息</Button>
+                  <Button icon={<UploadOutlined />} className="button">导入教学信息</Button>
               </Upload>
               <Button
                     onClick={this.handleUploadStu}
@@ -166,11 +172,11 @@ class ImData extends Component {
           </div>
           <div className="StuInfo">
               <Upload {...classprops}>
-                  <Button icon={<UploadOutlined />} className="button">导入教学班信息</Button>
+                  <Button icon={<UploadOutlined />} className="button">更新学生信息</Button>
               </Upload>
               <Button
                     onClick={this.handleUploadClass}
-                    disabled={classList.length === 0  || classList.length>1}
+                    disabled={classList.length === 0  }
                     loading={uploadingClass}
                     style={{ marginTop: 16 }}
                   >
