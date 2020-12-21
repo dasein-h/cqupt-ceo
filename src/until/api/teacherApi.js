@@ -244,6 +244,14 @@ function DeleteUpload(id) {
     "id":id
   })
 }
+// 下载
+function download(id) { 
+  return Service.post('/upload/download', {
+    "id":id
+  })
+}
+
+
 export{
   selectedClassTeacher,
   unSelectedClassTeacher,
@@ -274,5 +282,6 @@ export{
   updateConfigCompany,
   updateConfigOther,
   ChoseCompany,
-  DeleteUpload
+  DeleteUpload,
+  download
 }

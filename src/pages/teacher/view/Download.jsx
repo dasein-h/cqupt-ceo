@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { showFile,DeleteUpload } from '../../../until/api/teacherApi';
+import { showFile,DeleteUpload,download } from '../../../until/api/teacherApi';
 import {Table,Popconfirm,message} from 'antd';
 
 class Download extends Component { 
@@ -24,9 +24,12 @@ class Download extends Component {
                     dataIndex: 'filename',
                     key: 'filename',
                       render: (text, record) => { 
+                          console.log(record.id);
                           let url = `http://120.79.207.60:8089/upload/download?id=` + record.id;
                           return (
-                              <a href={ url}>{ text}</a>
+                              <a
+                                  onClick={() => { this.handleDownload(record.id) }}
+                              >{text}</a>
                         )
                       }
                 },
@@ -53,6 +56,15 @@ class Download extends Component {
         }
     }
 
+    handleDownload = (id) => { 
+        let res = download(id);
+        res.then((result) => { 
+            console.log(result);
+        },
+        (error) => { 
+            console.log(error);
+        })
+    }
     handleDelete = (record, key, id) => {
         const dataSource = [...this.state.data];
         console.log(id);

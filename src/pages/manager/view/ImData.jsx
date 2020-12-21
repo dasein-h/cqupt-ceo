@@ -62,14 +62,10 @@ class ImData extends Component {
     stuList.forEach(file => {
       formData.append('stufile', file);
     });
-
-
-
     this.setState({
-      uploadingStu: true,
+      uploadingStu: true
     });
-    
-    this.Ajax(0,baseurl+'/admin/stufile', formData);
+    this.Ajax(0, baseurl + '/admin/stufile', formData);
     
   };
 
@@ -92,14 +88,12 @@ class ImData extends Component {
     classList.forEach(file => {
       formData.append('file', file);
     });
-
     this.setState({
-      uploadingClass: true,
-    });
-
-    this.Ajax(1, baseurl+'/admin/file', formData);
-
-  };
+      uploadingClass: true
+    })
+    this.Ajax(1, baseurl + '/admin/file', formData);
+  }
+    
 
   handleStatusClass = (status) => { 
     console.log(status);

@@ -77,6 +77,12 @@ export default (state = newstate, action) => {
       return {isDownloadFile:true, isLogin:state.isLogin,...data, ...action.payload}
     case "DownloadFile_NO":
       return {isDownloadFile:false, isLogin:state.isLogin,...data, ...action.payload}
+    case "DeleteFile":
+      return {isLogin:state.isLogin,...data,...action}
+    case "DeleteFile_OK":
+      return {isDeleteFile:true, isLogin:state.isLogin,...data, ...action.payload}
+    case "DeleteFile_NO":
+      return {isDeleteFile:false, isLogin:state.isLogin,...data, ...action.payload}
     case "Exist" :
       return {...data,...action,isLogin:state.isLogin}
     case "CEO_SET_MEMBER":
