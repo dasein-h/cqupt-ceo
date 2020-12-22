@@ -7,7 +7,9 @@ import {selectedClassTeacher} from '../../../until/api/teacherApi';
 
 
 class StuClass extends React.Component{ 
-    constructor(props) { 
+  constructor(props) { 
+      
+    
         super(props);
         this.state = {
         contentList:"",

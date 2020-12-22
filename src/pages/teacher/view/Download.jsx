@@ -27,9 +27,10 @@ class Download extends Component {
                           console.log(record.id);
                           let url = `http://120.79.207.60:8089/upload/download?id=` + record.id;
                           return (
-                              <a
-                                  onClick={() => { this.handleDownload(record.id) }}
-                              >{text}</a>
+                            //   <a
+                            //       onClick={() => { this.handleDownload(record.id) }}
+                            //   >{text}</a>
+                              <a href={url}>{ text}</a>
                         )
                       }
                 },
@@ -56,15 +57,15 @@ class Download extends Component {
         }
     }
 
-    handleDownload = (id) => { 
-        let res = download(id);
-        res.then((result) => { 
-            console.log(result);
-        },
-        (error) => { 
-            console.log(error);
-        })
-    }
+    // handleDownload = (id) => { 
+    //     let res = download(id);
+    //     res.then((result) => { 
+    //         console.log(result);
+    //     },
+    //     (error) => { 
+    //         console.log(error);
+    //     })
+    // }
     handleDelete = (record, key, id) => {
         const dataSource = [...this.state.data];
         console.log(id);

@@ -118,7 +118,7 @@ class VotSit extends Component {
 
     changePage = (currentPage) => {
       this.setState({
-            loading:false
+            loading:true
       })
       showCeo(currentPage,this.state.teachclass).then(
         (res) => {
@@ -128,7 +128,7 @@ class VotSit extends Component {
             pagination.total = res.data.data.totalNumber;
             this.setState({
             dataSource : res.data.data.object,
-            loading:true,
+            loading:false,
             pagination
             })
             this.addAction(this.state.dataSource);
