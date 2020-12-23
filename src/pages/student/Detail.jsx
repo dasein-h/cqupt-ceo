@@ -8,46 +8,12 @@ import baseurl from '../../until/BaseUrl'
 // import $ from 'jquery';
 import '../../static/style/style.scss'
 
-// const columns = [
-//     {
-//       title: 'count',
-//       dataIndex: 'count',
-//       key: 'count',
-//     },
-//     {
-//       title: 'type',
-//       dataIndex: 'type',
-//       key: 'type',
-//     },
-//     {
-//       title: 'companyName',
-//       dataIndex: 'companyName',
-//       key: 'companyName',
-//     },
-//     {
-//       title: 'ceoName',
-//       key: 'ceoName',
-//       dataIndex: 'ceoName',
-
-//     },
-//     {
-//       title: 'Action',
-//       key: 'action',
-//       render: (text, record) => (
-//         <Space size="middle">
-//           <a>Invite {record.name}</a>
-//           <a>Delete</a>
-//         </Space>
-//       ),
-//     },
-//   ];
-
 class Detail extends Component {
     constructor(props) {
         super(props);
         this.state = { 
             totalNum:0,
-            currentPage:parseInt(sessionStorage.getItem("Page4"))||"1",
+            currentPage:parseInt(sessionStorage.getItem("Page4"))||1,
             data : [],
             visible:false,
             fileList:[],       
@@ -58,6 +24,13 @@ class Detail extends Component {
     UNSAFE_componentWillUpdate(newProps,newState){
       if(newProps!==this.props){
         try{
+          if( newProps.isDeleteFile === true )
+          message.success("删除成功")
+          if( newProps.message ){
+            if( newProps.isDeleteFile === false ){
+              message.error(newProps.message)
+            }
+          }
           const {FileData} = newProps
           let newdata = FileData
           for (let item in newdata){
@@ -65,20 +38,18 @@ class Detail extends Component {
             var totalNumber = newdata[item].filePath
           }
           this.setState({
-            currentPage: parseInt(sessionStorage.getItem("Page4"))||'1',
+            currentPage: parseInt(sessionStorage.getItem("Page4"))||1,
             data:newdata,
             totalNum:totalNumber
           })
         
         }
-        catch{
-          console.log("error")
-        }
+        catch{}
       }
     }
     componentDidMount() {
       if(localStorage.getItem("class") && !this.props.FileData){
-        this.props.ShowFile(localStorage.getItem("class"),parseInt(sessionStorage.getItem("Page4"))||'1')
+        this.props.ShowFile(localStorage.getItem("class"),parseInt(sessionStorage.getItem("Page4"))||1)
       }
       if(this.props.FileData){
         this.props.Exist()
@@ -113,7 +84,7 @@ class Detail extends Component {
         fileList:[]
       })
       const { fileList } = this.state;
-      const formData = new FormData();
+      const formData = new FormData()
       fileList.forEach(file => {
         formData.append('file', file)
       })
@@ -121,19 +92,28 @@ class Detail extends Component {
       formData.append("teachclass",localStorage.getItem("class"))
       this.setState({
         uploading: true,
-      });
+      })
       var ajax = new XMLHttpRequest()
+      var that = this
       ajax.open("post", baseurl+"/upload/up", true)
       ajax.onload = function () {
-      console.log(ajax.responseText);
       }
       ajax.send(formData);
       ajax.onreadystatechange = function() {
 				if(ajax.readyState == 4){
-					if(ajax.status == 200){
-						console.log(ajax.responseText);
-					}
-				}
+					if(ajax.status == 200 && JSON.parse(ajax.response).flag){
+            message.success("上传成功")
+            that.setState({
+              uploading: false,
+            })
+          }
+          else{
+            message.error("上传失败，文件可能为空")
+            that.setState({
+              uploading: false,
+            })
+          }
+        }
 			}
      
       // $.ajax({
@@ -169,33 +149,42 @@ class Detail extends Component {
     render() { 
       const columns = [
         {
-            title: 'fileName',
+            title: '文件名',
             dataIndex: 'fileName',
             key: 'fileName',
         },
           {
-            title: 'id',
+            title: '文件ID',
             dataIndex: 'id',
             key: 'id',
           },
         {
-            title: 'studentId',
+            title: '上传学号',
             dataIndex: 'studentId',
             key: 'studentId',
         },
         {
-            title: 'teachclass',
+            title: '教学班',
             dataIndex: 'teachclass',
             key: 'teachclass',
         },
         {
-          title: 'Action',
+          title: '操作',
           key: 'action',
-          render: (text, record) => (
+          render: (text, record) => {
+            if(record.studentId!==localStorage.getItem("userId"))
+              return(
             <Space size="middle">
               <a onClick={this.props.DownloadFile.bind(this,record.id)}>下载</a>
             </Space>
-          ),
+          )
+            else 
+              return(
+                <Space size="middle">
+                <a onClick={this.props.DownloadFile.bind(this,record.id)}>下载</a>
+                <a onClick={this.props.DeleteFile.bind(this,record.id)}>删除</a>
+              </Space>
+              )},
         },
       ]
       const pagination = {
@@ -213,14 +202,14 @@ class Detail extends Component {
           newFileList.splice(index, 1);
           return {
             fileList: newFileList,
-          };
-        });
+          }
+        })
       },
       beforeUpload: file => {
         this.setState({
           fileList:[file]
         });
-        return false;
+        return false
       },
       fileList,
     };
@@ -241,7 +230,7 @@ class Detail extends Component {
                 }
                 >
         <Upload {...props}>
-          <Button icon={<UploadOutlined />}>Select File</Button>
+          <Button icon={<UploadOutlined />}>选择文件</Button>
         </Upload>
         <Button
           type="primary"
@@ -250,7 +239,7 @@ class Detail extends Component {
           loading={uploading}
           style={{ marginTop: 16 }}
         >
-          {uploading ? 'Uploading' : 'Start Upload'}
+          {uploading ? '上传中' : '上传文件'}
         </Button>
               </Modal>
             <Table columns={columns} dataSource={this.state.data} pagination={pagination}/>
@@ -265,7 +254,6 @@ class Detail extends Component {
 }
  
 const mapDispatchToProps = (dispatch) => {
-  //把发送action的方法绑定到当前组件的props
   return {
     ShowFile: (teachClass,currentPage) => {
         dispatch(actions.ShowFile(teachClass,currentPage))
@@ -275,6 +263,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     DownloadFile: (id) => {
       dispatch(actions.DownloadFile(id))
+    },
+    DeleteFile: (id) => {
+      dispatch(actions.DeleteFile(id))
     },
     Exist: () => {
       dispatch(actions.Exist())

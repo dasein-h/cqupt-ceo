@@ -9,7 +9,6 @@ async function getMember(ceoId) {
   res = res.data
   return res
 }
-
 async function setPosition(ceoId, studentId, position) {
   let res
   res = await Service.get('/student/setPosition', {
@@ -22,7 +21,6 @@ async function setPosition(ceoId, studentId, position) {
   res = res.data
   return res
 }
-
 async function showApplication(currentPage, studentId) {
   let res = await Service.get('/application/showApplication', {
     params: {

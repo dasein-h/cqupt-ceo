@@ -1,11 +1,12 @@
 import Service from "../Service";
 
 /*展示所有老师已经选择过的班级*/
-function selectedClassTeacher(teacherId, currentPage) {
+function selectedClassTeacher(teacherId, currentPage,pageSize1) {
   return Service.get('/teacher/exitclass', {
     params: {
       teacherId,
-      currentPage
+      currentPage,
+      pageSize1
     }
   })
 }
@@ -65,14 +66,13 @@ function deleteClass(teacherId, cls) {
   })
 }
 // 展示竞选ceo同学及投票数
-function showCeo(currentPage,teacherclass){
+function showCeo(currentPage,teachclass){
   return Service.post('/student/showCeoVote',{
-    params:{
       currentPage,
-      teacherclass
-    }
+      teachclass
   })
 }
+
 // 展示所有学生信息
 function showAll(teachclass,currentPage){
   return Service.post('/teacher/showall',{
@@ -80,20 +80,22 @@ function showAll(teachclass,currentPage){
   })
 }
 /*开启ceo投票*/
-function runCeo(teachclass) {
-  return Service.get('/teacher/runceo', {
-    params: {
-      teachclass
-    }
+function runCeo(teacherclass) {
+  return Service.post('/teacher/runceo', {
+    teacherclass
   })
 }
 
 /*关闭ceo投票*/
 function closeCeo(teachclass) {
-  return Service.get('/teacher/closeceo', {
-    params: {
+  return Service.post('/teacher/closeceo', {
+    teachclass
+  })
+}
+
+function isRunVote(teachclass) {
+  return Service.post('/teacher/checkceo', {
       teachclass
-    }
   })
 }
 
@@ -128,7 +130,7 @@ function deleteCompany(ceo) {
 
 /*撤销ceo*/
 function deleteCeo(studentId) {
-  return Service.post('/teacher/deleteceo', {
+  return Service.post('/teacher/deletecompany', {
     studentId
   })
 }
@@ -139,9 +141,11 @@ function decideCeo(studentId) {
   })
 }
 /*给公司打分*/
-function putScore(teacherId,scoreTeacher,companyName) {
+function putScore(ceo,scoreTeacher) {
   return Service.post('/teacher/companyscore', {
-    teacherId,scoreTeacher,companyName
+    ceo,
+    scoreTeacher,
+    
   })
 }
 /*老师修改宣讲状态*/
@@ -152,17 +156,11 @@ function voteStatus(flag, teacherId) {
 }
 /*给学生打分*/
 function setScore(teacherId, studentId, teacherScore) {
-  return  Service.post('/teacher/setstuscore', {
+  return Service.post('/teacher/setstuscore', {
     teacherId, studentId, teacherScore
   })
 }
 
-// 查看公司信息
-function ShowComInfo(teachclass) {
-  return Service.post('/student/showCompany', {
-    "teachclass": teachclass
-  })
-}
 // 导出
 function exportExc(teachclass){
   return Service.post('/upload/export',{
@@ -178,9 +176,9 @@ function noSign(teachclass){
 }
 
 //设置为未签到
-function setNosign(teachclass,studentId,scoreSign,sign){
+function setNosign(teachclass,studentId,scoreSign,sign,addtime){
   return Service.post('teacher/sign',{
-    teachclass,studentId,scoreSign,sign
+    teachclass,studentId,scoreSign,sign,addtime
   })
 }
 
@@ -190,6 +188,63 @@ function showConfig(teachclass){
     teachclass
   })
 }
+function ShowComInfo(teachclass) {
+  return Service.post('/student/showCompany', {
+    teachclass})
+  }
+
+//个人配置
+function updateConfigMember(ceoScore,memberScore,signScore,teachclass){
+  return Service.post('/admin/updateConfigMember',{
+    ceoScore,memberScore,signScore,teachclass
+  })
+}
+
+//公司配置
+function updateConfigCompany(companyScore,newsScore,bankScore,accountScore,tradeScore,revenueScore,agencyScore,fromCompanyScore,teachclass){
+  return Service.post('/admin/updateConfigCompany',{
+    companyScore,newsScore,bankScore,accountScore,tradeScore,revenueScore,agencyScore,fromCompanyScore,teachclass
+  })
+}
+function updateConfigOther(late,absence,sameClassMember,companyNum,teachclass){
+  return Service.post('/admin/updateConfigOther',{
+    late,absence,sameClassMember,companyNum,teachclass
+  })
+}
+function ShowComMember(stuid) { 
+  return Service.post('/student/showCompanyMember', {
+    "studentId":stuid
+  })
+}
+//给学生选择公司
+function ChoseCompany(ceoId, studentId, companyName) { 
+  return Service.post('/teacher/selectStu', {
+    "ceoId": ceoId,
+    "studentId": studentId,
+    "companyName":companyName
+  })
+}
+
+// 展示PPT
+function showFile(teachclass, currentPage) { 
+  return Service.post('/upload/showAll', {
+    teachclass,
+    currentPage
+  })
+}
+// 删除上传的文件
+function DeleteUpload(id) { 
+  return Service.post('/upload/delete', {
+    "id":id
+  })
+}
+// 下载
+function download(id) { 
+  return Service.post('/upload/download', {
+    "id":id
+  })
+}
+
 
 export{
   selectedClassTeacher,
@@ -210,8 +265,17 @@ export{
   showCeo,
   showAll,
   exportExc,
+  ShowComMember,
   noSign,
+  isRunVote,
   setNosign,
   showConfig,
-  ShowComInfo
+  ShowComInfo,
+  showFile,
+  updateConfigMember,
+  updateConfigCompany,
+  updateConfigOther,
+  ChoseCompany,
+  DeleteUpload,
+  download
 }

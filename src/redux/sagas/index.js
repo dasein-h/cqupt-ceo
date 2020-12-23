@@ -3,6 +3,7 @@ import actions from '../actionCreators/creators'
 import LoginApi from '../../until/api/LoginApi.js'
 import StudentApi from '../../until/api/StudentApi'
 import {getMember, setPosition} from "../../until/api/ceo";
+import { message } from 'antd';
 function setLocalStorage(config) {
   Reflect.ownKeys(config).forEach(key => {
     localStorage.setItem(key, config[key])
@@ -11,26 +12,11 @@ function setLocalStorage(config) {
 
 export default function* defSaga() {
   yield throttle(2000, 'login', function* () {
-
     const action = yield select();
-
     const res = yield call(LoginApi.Login, action.payload)
-    console.log(res)
-
     if (res.status === 200 && res.data.flag)
-    // if (res.status === 200 )
-    {      
-      
-      yield put(actions.Login_Success(res.message, res.data))
-
-      // setLocalStorage({
-      //   name: res.data.data.userName,
-      //   userId: res.data.data.userId,
-      //   type: action.chooseType
-      // })
-
+    {        
       if(action.payload.studentId!==undefined){
-
         setLocalStorage({
           userId: action.payload.studentId,
           type: res.data.data.type
@@ -51,53 +37,35 @@ export default function* defSaga() {
         window.location="/Student/AllCompanies/ChosenClasses"
       }
       sessionStorage.clear()
-      
+      yield put(actions.Login_Success(res.data.message, res.data))
     }
     else {
-      yield put(actions.Login_Fail(res.data));
+      yield put(actions.Login_Fail())
+      if(res.data.message)
+      message.error(res.data.message)
     }
-
   })
   yield takeEvery('Login_Check', function* () {
-
-    const action = yield select()
-
     const res = yield call(LoginApi.KeepLogin, localStorage.getItem("userId"))
-    // if (res.status == 200 && res.data.flag)
     if (res.status == 200 && res.data.flag)
-    //flag不对，向后端反映
      {
       yield put(actions.Login_Check_OK())
-      // yield put(actions.getAllCompanies(localStorage.getItem("userId"),parseInt(sessionStorage.getItem("Page1"))||"1"))
     }
     else {
       yield put(actions.Login_Check_NO())
-
-      console.log('clear localstorage')
-
       localStorage.clear()
-      // //清除本地数据
-      // yield put(actions.getAllCompanies(null,null))
     }
   })
-
   yield takeEvery('Exit', function* () {
-    const action = yield select()
     const res = yield call(LoginApi.Exit, localStorage.getItem("userId"))
-    // if (res.status === 200 && res.data.flag)
     if (res.status === 200)
     {
-      console.log('clear localstorage')
       yield put(actions.Exit_OK())
       localStorage.clear()
       window.location="/Student/AllCompanies/ChosenClasses"
       sessionStorage.clear()
-      // location.reload()
-      //不再登录后清除本地数据
-      // yield put(actions.getAllCompanies(null,null))
-      // yield put(actions.ShowCeo(null,null))
     } else {
-      alert('退出失败')
+      message.error('退出失败')
       yield put(actions.Exit_NO())
     }
   })
@@ -107,12 +75,10 @@ export default function* defSaga() {
     const res = yield call(StudentApi.ShowAllCompany, action.payload)
     if (res.status === 200 && res.data.flag) {
       yield put(actions.getAllCompanies_OK(res.data))
-      //把获取到的数据发送到state，展示在页面上
     }
     else{
       yield put(actions.getAllCompanies_NO())
     }
-
   })
   yield takeEvery('VoteForCompany', function* () {
     const action = yield select()
@@ -120,7 +86,6 @@ export default function* defSaga() {
     if (res.status === 200 && res.data.flag) {
       yield put(actions.VoteForCompany_OK(res.data.message))
       yield put(actions.getAllCompanies(localStorage.getItem("userId"),parseInt(sessionStorage.getItem("Page1"))||"1"))
-      //把获取到的数据发送到state，展示在页面上
     }
     else{
       yield put(actions.VoteForCompany_NO(res.data.message))
@@ -131,7 +96,6 @@ export default function* defSaga() {
     const res = yield call(StudentApi.ShowCeo, action.payload)
     if (res.status === 200 && res.data.flag) {
       yield put(actions.ShowCeo_OK(res.data))
-      //把获取到的数据发送到state，展示在页面上
     }
     else{
       yield put(actions.ShowCeo_NO())
@@ -142,7 +106,6 @@ export default function* defSaga() {
     const res = yield call(StudentApi.VoteCeo, action.payload)
     if (res.status === 200 && res.data.flag) {
       yield put(actions.VoteForCeo_OK(res.data.message))
-      //把获取到的数据发送到state，展示在页面上
     }
     else{
       yield put(actions.VoteForCeo_NO(res.data.message))
@@ -153,7 +116,6 @@ export default function* defSaga() {
     const res = yield call(StudentApi.RunCeo, action.payload)
     if (res.status === 200 && res.data.flag) {
       yield put(actions.RunCeo_OK(res.data.message))
-      //把获取到的数据发送到state，展示在页面上
     }
     else{
       yield put(actions.RunCeo_NO(res.data.message))
@@ -164,7 +126,6 @@ export default function* defSaga() {
     const res = yield call(StudentApi.ShowApplication, action.payload)
     if (res.status === 200 && res.data.flag) {
       yield put(actions.ShowApplication_OK(res.data))
-      //把获取到的数据发送到state，展示在页面上
     }
     else{
       yield put(actions.ShowApplication_NO())
@@ -175,7 +136,6 @@ export default function* defSaga() {
     const res = yield call(StudentApi.AddApplication, action.payload)
     if (res.status === 200 && res.data.flag) {
       yield put(actions.AddApplication_OK(res.data.message))
-      //把获取到的数据发送到state，展示在页面上
     }
     else{
       yield put(actions.AddApplication_NO(res.data.message))
@@ -184,38 +144,34 @@ export default function* defSaga() {
   yield takeEvery('ShowFlie', function* () {
     const action = yield select()
     const res = yield call(StudentApi.ShowFile, action.payload)
-    console.log(res)
     if (res.status === 200 ) {
-
       yield put(actions.ShowFile_OK(JSON.parse(res.data)))
-      //把获取到的数据发送到state，展示在页面上
     }
     else{
       yield put(actions.ShowFile_NO())
     }
   })
-  yield takeEvery('UploadFile', function* () {
-    const action = yield select()
-    const res = yield call(StudentApi.UploadFile,action.payload)
-    console.log(res)
-    if (res.status === 200 && res.data.flag) {
-      yield put(actions.UploadFile_OK(res.data))
-      //把获取到的数据发送到state，展示在页面上
-    }
-    else{
-      yield put(actions.UploadFile_NO())
-    }
-  })
   yield takeEvery('DownloadFile', function* () {
     const action = yield select()
     const res = yield call(StudentApi.DownloadFile,action.payload)
-    console.log(res)
-    if (res.status === 200 && res.data.flag) {
+    if (res.status === 200 ) {
       yield put(actions.DownloadFile_OK(res.data.message))
-      //把获取到的数据发送到state，展示在页面上
+      let download = document.createElement('a')
+      download.href = "http://120.79.207.60:8089/upload/download?id="+action.payload.id
+      download.click()
     }
     else{
       yield put(actions.DownloadFile_NO(res.data.message))
+    }
+  })
+  yield takeEvery('DeleteFile', function* () {
+    const action = yield select()
+    const res = yield call(StudentApi.DeleteFile,action.payload)
+    if (res.status === 200 && res.data.flag) {
+      yield put(actions.DeleteFile_OK(res.data.message))
+    }
+    else{
+      yield put(actions.DeleteFile_NO(res.data.message))
     }
   })
   /* CEO */

@@ -56,5 +56,10 @@ const StudentApi = {
                 ...payload
         })
     },
+    DeleteFile : (payload) => {
+        return Service.post('/upload/delete',{
+                ...payload
+        })
+    },
 }
 export default StudentApi

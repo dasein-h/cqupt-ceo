@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter , Switch  } from 'react-router-dom'
 import WriteWant from './WriteWant';
-import Join from '../student/Join'
+import Join from './Join'
 import {HashRouter as Router, Route,Link,Redirect} from 'react-router-dom';
 import {  Menu } from 'antd';
 import changeNav from '../../until/changeNav'

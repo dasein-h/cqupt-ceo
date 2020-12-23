@@ -4,40 +4,6 @@ import { Table, Tag, Space,pagination, message , Empty } from 'antd';
 import actions from '../../redux/actionCreators/creators'
 import changePage from '../../until/changePage'
 import '../../static/style/style.scss'
-// const columns = [
-//     {
-//       title: 'count',
-//       dataIndex: 'count',
-//       key: 'count',
-//     },
-//     {
-//       title: 'type',
-//       dataIndex: 'type',
-//       key: 'type',
-//     },
-//     {
-//       title: 'companyName',
-//       dataIndex: 'companyName',
-//       key: 'companyName',
-//     },
-//     {
-//       title: 'ceoName',
-//       key: 'ceoName',
-//       dataIndex: 'ceoName',
-
-//     },
-//     {
-//       title: 'Action',
-//       key: 'action',
-//       render: (text, record) => (
-//         <Space size="middle">
-//           <a>Invite {record.name}</a>
-//           <a>Delete</a>
-//         </Space>
-//       ),
-//     },
-//   ];
-
 class ChosenClasses extends Component {
     constructor(props) {
         super(props);
@@ -68,13 +34,10 @@ class ChosenClasses extends Component {
             data:newdata
           })
         }
-        catch{
-          console.log("error")
-        }
+        catch{}
       }
     }
     componentDidMount() {
-      //如果要获取数据，最好在这里进行，组件在render之前不会返回数据
       if(localStorage.getItem("userId") && !this.props.CompanyData){
         this.props.getAllCompanies(localStorage.getItem("userId"))
       }
@@ -103,32 +66,32 @@ class ChosenClasses extends Component {
 
       const columns = [
         {
-            title: 'count',
+            title: '票数',
             dataIndex: 'count',
             key: 'count',
         },
           {
-            title: 'type',
+            title: '类型',
             dataIndex: 'type',
             key: 'type',
           },
         {
-            title: 'companyName',
+            title: '公司名称',
             dataIndex: 'companyName',
             key: 'companyName',
         },
         {
-            title: 'ceoName',
+            title: '姓名',
             key: 'ceoName',
             dataIndex: 'ceoName',
         },
         {
-          title: 'ceoId',
+          title: 'CEOID',
           key: 'ceo',
           dataIndex: 'ceo',
       },
         {
-          title: 'Action',
+          title: '操作',
           key: 'action',
           render: (text, record) => (
             <Space size="middle">
@@ -153,7 +116,6 @@ class ChosenClasses extends Component {
 }
  
 const mapDispatchToProps = (dispatch) => {
-  //把发送action的方法绑定到当前组件的props
   return {
     getAllCompanies: (userId, page) => {
       dispatch(actions.getAllCompanies(userId))
@@ -167,7 +129,6 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 const mapStateToProps = state => {
-  //把store里的state绑定到当前组件的props
   return state
 }
 
