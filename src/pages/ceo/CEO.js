@@ -1,5 +1,5 @@
-import React from 'react';
-import {Route, Link, withRouter} from 'react-router-dom'
+import React, {memo} from 'react';
+import {Route, Link, withRouter, Switch, Redirect} from 'react-router-dom'
 import Application from "./application/Application";
 import Position from "./position/Position";
 import {Layout, Menu} from "antd";
@@ -12,13 +12,19 @@ const routes = [
     name: '申请',
     component: Application
   }, {
-    path: '/CEO/position',
-    name: '职位',
+    path: '/CEO/company',
+    name: '公司',
     component: Position
-  },
+  }
 ]
 
 function CEO(props) {
+  let userId = localStorage.getItem('userId')
+  let ceo = localStorage.getItem('ceo')
+  if (!ceo && ceo !== '1') {
+    // props.history.replace('/')
+  }
+
   return (
     <Layout
       style={{
@@ -47,14 +53,19 @@ function CEO(props) {
         </Menu>
       </Sider>
       <Content>
-        {
-          routes.map(({path, component}) => (
-            <Route path={path} key={path} component={component}/>
-          ))
-        }
+        <Switch>
+          {
+            routes.map(({path, component: Comp}) => (
+              <Route path={path} key={path}>
+                {<Comp userId={userId}/>}
+              </Route>
+            ))
+          }
+          <Redirect to="/CEO/application"/>
+        </Switch>
       </Content>
     </Layout>
   )
 }
 
-export default withRouter(CEO);
+export default memo(withRouter(CEO));
