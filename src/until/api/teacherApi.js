@@ -80,9 +80,9 @@ function showAll(teachclass,currentPage){
   })
 }
 /*开启ceo投票*/
-function runCeo(teacherclass) {
+function runCeo(teachclass) {
   return Service.post('/teacher/runceo', {
-    teacherclass
+    teachclass
   })
 }
 
