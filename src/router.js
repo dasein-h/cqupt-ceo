@@ -1,4 +1,5 @@
 import React from 'react';
+<<<<<<< HEAD
 import App from './pages/App';
 import Student from './pages/student/Student'
 import Teacher from './pages/teacher/view/Teacher'
@@ -38,6 +39,34 @@ class RouteMap extends React.Component {
   }
 }
 
+=======
+import Student from './pages/student/Student';
+
+import {HashRouter as Router, Switch, Route, Redirect,BrowserRouter} from 'react-router-dom';
+
+class RouteMap extends React.Component {
+
+    render() {
+        return (
+            <div>
+        <BrowserRouter >
+
+     <Route path="/" component={Student}/>
+      {/* <Route path="/AllCompanies" component={AllCompanies}/>
+      <Route path="/Join" component={Join}/>
+      <Route path="/MyCompany" component={MyCompany}/> */}
+        {/* <Route path="/MyCompany/WriteWant" component={WriteWant}></Route>
+        <Route path="/MyCompany/Detail" component={Detail}></Route>
+        <Route path="/MyCompany/Participants" component={Participants}></Route> */}
+        <Redirect to="/AllCompanies" from='/' />
+
+  </BrowserRouter> 
+  </div>
+        )
+    }
+}
+ 
+>>>>>>> 8a0aadb (CEO)
 
 export default RouteMap
 
