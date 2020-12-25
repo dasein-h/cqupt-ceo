@@ -37,10 +37,12 @@ export default function* defSaga() {
         window.location="/Student/AllCompanies/ChosenClasses"
       }
       sessionStorage.clear()
-      yield put(actions.Login_Success(res.message, res.data))
+      yield put(actions.Login_Success(res.data.message, res.data))
     }
     else {
-      yield put(actions.Login_Fail(res.data))
+      yield put(actions.Login_Fail())
+      if(res.data.message)
+      message.error(res.data.message)
     }
   })
   yield takeEvery('Login_Check', function* () {
@@ -83,7 +85,7 @@ export default function* defSaga() {
     const res = yield call(StudentApi.VoteCompany, action.payload)
     if (res.status === 200 && res.data.flag) {
       yield put(actions.VoteForCompany_OK(res.data.message))
-      yield put(actions.getAllCompanies(localStorage.getItem("userId"),parseInt(sessionStorage.getItem("Page1"))||"1"))
+      yield put(actions.getAllCompanies(localStorage.getItem("userId")))
     }
     else{
       yield put(actions.VoteForCompany_NO(res.data.message))
@@ -102,9 +104,9 @@ export default function* defSaga() {
   yield takeEvery('VoteForCeo', function* () {
     const action = yield select()
     const res = yield call(StudentApi.VoteCeo, action.payload)
-    console.log(res)
     if (res.status === 200 && res.data.flag) {
       yield put(actions.VoteForCeo_OK(res.data.message))
+      yield put(actions.ShowCeo(parseInt(sessionStorage.getItem("Page2"))||1,localStorage.getItem("userId")))
     }
     else{
       yield put(actions.VoteForCeo_NO(res.data.message))
@@ -115,6 +117,7 @@ export default function* defSaga() {
     const res = yield call(StudentApi.RunCeo, action.payload)
     if (res.status === 200 && res.data.flag) {
       yield put(actions.RunCeo_OK(res.data.message))
+      yield put(actions.ShowCeo(parseInt(sessionStorage.getItem("Page2"))||1,localStorage.getItem("userId")))
     }
     else{
       yield put(actions.RunCeo_NO(res.data.message))
@@ -123,7 +126,6 @@ export default function* defSaga() {
   yield takeEvery('ShowApplication', function* () {
     const action = yield select()
     const res = yield call(StudentApi.ShowApplication, action.payload)
-    console.log(res)
     if (res.status === 200 && res.data.flag) {
       yield put(actions.ShowApplication_OK(res.data))
     }
@@ -136,6 +138,7 @@ export default function* defSaga() {
     const res = yield call(StudentApi.AddApplication, action.payload)
     if (res.status === 200 && res.data.flag) {
       yield put(actions.AddApplication_OK(res.data.message))
+      yield put(actions.ShowApplication(parseInt(sessionStorage.getItem("Page3"))||1,localStorage.getItem("userId")))
     }
     else{
       yield put(actions.AddApplication_NO(res.data.message))
@@ -151,20 +154,10 @@ export default function* defSaga() {
       yield put(actions.ShowFile_NO())
     }
   })
-  yield takeEvery('UploadFile', function* () {
-    const action = yield select()
-    const res = yield call(StudentApi.UploadFile,action.payload)
-    if (res.status === 200 && res.data.flag) {
-      yield put(actions.UploadFile_OK(res.data))
-    }
-    else{
-      yield put(actions.UploadFile_NO())
-    }
-  })
   yield takeEvery('DownloadFile', function* () {
     const action = yield select()
     const res = yield call(StudentApi.DownloadFile,action.payload)
-    if (res.status === 200) {
+    if (res.status === 200 ) {
       yield put(actions.DownloadFile_OK(res.data.message))
       let download = document.createElement('a')
       download.href = "http://120.79.207.60:8089/upload/download?id="+action.payload.id
@@ -172,6 +165,17 @@ export default function* defSaga() {
     }
     else{
       yield put(actions.DownloadFile_NO(res.data.message))
+    }
+  })
+  yield takeEvery('DeleteFile', function* () {
+    const action = yield select()
+    const res = yield call(StudentApi.DeleteFile,action.payload)
+    if (res.status === 200 && res.data.flag) {
+      yield put(actions.DeleteFile_OK(res.data.message))
+      yield put(actions.ShowFile(localStorage.getItem("class"),parseInt(sessionStorage.getItem("Page4"))||1))
+    }
+    else{
+      yield put(actions.DeleteFile_NO(res.data.message))
     }
   })
   /* CEO */

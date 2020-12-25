@@ -18,9 +18,9 @@ class ChosenClasses extends Component {
       // this.setState()
       if(newProps!==this.props){
         try{
+          if(newProps.isVoteForCompany === true )
+          message.success("投票成功")
           if(newProps.message){
-            if(newProps.isVoteForCompany === true )
-            message.success(newProps.message)
             if(newProps.isVoteForCompany === false )
             message.error(newProps.message)
           }

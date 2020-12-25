@@ -1,11 +1,11 @@
 import React, { Component, Fragment } from 'react'
 import {
   Table, Badge, Menu, Dropdown, Space, Tag,
-  Input, Button, InputNumber, Form, Popconfirm, message
+  Input, Button, InputNumber, Form, Popconfirm, message,FormItem,Modal
 } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import '../../teacher/style/ComInfo.css';
-import { ShowComInfo, putScore,deleteCompany,ShowComMember } from '../../../until/api/teacherApi';
+import { ShowComInfo, putScore,deleteCompany,ShowComMember,ChoseCompany } from '../../../until/api/teacherApi';
 
 // const menu = (
 //   <Menu>
@@ -75,6 +75,22 @@ class ComInfo extends Component {
             width:'6%'
           },
           {
+            title: '添加学生',
+            dataIndex: 'AddStudent',
+            key: 'AddStudent',
+            width:'20%',
+            render: (text,record) => {
+             
+              return (
+                <Fragment>
+                  <AddStudent ref={this.textInput} txt={text} record={ record}/>      
+                </Fragment>
+
+              )
+            },
+            width:'6%'
+          },
+          {
             title: '操作',
             dataIndex: 'operation',
             render: (text, record) =>
@@ -85,7 +101,9 @@ class ComInfo extends Component {
               ) : null,
           },
         ],
-        data: [],
+        data: [
+          
+        ],
         pagination: {
           total:20,
           pageSize: 10,
@@ -96,7 +114,16 @@ class ComInfo extends Component {
         expandedloading:false
       };
 
+      
+
   }
+
+  // handleSubmit(e){
+  //   e.preventDefault();
+  //   console.log('data of form:',this.props.form.getFieldsValue());
+  //   alert(this.props.form.getFieldValue('userName'));
+  // }
+
   handleDelete = (key,ceo) => {
     const dataSource = [...this.state.data];
     console.log(ceo);
@@ -127,35 +154,28 @@ class ComInfo extends Component {
       },
       { title: '职位', dataIndex: 'position', key: 'position' },
       { title:'专业',dataIndex:'academy',key:'academy' },
-      // {
-      //   title: 'Action',
-      //   dataIndex: 'operation',
-      //   key: 'operation',
-      //   render: () => (
-      //     <Space size="middle">
-      //       <a>Pause</a>
-      //       <a>Stop</a>
-      //       <Dropdown overlay={menu}>
-      //         <a>
-      //           More <DownOutlined />
-      //         </a>
-      //       </Dropdown>
-      //     </Space>
-      //   ),
-      // },
     ]; 
+    // const { getFieldProps } = this.props.form;
     return (
-      <Table
-        rowKey={record => record.studentId}
-        columns={columns}
-        dataSource={this.state.expandedData[record.comName]}
-        loading={this.state.expandedloading}
-        pagination="false"
-      />
+      <Fragment>
+          <Table
+          rowKey={record => record.studentId}
+          columns={columns}
+          dataSource={this.state.expandedData[record.comName]}
+          // dataSource={this.state.expandedData}
+          loading={this.state.expandedloading}
+          pagination="false"
+        />
+
+        
+        
+      </Fragment>
+      
     )
   
   };
   onExpand = (expanded, record) => {
+    console.log(record);
     if (expanded == false) {
       console.log('合并');
       this.setState({
@@ -196,6 +216,22 @@ class ComInfo extends Component {
           console.log(err);
         }
       )
+
+      // this.setState({
+      //   expandedData: [
+      //     {
+      //         key: 1,
+      //         'studentId': '231231',
+      //         'userName': 'sdfa',
+      //         'companyName': 'yy',
+      //         'position': 'sdfa',
+      //         'academy': 'dsfad'
+      //     },
+      //   ]
+      // })
+
+
+
     }
   }
     // 表格
@@ -215,41 +251,72 @@ class ComInfo extends Component {
       res.then(
         (result) => { 
           console.log(result);
-          let newData = [];
-          for (let j = 0; j < result.data.data["totalNumber"];j++) { 
-            newData.push(false);
-          }
-          for (let i in result.data.data["object"]) { 
-            mydata.push({
-              key:i,
-              "companyID": result.data.data["object"][i]["companyID"],
-              "comName": result.data.data["object"][i]["companyName"],
-              "ceoID":result.data.data["object"][i]["ceo"],
-              "ceoname":result.data.data["object"][i]["ceoName"],
-              "companyScore":result.data.data["object"][i]["companyScore"],
-              "count":result.data.data["object"][i]["count"],
-              "level":result.data.data["object"][i]["level"],
-              "scoreTeacher":result.data.data["object"][i]["scoreTeacher"],
-              // "action":result.data.data["object"][i]["companyName"]
+          if (result.data.data == undefined) {
+            this.setState({
+              data: [],
+              
+              loading: false,
+              
             })
-
-
           }
-                this.setState({
-                  data: mydata,
-                  pagination: {
-                    total:result.data.data["totalNumber"],
-                    pageSize: result.data.data["pageSize"]
-                    },
-                  loading: false,
-                  
-                })
+          else { 
+            let newData = [];
+            for (let j = 0; j < result.data.data["totalNumber"];j++) { 
+              newData.push(false);
+            }
+            for (let i in result.data.data["object"]) { 
+              mydata.push({
+                key:i,
+                "companyID": result.data.data["object"][i]["companyID"],
+                "comName": result.data.data["object"][i]["companyName"],
+                "ceoID":result.data.data["object"][i]["ceo"],
+                "ceoname":result.data.data["object"][i]["ceoName"],
+                "companyScore":result.data.data["object"][i]["companyScore"],
+                "count":result.data.data["object"][i]["count"],
+                "level":result.data.data["object"][i]["level"],
+                "scoreTeacher":result.data.data["object"][i]["scoreTeacher"],
+                // "action":result.data.data["object"][i]["companyName"]
+              })
+  
+  
+            }
+                  this.setState({
+                    data: mydata,
+                    pagination: {
+                      total:result.data.data["totalNumber"],
+                      pageSize: result.data.data["pageSize"]
+                      },
+                    loading: false,
+                    
+                  })
+          }
+          
           console.log(this.state);
         },
         (err) => { 
           console.log(err);
         }
     )
+
+    // this.setState({
+    //   data: [{
+    //     "companyID": 1,
+    //     'comName': 'yy',
+    //     'count': 20,
+    //     'level': 1,
+    //     'scoreTeacher':0
+        
+    //   },{
+    //     "companyID": 2,
+    //     'comName': 'yy',
+    //     'count': 20,
+    //     'level': 1,
+    //     'scoreTeacher':0
+        
+    //   }]
+       
+      
+    // })
     
       } 
     
@@ -306,7 +373,13 @@ class CustomTextInput extends React.Component {
     res.then(
       (result) => { 
         console.log(result);
-        message.success('修改成功！');
+        if (result.data.error) {
+          message.error('修改失败！');
+        }
+        else { 
+          message.success('修改成功！');
+        }
+        
         
         
       },
@@ -345,4 +418,129 @@ class CustomTextInput extends React.Component {
   }
 }
 
+// 子组件
+class AddStudent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.textInput = React.createRef();
+    this.focusTextInput = this.focusTextInput.bind(this);
+    this.handleInput = this.handleInput.bind(this);
+    this.state = {
+      // inputValue: this.props.txt,
+      record:this.props.record,
+      inputValue: '',
+      loading: false,
+      visible: false,
+    }
+  }
+
+
+  showModal = () => {
+    this.setState({
+      visible: true,
+    });
+  };
+
+  handleOk = () => {
+    this.setState({ loading: true });
+
+    let ceo = this.state.record.ceoID;
+    let companyName = this.state.record.comName;
+    let studentId = this.textInput.current.value;
+    console.log(ceo);
+    let res = ChoseCompany(ceo, studentId,companyName);
+    res.then(
+      (result) => { 
+        console.log(result);
+        
+        if (result.data.error) {
+          message.error('修改失败！');
+        }
+        else { 
+          message.success('修改成功！');
+        }
+        this.setState({ loading: false, visible: false });
+        
+        
+      },
+      (err) => { 
+        console.log(err);
+        message.error('修改失败！');
+        this.setState({ loading: false, visible: false });
+        }
+      )
+
+    
+    // setTimeout(() => {
+      
+    // }, 3000);
+  };
+
+  handleCancel = () => {
+    this.setState({ visible: false });
+  };
+
+  focusTextInput() {
+    let ceo=this.state.record.ceoID;
+    let scoreTeacher = this.textInput.current.value;
+    console.log(ceo);
+    let res = putScore(ceo, scoreTeacher);
+    res.then(
+      (result) => { 
+        console.log(result);
+        message.success('修改成功！');
+        
+        
+      },
+      (err) => { 
+        console.log(err);
+        message.error('修改失败！');
+        }
+      )
+    
+  }
+
+  handleInput(e) { 
+    let value = e.target.value;
+    this.setState({
+      inputValue: value,
+    })
+  }
+  render() {
+    const { visible, loading } = this.state;
+    return (
+      <>
+        <Button type="primary" onClick={this.showModal}>
+          添加
+        </Button>
+        <Modal
+          visible={visible}
+          title="添加新的学生信息"
+          onOk={this.handleOk}
+          onCancel={this.handleCancel}
+          footer={[
+
+            <Button key="back" onClick={this.handleCancel}>
+              返回
+            </Button>,
+            <Button key="submit" type="primary" loading={loading} onClick={this.handleOk}>
+              提交
+            </Button>,
+          ]}
+        >
+            <div className="Inp-Sco-div">
+                <input
+                      className='InpSco'
+                      type="text"
+                      ref={this.textInput}
+                      value={this.state.inputValue}
+                      onChange={this.handleInput}
+                      placeholder='请输入学生学号'
+                  />
+            </div>
+        </Modal>
+      </>
+    );
+  }
+}
 export default ComInfo;

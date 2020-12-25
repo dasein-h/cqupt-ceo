@@ -131,8 +131,6 @@ class Student extends Component {
         if(newProps.message){
           if(newProps.isLogin === true && newProps.payload === undefined )
           message.success(newProps.message)
-          if(newProps.isLogin === false && newProps.payload === undefined )
-          message.error(newProps.message)
         }
       }
       catch{

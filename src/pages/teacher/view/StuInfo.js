@@ -71,12 +71,16 @@ class StuInfo extends Component {
     showAll(this.state.teachclass,page).then((res) => {
       this.setState({loading:false});
       let rs = JSON.parse(res.data);
+      let companyName
       for(let i = 0;i<rs.length;i++){
+        if(rs[i].companyName === undefined)
+          companyName = "无"
+        else companyName = rs[i].companyName
         lists.push({
           "name":rs[i].userName,
           "id":rs[i].studentId,
           "major":rs[i].academy,
-          "company":rs[i].companyName,
+          "company":companyName,
           "score":rs[i].personalScore
         })
       }
@@ -152,7 +156,7 @@ class StuInfo extends Component {
     })
   }
   downLoad = () => {
-    window.location.href = "http://localhost:3000/api/upload/export?teachclass=SJ00201A2031780003"
+    window.location.href = "http://localhost:3000/api/upload/export?teachclass="+this.state.teachclass;
   }
 }
 

@@ -1,33 +1,7 @@
 import React, { Component, Fragment } from 'react'
-import { Table, Button, Space} from 'antd'
+import { Table, Button, Space,notification} from 'antd'
 import ManagerApi from '../../../until/api/managerApi'
-
-const dataSource = [
-  {
-    key:"1",
-    discipline: "工商管理系",
-    userId: "tiansh",
-    userName: "田帅辉",
-  },
-  {
-    key:"2",
-    discipline: "工商管理系",
-    userId: "lihd",
-    userName: "李怀东"
-  },
-  {
-    key: '3',
-    discipline: "",
-    userId: "longwei",
-    userName: "龙伟"
-  },
-  {
-    key: '4',
-    discipline: "工商管理系",
-    userId: "shitao",
-    userName: "施涛"
-  }
-];
+import {Link} from "react-router-dom";
 
 class ChoseTeacher extends Component{
     constructor(props){
@@ -55,12 +29,30 @@ class ChoseTeacher extends Component{
                     align:'center',
                     render: (text, record) => (
                         <Space size="middle">
-                            <Button type="primary" ghost onClick={() => {this.handleClick(text,record)}}>进入该班级</Button>
+                           <Button type="primary" ghost onClick={() => {this.handleClick(text,record)}}>
+                                进入该班级
+                            </Button>
                         </Space>
                     )
                 }
             ],
-            dataSource:[]
+            dataSource:[],
+            teacherId:'',
+            teacherName:'',
+            loading:true,
+            pagination:{
+                showSizeChanger:false,
+                defaultCurrent:1,
+                current: 1,
+                pageSize: 7,
+                total:'',
+                hideOnSinglePage: true,
+                onChange: (page, pageSize) => {
+                console.log(this.changePage);
+                this.changePage(page);
+                this.state.pagination.current = page
+            }
+            }
         }
         this.handleClick = this.handleClick.bind(this);
         this.changePage = this.changePage.bind(this);
@@ -68,11 +60,14 @@ class ChoseTeacher extends Component{
     render() {
         return(
             <Fragment>
+                <span className="Nav-top">选择老师</span>
                 <Table 
                     dataSource={this.state.dataSource} 
                     columns={this.state.columns}  
                     style = {{marginTop:'10px'}}
+                    pagination={this.state.pagination}
                     rowKey={record => record.userId}
+                    loading={this.state.loading}
                 />
             </Fragment>
         )
@@ -80,24 +75,46 @@ class ChoseTeacher extends Component{
 
     handleClick = (text,record) => {
         console.log(record.userId);
-        this.props.changeComponent(true);
-        this.props.getTeacherId(record.userId,record.userName);
+        this.setState({
+            teacherId:record.userId,
+            teacherName:record.userName
+        },()=>{
+            this.props.history.push({
+            pathname: '/Manager/ChoseClass/MenuClass',
+            state: { teacherId:this.state.teacherId,teacherName:this.state.teacherName},
+            });
+        })
+        
     }
 
     componentDidMount (){
         this.changePage(1);
     }
     changePage = (currentPage) => {
+        this.setState({
+            loading:true
+        })
        ManagerApi.showTeacher(currentPage).then(
             (res) => {
                 let list = JSON.parse(res.data);
-                this.setState({
-                    dataSource: list
-                })
-                console.log(JSON.parse(res.data));
+                if(list.length !== 0){
+                    let pagination = {...this.state.pagination};
+                    pagination.total = list[0].count;
+                    this.setState({
+                        loading:false,
+                        dataSource: list,
+                        pagination
+                    })
+                }
             },
             (err) => {
-                console.log(err);
+                this.setState({ loading: false })
+                notification.open({
+                    message: '警告',
+                    placement: "bottomRight",
+                    description:
+                    '请求超时或服务器异常,请检查网络或联系管理员!',
+                });
             }
         )
     }

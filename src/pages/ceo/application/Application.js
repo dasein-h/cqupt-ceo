@@ -1,103 +1,17 @@
-import React, {useEffect, useReducer} from 'react'
+import React, {memo, useEffect, useReducer, useState} from 'react'
 
-import {Card, PageHeader, Button, Modal, Radio, List, message, Pagination} from "antd";
+import {showApplication, agreeApplication, downloadFile, fetchFileList} from "../../../until/api/ceo";
+import {Card, PageHeader, Button, List, message} from "antd";
 import {PAGE_SIZE, SET_PAGE, INIT_PAGE, SET_CURR_PAGE, LOADING} from "./consts/consts";
-
-const mockData = [
-  {
-    "id": 5,
-    "studentId": "2017210960",
-    "studentName": "任飞燕",
-    "companyName": "第一家新闻机构",
-    "level": 2,
-    "creatTime": "2020-11-29T16:00:00.000+00:00",
-    "teachclass": "SJ00201A2031780003",
-    "ceoId": null,
-    "teacherId": null,
-    "academy": "信息管理与信息系统",
-    "state": "等待中"
-  }, {
-    "id": 7,
-    "studentId": "2017210966",
-    "studentName": "杨练",
-    "companyName": "第一家新闻机构",
-    "level": 2,
-    "creatTime": "2020-11-30T16:00:00.000+00:00",
-    "teachclass": "SJ00201A2031780003",
-    "ceoId": null,
-    "teacherId": null,
-    "academy": "信息管理与信息系统",
-    "state": "等待中"
-  }, {
-    "id": 7,
-    "studentId": "2017210966",
-    "studentName": "杨练",
-    "companyName": "第一家新闻机构",
-    "level": 2,
-    "creatTime": "2020-11-30T16:00:00.000+00:00",
-    "teachclass": "SJ00201A2031780003",
-    "ceoId": null,
-    "teacherId": null,
-    "academy": "信息管理与信息系统",
-    "state": "等待中"
-  }, {
-    "id": 7,
-    "studentId": "2017210966",
-    "studentName": "杨练",
-    "companyName": "第一家新闻机构",
-    "level": 2,
-    "creatTime": "2020-11-30T16:00:00.000+00:00",
-    "teachclass": "SJ00201A2031780003",
-    "ceoId": null,
-    "teacherId": null,
-    "academy": "信息管理与信息系统",
-    "state": "等待中"
-  }, {
-    "id": 7,
-    "studentId": "2017210966",
-    "studentName": "杨练",
-    "companyName": "第一家新闻机构",
-    "level": 2,
-    "creatTime": "2020-11-30T16:00:00.000+00:00",
-    "teachclass": "SJ00201A2031780003",
-    "ceoId": null,
-    "teacherId": null,
-    "academy": "信息管理与信息系统",
-    "state": "等待中"
-  }, {
-    "id": 5,
-    "studentId": "2017210960",
-    "studentName": "任飞燕",
-    "companyName": "第一家新闻机构",
-    "level": 2,
-    "creatTime": "2020-11-29T16:00:00.000+00:00",
-    "teachclass": "SJ00201A2031780003",
-    "ceoId": null,
-    "teacherId": null,
-    "academy": "信息管理与信息系统",
-    "state": "等待中"
-  }, {
-    "id": 9,
-    "studentId": "2017210960",
-    "studentName": "XX",
-    "companyName": "第一家新闻机构",
-    "level": 2,
-    "creatTime": "2020-11-29T16:00:00.000+00:00",
-    "teachclass": "SJ00201A2031780003",
-    "ceoId": null,
-    "teacherId": null,
-    "academy": "信息管理与信息系统",
-    "state": "等待中"
-  },
-]
+import './application.scss'
 
 const reducer = (state, {type, payload}) => {
   switch (type) {
     case LOADING:
       return {...state, loading: true}
     case SET_PAGE:
-      return {...state,
-        currentPage: payload.currentPage,
+      return {
+        ...state,
         loading: false,
         data: payload.data
       }
@@ -106,55 +20,110 @@ const reducer = (state, {type, payload}) => {
     case INIT_PAGE:
       return {
         ...state,
-        currentPage: 0,
-        total: payload.total,
+        total: payload.totalNumber,
         loading: false,
-        data: payload.data
+        data: payload.object,
+        pageSize: payload.pageSize
       }
   }
 }
 
-export default function Application() {
-  const [state, dispatch] = useReducer(reducer, {
-    currentPage: 0,
-    loading: true,
-    data: null
+const fileReducer = (state, action) => {
+  switch (action.type) {
+    case 'INIT_FILE':
+      return {...state, loading: true}
+    case 'FETCH_OK':
+      return {...state, loading: false, list: action.payload}
+    case 'FETCH_FAIL':
+      return {...state, loading: false}
+    default:
+      return state
+  }
+}
+/*可下载列表*/
+const FileList = () => {
+  const teacherClass = localStorage.getItem('class')
+
+  const [fileId, setFileId] = useState(null)
+  const [currentPage, setPage] = useState(1)
+
+  const [state, dispatch] = useReducer(fileReducer, {
+    loading: false,
+    list: []
   })
 
   useEffect(() => {
-    setTimeout(() => {
-      dispatch({
-        type: INIT_PAGE, payload: {
-          total: 9,
-          data: mockData
-        }
-      })
-    }, 500)
+    if (teacherClass) {
+      fetchFileList(teacherClass, currentPage)
+        .then(list => {
+          if (list.length) {
+            dispatch({
+              type: 'FETCH_OK',
+              payload: list
+            })
+          }
+        }, e=>{
+          message.warn(e)
+        })
+    }
+  }, [currentPage])
+
+  const handleDownload = async (id) => {
+    try {
+      const res = await downloadFile(id)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  return (
+    <>
+      <List
+        size="small"
+        style={{padding: '15px'}}
+        dataSource={state.list}
+        loading={state.loading}
+        pagination={{
+          onChange(pos) {
+            setPage(pos)
+          }
+        }}
+        renderItem={({fileName, id}, i) => {
+          return (
+            <li key={i} style={{padding: '15px'}}>
+              <span>{fileName}</span>
+              <Button type="primary" onClick={handleDownload.bind(null, id)}>下载</Button>
+            </li>
+          )
+        }}
+      />
+    </>
+  )
+}
+
+function Application(props) {
+  const {userId} = props
+  const [state, dispatch] = useReducer(reducer, {
+    currentPage: 0,
+    loading: true,
+    data: null,
+    pageSize: 0,
+    fileList: []
+  })
+
+  useEffect(() => {
+    showApplication(0, userId).then(
+      res => {
+        dispatch({
+          type: INIT_PAGE,
+          payload: res.data
+        })
+      }
+    )
   }, [])
 
-  const handlePageChange = pos => {
-    dispatch({type: LOADING})
-    setTimeout(() => {
-      dispatch({
-        type: SET_PAGE,
-        payload: {
-          currentPage: pos,
-          data: [
-            {
-              name: 'fy'
-            }, {
-              name: 'ly'
-            }
-          ]
-        }
-      })
-    }, 500)
-  }
-  const handleAgree = id => {
-
-  }
-  const handleReject = id => {
-
+  const handleAgree = (studentId, companyName) => {
+    agreeApplication(userId, studentId, companyName)
   }
   return (
     <div>
@@ -164,16 +133,14 @@ export default function Application() {
         grid={{column: 4}}
         loading={state.loading}
         pagination={{
-          current: state.currentPage,
-          pageSize: PAGE_SIZE,
+          pageSize: state.pageSize,
           total: state.total,
-          onChange: handlePageChange
         }}
         renderItem={item => (
           <Card
             hoverable
             style={{margin: '10px'}}
-            title={item.companyName}
+            title={item.companyName || '无名'}
           >
             <List.Item>
               <ul style={{
@@ -188,21 +155,34 @@ export default function Application() {
                 <li>班级id：{item.teachclass}</li>
               </ul>
               <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                <Button
-                  type="primary" shape="round"
-                  onClick={handleAgree.bind(null, item.studentId)}
-                >同意</Button>
-                <Button
-                  type="primary" danger={true}
-                  shape="round"
-                  onClick={handleReject.bind(null, item.studentId)}
-                >拒绝</Button>
+                {
+                  item.state === '等待中'
+                    ? (
+                      <>
+                        <Button
+                          type="primary" shape="round"
+                          onClick={handleAgree.bind(null, item.studentId, item.companyName)}
+                        >同意</Button>
+                        {/*<Button*/}
+                        {/*  type="primary" danger={true}*/}
+                        {/*  shape="round"*/}
+                        {/*  onClick={handleReject.bind(null, item.studentId)}*/}
+                        {/*>拒绝</Button>*/}
+                      </>
+                    )
+                    : <div className="status pass">已同意</div>
+                }
               </div>
             </List.Item>
           </Card>
         )}
       >
       </List>
+
+      <PageHeader title="文件"/>
+      <FileList list={state.fileList}/>
     </div>
   )
 }
+
+export default memo(Application)

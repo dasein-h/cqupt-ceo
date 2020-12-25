@@ -1,11 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component,Fragment } from 'react';
 import { Upload, Button, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
-import   ManagerApi  from '../../../until/api/managerApi';
-// import reqwest from 'reqwest';
-import { InboxOutlined } from '@ant-design/icons';
+import baseurl from '../../../until/BaseUrl';
+import axios from 'axios';
 import '../style/ImData.css';
-const { Dragger } = Upload;
 
 
 class ImData extends Component {
@@ -17,108 +15,97 @@ class ImData extends Component {
       uploadingStu: false,
       uploadingClass:false
     }
+    this.handleUploadStu = this.handleUploadStu.bind(this);
+    this.handleUploadClass = this.handleUploadClass.bind(this);
+    this.handleStatusStu = this.handleStatusStu.bind(this);
+    this.handleStatusClass = this.handleStatusClass.bind(this);
+    this.Ajax = this.Ajax.bind(this);
   }
-  
+
+  Ajax (type, url, formData){
+    let status = false;
+    axios({
+      method: 'post',
+      url: url,
+      data: formData,
+      processData: false,
+      contentType:false
+    }).then(
+      (result) => {
+        console.log(result);
+
+        if (result.data.flag == true) {
+          console.log('上传成功！');
+          message.success("上传成功");
+          status = true;
+        }
+        else if (result.data.flag == false) {
+          console.log('上传失败');
+          message.error('上传失败！');
+        }
+      }
+    ).then(() => {
+      if (type == 0) {
+        this.handleStatusStu(status);
+      }
+      else if (type == 1) {
+        this.handleStatusClass(status);
+      }
+    })
+
+  }
+
 
   handleUploadStu = () => {
     const { stuList } = this.state;
     const formData = new FormData();
     stuList.forEach(file => {
-      formData.append('files[]', file);
+      formData.append('stufile', file);
     });
-
     this.setState({
-      uploadingStu: true,
+      uploadingStu: true
     });
-
-
-
-    let res = ManagerApi.upLoadStu(formData);
-    res.then(
-      () => {
-        this.setState({
-          classList: [],
-          uploadingClass: false,
-        });
-        message.success('上传成功!');
-      },
-      () => {
-        this.setState({
-          uploadingClass: false,
-        });
-        message.error('上传失败！');
-      },
-    );
-
-  //   reqwest({
-  //     url: 'http://120.79.207.60:8089/admin/stufile',
-  //     method: 'post',
-  //     processData: false,
-  //     data: formData,
-  //     success: () => {
-  //       this.setState({
-  //         stuList: [],
-  //         uploadingStu: false,
-  //       });
-  //       message.success('上传成功!');
-  //     },
-  //     error: () => {
-  //       this.setState({
-  //         uploadingStu: false,
-  //       });
-  //       message.error('上传失败！');
-  //     },
-  //   });
+    this.Ajax(0, baseurl + '/admin/stufile', formData);
+    
   };
+
+  handleStatusStu = (status) => { 
+    console.log(status);
+    if (status == true) { 
+      this.setState({
+        uploadingStu: false,
+        stuList:[]
+      });
+
+    }
+      
+  }
+
 
   handleUploadClass = () => {
     const { classList } = this.state;
     const formData = new FormData();
     classList.forEach(file => {
-      formData.append('files[]', file);
+      formData.append('file', file);
     });
-
     this.setState({
-      uploadingClass: true,
-    });
+      uploadingClass: true
+    })
+    this.Ajax(1, baseurl + '/admin/file', formData);
+  }
     
-    let res = ManagerApi.upLoadClass(formData);
-    res.then(
-      () => {
-        this.setState({
-          classList: [],
-          uploadingClass: false,
-        });
-        message.success('上传成功!');
-      },
-      () => {
-        this.setState({
-          uploadingClass: false,
-        });
-        message.error('上传失败！');
-      },
-    );
-  //   reqwest({
-  //     url: 'http://120.79.207.60:8089/admin/teafile',
-  //     method: 'post',
-  //     processData: false,
-  //     data: formData,
-  //     success: () => {
-  //       this.setState({
-  //         classList: [],
-  //         uploadingClass: false,
-  //       });
-  //       message.success('上传成功!');
-  //     },
-  //     error: () => {
-  //       this.setState({
-  //         uploadingClass: false,
-  //       });
-  //       message.error('上传失败！');
-  //     },
-  //   });
-  };
 
+  handleStatusClass = (status) => { 
+    console.log(status);
+    if (status == true) { 
+      this.setState({
+        uploadingClass: false,
+        classList:[]
+      })
+    }
+    
+  }
+  
   render() {
     const { uploadingStu,uploadingClass, stuList,classList } = this.state;
     const stuprops = {
@@ -140,11 +127,12 @@ class ImData extends Component {
       },
       stuList,
     };
+
     const classprops = {
       onRemove: file => {
         this.setState(state => {
-          const index = state.ClassList.indexOf(file);
-          const newclassList = state.ClassList.slice();
+          const index = state.classList.indexOf(file);
+          const newclassList = state.classList.slice();
           newclassList.splice(index, 1);
           return {
             classsList: newclassList,
@@ -157,19 +145,19 @@ class ImData extends Component {
         }));
         return false;
       },
-      stuList,
+      // classList,
     };
+    
     return (
       <>
         <div id="div">
           <div className="StuInfo">
               <Upload {...stuprops}>
-                  <Button icon={<UploadOutlined />} className="button">导入学生信息</Button>
-                </Upload>
+                  <Button icon={<UploadOutlined />} className="button">导入教学信息</Button>
+              </Upload>
               <Button
-                    // type="primary"
                     onClick={this.handleUploadStu}
-                    disabled={stuList.length === 0}
+                    disabled={stuList.length === 0  || stuList.length>1}
                     loading={uploadingStu}
                     style={{ marginTop: 16 }}
                   >
@@ -178,12 +166,11 @@ class ImData extends Component {
           </div>
           <div className="StuInfo">
               <Upload {...classprops}>
-                  <Button icon={<UploadOutlined />} className="button">导入教学班信息</Button>
-                </Upload>
+                  <Button icon={<UploadOutlined />} className="button">更新学生信息</Button>
+              </Upload>
               <Button
-                    // type="primary"
                     onClick={this.handleUploadClass}
-                    disabled={classList.length === 0}
+                    disabled={classList.length === 0  }
                     loading={uploadingClass}
                     style={{ marginTop: 16 }}
                   >
@@ -196,6 +183,5 @@ class ImData extends Component {
     );
   }
 }
-
 
 export default ImData;
