@@ -172,10 +172,7 @@ export default function* defSaga() {
     const res = yield call(StudentApi.DeleteFile,action.payload)
     if (res.status === 200 && res.data.flag) {
       yield put(actions.DeleteFile_OK(res.data.message))
-<<<<<<< HEAD
-=======
       yield put(actions.ShowFile(localStorage.getItem("class"),parseInt(sessionStorage.getItem("Page4"))||1))
->>>>>>> 0a6ddf24a7f2ec170753d4fdf903bcfc23ff15b2
     }
     else{
       yield put(actions.DeleteFile_NO(res.data.message))
