@@ -186,12 +186,11 @@ function showConfig(teachclass){
     teachclass
   })
 }
-<<<<<<< Updated upstream
 //
 function ShowComInfo(teachclass) {
   return Service.post('/student/showCompany', {
-    teachclass
-=======
+    teachclass})
+  }
 
 //个人配置
 function updateConfigMember(ceoScore,memberScore,signScore,teachclass){
@@ -209,7 +208,6 @@ function updateConfigCompany(companyScore,newsScore,bankScore,accountScore,trade
 function updateConfigOther(late,absence,sameClassMember,companyNum,teachclass){
   return Service.post('/admin/updateConfigOther',{
     late,absence,sameClassMember,companyNum,teachclass
->>>>>>> Stashed changes
   })
 }
 export{

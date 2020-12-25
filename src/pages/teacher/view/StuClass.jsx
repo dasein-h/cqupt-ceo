@@ -33,11 +33,6 @@ class StuClass extends React.Component {
         );
 
     }
-<<<<<<< Updated upstream
-
-    handleClick = () => {
-        
-=======
     componentDidMount(){
       let repro = selectedClassTeacher(localStorage.getItem("userId"),"1","5");
       repro.then((res) => {
@@ -54,7 +49,6 @@ class StuClass extends React.Component {
       console.log(record.teachclass);
       localStorage.setItem('teachclass',record.teachclass);
       this.props.handleDisTeach();
->>>>>>> Stashed changes
     }
 }
 export default StuClass;
