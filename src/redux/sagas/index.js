@@ -85,7 +85,7 @@ export default function* defSaga() {
     const res = yield call(StudentApi.VoteCompany, action.payload)
     if (res.status === 200 && res.data.flag) {
       yield put(actions.VoteForCompany_OK(res.data.message))
-      yield put(actions.getAllCompanies(localStorage.getItem("userId"),parseInt(sessionStorage.getItem("Page1"))||"1"))
+      yield put(actions.getAllCompanies(localStorage.getItem("userId")))
     }
     else{
       yield put(actions.VoteForCompany_NO(res.data.message))
@@ -106,6 +106,7 @@ export default function* defSaga() {
     const res = yield call(StudentApi.VoteCeo, action.payload)
     if (res.status === 200 && res.data.flag) {
       yield put(actions.VoteForCeo_OK(res.data.message))
+      yield put(actions.ShowCeo(parseInt(sessionStorage.getItem("Page2"))||1,localStorage.getItem("userId")))
     }
     else{
       yield put(actions.VoteForCeo_NO(res.data.message))
@@ -116,6 +117,7 @@ export default function* defSaga() {
     const res = yield call(StudentApi.RunCeo, action.payload)
     if (res.status === 200 && res.data.flag) {
       yield put(actions.RunCeo_OK(res.data.message))
+      yield put(actions.ShowCeo(parseInt(sessionStorage.getItem("Page2"))||1,localStorage.getItem("userId")))
     }
     else{
       yield put(actions.RunCeo_NO(res.data.message))
@@ -136,6 +138,7 @@ export default function* defSaga() {
     const res = yield call(StudentApi.AddApplication, action.payload)
     if (res.status === 200 && res.data.flag) {
       yield put(actions.AddApplication_OK(res.data.message))
+      yield put(actions.ShowApplication(parseInt(sessionStorage.getItem("Page3"))||1,localStorage.getItem("userId")))
     }
     else{
       yield put(actions.AddApplication_NO(res.data.message))
@@ -169,6 +172,10 @@ export default function* defSaga() {
     const res = yield call(StudentApi.DeleteFile,action.payload)
     if (res.status === 200 && res.data.flag) {
       yield put(actions.DeleteFile_OK(res.data.message))
+<<<<<<< HEAD
+=======
+      yield put(actions.ShowFile(localStorage.getItem("class"),parseInt(sessionStorage.getItem("Page4"))||1))
+>>>>>>> 0a6ddf24a7f2ec170753d4fdf903bcfc23ff15b2
     }
     else{
       yield put(actions.DeleteFile_NO(res.data.message))

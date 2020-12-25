@@ -11,12 +11,12 @@ import '../../static/style/style.scss'
 class Detail extends Component {
     constructor(props) {
         super(props);
-        this.state = { 
+        this.state = {
             totalNum:0,
             currentPage:parseInt(sessionStorage.getItem("Page4"))||1,
             data : [],
             visible:false,
-            fileList:[],       
+            fileList:[],
          }
          this.onPageChange=this.onPageChange.bind(this)
     }
@@ -42,7 +42,6 @@ class Detail extends Component {
             data:newdata,
             totalNum:totalNumber
           })
-        
         }
         catch{}
       }
@@ -69,7 +68,7 @@ class Detail extends Component {
       });
     };
     handleOk = e => {
-  
+
       this.setState({
         visible: false,
       });
@@ -106,6 +105,8 @@ class Detail extends Component {
             that.setState({
               uploading: false,
             })
+
+            that.props.ShowFile(localStorage.getItem("class"),parseInt(sessionStorage.getItem("Page4"))||1)
           }
           else{
             message.error("上传失败，文件可能为空")
@@ -115,7 +116,7 @@ class Detail extends Component {
           }
         }
 			}
-     
+
       // $.ajax({
       //   url: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
       //   method: 'post',
@@ -146,7 +147,7 @@ class Detail extends Component {
         changePage(4,page)
     }
 
-    render() { 
+    render() {
       const columns = [
         {
             title: '文件名',
@@ -178,7 +179,7 @@ class Detail extends Component {
               <a onClick={this.props.DownloadFile.bind(this,record.id)}>下载</a>
             </Space>
           )
-            else 
+            else
               return(
                 <Space size="middle">
                 <a onClick={this.props.DownloadFile.bind(this,record.id)}>下载</a>
@@ -215,7 +216,7 @@ class Detail extends Component {
     };
 
     if(localStorage.getItem("class"))
-        return ( 
+        return (
             <div className="table_div">
               <Button className="RunCeo" type="primary" onClick={this.showModal}>上传</Button>
               <Modal
@@ -250,9 +251,9 @@ class Detail extends Component {
               <Empty image={Empty.PRESENTED_IMAGE_SIMPLE}>请登录后查看</Empty>
             </div>
             )
-    } 
+    }
 }
- 
+
 const mapDispatchToProps = (dispatch) => {
   return {
     ShowFile: (teachClass,currentPage) => {
