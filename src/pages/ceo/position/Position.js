@@ -158,7 +158,7 @@ function Position(props) {
   }
   const createCompany = async (userId) => {
     const res = await createCompanyImpl(userId, companyName, companyType)
-    message.info(res.msg)
+    message.info(res.msg ? res.msg: res.message)
   }
 
   /* UI */
@@ -299,23 +299,23 @@ function Position(props) {
       <Card style={{margin: '15px'}}>
         <Input placeholder="公司名" onChange={e => setCompanyName(e.target.value)}/>
         公司类型：<Radio.Group onChange={({target: {value}}) => {
-          setPosValue(value)
-        }}>
-          {
-            companyTypes.map(type => (
-              <Radio.Button
-                buttonStyle="solid"
-                key={type}
-                value={type}
-                onChange={e => {
-                  setCompanyType(e.target.value)
-                }}
-              >
-                {type}
-              </Radio.Button>
-            ))
-          }
-        </Radio.Group>
+        setPosValue(value)
+      }}>
+        {
+          companyTypes.map(type => (
+            <Radio.Button
+              buttonStyle="solid"
+              key={type}
+              value={type}
+              onChange={e => {
+                setCompanyType(e.target.value)
+              }}
+            >
+              {type}
+            </Radio.Button>
+          ))
+        }
+      </Radio.Group>
         <br/>
         <Button
           onClick={createCompany.bind(null, userId)}

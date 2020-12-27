@@ -188,6 +188,7 @@ function showConfig(teachclass){
     teachclass
   })
 }
+//
 function ShowComInfo(teachclass) {
   return Service.post('/student/showCompany', {
     teachclass})
