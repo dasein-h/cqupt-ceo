@@ -27,9 +27,22 @@ function showCeo(currentPage,teachclass){
   return Service.post('/student/showCeoVote',{
       currentPage,
       teachclass
+<<<<<<< Updated upstream
   })
 }
 /*开启ceo投票*/  
+=======
+  })
+}
+
+// 展示所有学生信息
+function showAll(teachclass,currentPage){
+  return Service.post('/teacher/showall',{
+      teachclass,currentPage
+  })
+}
+/*开启ceo投票*/
+>>>>>>> Stashed changes
 function runCeo(teachclass) {
   return Service.post('/teacher/runceo', {
       teachclass

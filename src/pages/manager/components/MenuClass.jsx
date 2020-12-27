@@ -104,6 +104,7 @@ class MenuClass extends Component{
             (res) => {
                 console.log(res);
                 message.success("添加成功",1);
+                console.log(this.state.List);
                 this.child.afterClickChange(this.state.List);
             },
             (err) => {
