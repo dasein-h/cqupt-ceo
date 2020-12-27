@@ -18,7 +18,6 @@ const positions = [
 
 const companyTypes = [
   '贸易公司',
-  '是贸易企业',
   '制造企业',
   '物流企业',
   '银行',
