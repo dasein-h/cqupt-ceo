@@ -7,12 +7,6 @@ import { DownOutlined } from '@ant-design/icons';
 import '../../teacher/style/ComInfo.css';
 import { ShowComInfo, putScore,deleteCompany,ShowComMember,ChoseCompany } from '../../../until/api/teacherApi';
 
-// const menu = (
-//   <Menu>
-//     <Menu.Item>Action 1</Menu.Item>
-//     <Menu.Item>Action 2</Menu.Item>
-//   </Menu>
-// );
 // 父组件
 class ComInfo extends Component { 
     constructor(props) { 
@@ -118,15 +112,10 @@ class ComInfo extends Component {
 
   }
 
-  // handleSubmit(e){
-  //   e.preventDefault();
-  //   console.log('data of form:',this.props.form.getFieldsValue());
-  //   alert(this.props.form.getFieldValue('userName'));
-  // }
 
   handleDelete = (key,ceo) => {
     const dataSource = [...this.state.data];
-    console.log(ceo);
+    // console.log(ceo);
     let res = deleteCompany(ceo);
     res.then(
       (result) => { 
@@ -145,7 +134,7 @@ class ComInfo extends Component {
   };
   expandedRowRender = (record) => {
 
-    // console.log(record);
+
     const columns = [
       { title: '学号', dataIndex: 'studentId', key: 'studentId' },
       { title: '姓名', dataIndex: 'userName', key: 'userName' },
@@ -155,14 +144,13 @@ class ComInfo extends Component {
       { title: '职位', dataIndex: 'position', key: 'position' },
       { title:'专业',dataIndex:'academy',key:'academy' },
     ]; 
-    // const { getFieldProps } = this.props.form;
+
     return (
       <Fragment>
           <Table
           rowKey={record => record.studentId}
           columns={columns}
           dataSource={this.state.expandedData[record.comName]}
-          // dataSource={this.state.expandedData}
           loading={this.state.expandedloading}
           pagination="false"
         />
@@ -175,9 +163,9 @@ class ComInfo extends Component {
   
   };
   onExpand = (expanded, record) => {
-    console.log(record);
+    // console.log(record);
     if (expanded == false) {
-      console.log('合并');
+      // console.log('合并');
       this.setState({
         expandedData: {
           ...this.state.expandedData,
@@ -186,7 +174,7 @@ class ComInfo extends Component {
       });
     }
     else {
-      console.log("展开！");
+      // console.log("展开！");
       this.setState({ expandedloading: true });
       let res = ShowComMember(record.ceoID);
       res.then(
@@ -209,26 +197,13 @@ class ComInfo extends Component {
               [record.comName]: mydata,
             }
           });
-          // console.log(this.state.expandedData);
           this.setState({ expandedloading: false })
         },
         (err) => {
+          message.warning("请求超时或服务器异常，请检查网络或联系管理员!");
           console.log(err);
         }
       )
-
-      // this.setState({
-      //   expandedData: [
-      //     {
-      //         key: 1,
-      //         'studentId': '231231',
-      //         'userName': 'sdfa',
-      //         'companyName': 'yy',
-      //         'position': 'sdfa',
-      //         'academy': 'dsfad'
-      //     },
-      //   ]
-      // })
 
 
 
@@ -250,7 +225,7 @@ class ComInfo extends Component {
       let mydata=[];
       res.then(
         (result) => { 
-          console.log(result);
+          // console.log(result);
           if (result.data.data == undefined) {
             this.setState({
               data: [],
@@ -275,7 +250,6 @@ class ComInfo extends Component {
                 "count":result.data.data["object"][i]["count"],
                 "level":result.data.data["object"][i]["level"],
                 "scoreTeacher":result.data.data["object"][i]["scoreTeacher"],
-                // "action":result.data.data["object"][i]["companyName"]
               })
   
   
@@ -291,32 +265,14 @@ class ComInfo extends Component {
                   })
           }
           
-          console.log(this.state);
+          // console.log(this.state);
         },
         (err) => { 
+          message.warning("请求超时或服务器异常，请检查网络或联系管理员!");
           console.log(err);
         }
     )
 
-    // this.setState({
-    //   data: [{
-    //     "companyID": 1,
-    //     'comName': 'yy',
-    //     'count': 20,
-    //     'level': 1,
-    //     'scoreTeacher':0
-        
-    //   },{
-    //     "companyID": 2,
-    //     'comName': 'yy',
-    //     'count': 20,
-    //     'level': 1,
-    //     'scoreTeacher':0
-        
-    //   }]
-       
-      
-    // })
     
       } 
     
@@ -385,7 +341,7 @@ class CustomTextInput extends React.Component {
       },
       (err) => { 
         console.log(err);
-        message.error('修改失败！');
+        message.warning("请求超时或服务器异常，请检查网络或联系管理员!");
         }
       )
     
@@ -465,15 +421,13 @@ class AddStudent extends React.Component {
       },
       (err) => { 
         console.log(err);
-        message.error('修改失败！');
+        message.warning("请求超时或服务器异常，请检查网络或联系管理员!");
         this.setState({ loading: false, visible: false });
         }
       )
 
     
-    // setTimeout(() => {
-      
-    // }, 3000);
+
   };
 
   handleCancel = () => {
@@ -494,7 +448,7 @@ class AddStudent extends React.Component {
       },
       (err) => { 
         console.log(err);
-        message.error('修改失败！');
+        message.warning("请求超时或服务器异常，请检查网络或联系管理员!");
         }
       )
     

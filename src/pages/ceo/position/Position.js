@@ -318,7 +318,7 @@ function Position(props) {
         </Radio.Group>
         <br/>
         <Button
-          onClick={createCompany}
+          onClick={createCompany.bind(null, userId)}
           type="primary"> 创 建 </Button>
       </Card>
     </div>
