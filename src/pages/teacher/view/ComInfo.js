@@ -89,7 +89,7 @@ class ComInfo extends Component {
             dataIndex: 'operation',
             render: (text, record) =>
               this.state.data.length >= 1 ? (
-                <Popconfirm title="确认删除该公司?" onConfirm={() => this.handleDelete(record.key,record.ceoID)}>
+                <Popconfirm title="确认删除该公司?" onConfirm={() => this.handleDelete(record.key,record.ceoID,record.companyName)}>
                   <a>删除公司</a>
                 </Popconfirm>
               ) : null,
@@ -113,21 +113,26 @@ class ComInfo extends Component {
   }
 
 
-  handleDelete = (key,ceo) => {
+  handleDelete = (key,ceo,companyName) => {
     const dataSource = [...this.state.data];
     // console.log(ceo);
-    let res = deleteCompany(ceo);
+    let res = deleteCompany(ceo,companyName);
     res.then(
       (result) => { 
         console.log(result);
-        this.setState({
-          data: dataSource.filter((item) => item.key !== key),
-        });
-        message.success('删除成功！');
+        if (result.data.flag == true) { 
+          this.setState({
+            data: dataSource.filter((item) => item.key !== key),
+          });
+          message.success('删除成功！');
+        }
+        else {
+          message.error('删除失败！');
+        }
       },
       (err) => { 
         console.log(err);
-        message.error('删除失败！');
+        message.warning("请求超时或服务器异常，请检查网络或联系管理员!");
       }
     )
 
