@@ -288,10 +288,10 @@ class ComInfo extends Component {
               
              
                     <span className='title'>公司信息</span>
-                    <span className='com-search'>
+                    {/* <span className='com-search'>
                         <Input placeholder="公司名称" className="input" />
                         <Button type="primary">搜索</Button>
-                    </span>
+                    </span> */}
                 </div>
 
             <div>

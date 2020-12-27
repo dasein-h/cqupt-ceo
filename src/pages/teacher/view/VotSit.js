@@ -83,7 +83,7 @@ class VotSit extends Component {
                   <Button 
                     type="primary" 
                     size="middle"
-                    style={{marginLeft:"20px"}}
+                    style={{marginLeft:"75%"}}
                     onClick={this.handleChange}
                   >{this.state.btuValue}</Button>
                 </span>
