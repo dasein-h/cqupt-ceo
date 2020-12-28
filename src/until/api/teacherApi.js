@@ -27,11 +27,6 @@ function showCeo(currentPage,teachclass){
   return Service.post('/student/showCeoVote',{
       currentPage,
       teachclass
-<<<<<<< Updated upstream
-  })
-}
-/*开启ceo投票*/  
-=======
   })
 }
 
@@ -42,7 +37,6 @@ function showAll(teachclass,currentPage){
   })
 }
 /*开启ceo投票*/
->>>>>>> Stashed changes
 function runCeo(teachclass) {
   return Service.post('/teacher/runceo', {
       teachclass
