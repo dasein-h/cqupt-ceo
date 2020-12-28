@@ -127,7 +127,6 @@ class ImData extends Component {
       },
       stuList,
     };
-
     const classprops = {
       onRemove: file => {
         this.setState(state => {
