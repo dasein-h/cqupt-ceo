@@ -1,8 +1,11 @@
 import React, {memo, useEffect, useReducer, useState} from 'react'
 
-import {showApplication, agreeApplication, downloadFile, fetchFileList} from "../../../until/api/ceo";
+import {showApplication, agreeApplication, downloadFile, fetchFileList} from "../../../../until/api/ceo";
+
+import FileList from './components/FileList'
+
 import {Card, PageHeader, Button, List, message} from "antd";
-import {PAGE_SIZE, SET_PAGE, INIT_PAGE, SET_CURR_PAGE, LOADING} from "./consts/consts";
+import {PAGE_SIZE, SET_PAGE, INIT_PAGE, SET_CURR_PAGE, LOADING} from "./consts/constants";
 import './application.scss'
 
 const reducer = (state, {type, payload}) => {
@@ -26,79 +29,6 @@ const reducer = (state, {type, payload}) => {
         pageSize: payload.pageSize
       }
   }
-}
-
-const fileReducer = (state, action) => {
-  switch (action.type) {
-    case 'INIT_FILE':
-      return {...state, loading: true}
-    case 'FETCH_OK':
-      return {...state, loading: false, list: action.payload}
-    case 'FETCH_FAIL':
-      return {...state, loading: false}
-    default:
-      return state
-  }
-}
-/*可下载列表*/
-const FileList = () => {
-  const teacherClass = localStorage.getItem('class')
-
-  const [fileId, setFileId] = useState(null)
-  const [currentPage, setPage] = useState(1)
-
-  const [state, dispatch] = useReducer(fileReducer, {
-    loading: false,
-    list: []
-  })
-
-  useEffect(() => {
-    if (teacherClass) {
-      fetchFileList(teacherClass, currentPage)
-        .then(list => {
-          if (list.length) {
-            dispatch({
-              type: 'FETCH_OK',
-              payload: list
-            })
-          }
-        }, e=>{
-          message.warn(e)
-        })
-    }
-  }, [currentPage])
-
-  const handleDownload = async (id) => {
-    try {
-      const res = await downloadFile(id)
-    } catch (e) {
-      console.log(e)
-    }
-  }
-
-  return (
-    <>
-      <List
-        size="small"
-        style={{padding: '15px'}}
-        dataSource={state.list}
-        loading={state.loading}
-        pagination={{
-          onChange(pos) {
-            setPage(pos)
-          }
-        }}
-        renderItem={({fileName, id}, i) => {
-          return (
-            <li key={i} style={{padding: '15px'}}>
-              <span>{fileName}</span>
-              <Button type="primary" onClick={handleDownload.bind(null, id)}>下载</Button>
-            </li>
-          )
-        }}
-      />
-    </>
-  )
 }
 
 function Application(props) {
@@ -176,8 +106,7 @@ function Application(props) {
             </List.Item>
           </Card>
         )}
-      >
-      </List>
+      />
 
       <PageHeader title="文件"/>
       <FileList list={state.fileList}/>

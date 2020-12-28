@@ -24,12 +24,15 @@ const WelcomeTitle = props => {
   return (
       <div
         style={{
+          color: '#1890ff',
           padding: '15px',
-          color: '#fff'
         }}
       >
-        <span style={{fontSize: '17px', marginLeft: '10px'}}>CEO  {userName}</span>
-        <Button onClick={exit} type="primary">退出登陆</Button>
+        <div style={{fontSize: '17px'}}>CEO  {userName}</div>
+        <Button onClick={exit} type="primary" style={{
+          fontSize: '12px',
+          margin: '10px 0'
+        }}>退出登陆</Button>
       </div>
   )
 }
