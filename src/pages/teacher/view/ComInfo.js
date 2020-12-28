@@ -17,11 +17,11 @@ class ComInfo extends Component {
       this.textInput = React.createRef();
       this.state = {
         columns : [
-          {
-            title: '公司ID',
-            dataIndex: 'companyID',
-            key:'companyID'
-          },
+          // {
+          //   title: '公司ID',
+          //   dataIndex: 'companyID',
+          //   key:'companyID'
+          // },
           {
             title: '公司名称',
             dataIndex: 'comName',
@@ -247,7 +247,7 @@ class ComInfo extends Component {
             for (let i in result.data.data["object"]) { 
               mydata.push({
                 key:i,
-                "companyID": result.data.data["object"][i]["companyID"],
+                // "companyID": result.data.data["object"][i]["companyID"],
                 "comName": result.data.data["object"][i]["companyName"],
                 "ceoID":result.data.data["object"][i]["ceo"],
                 "ceoname":result.data.data["object"][i]["ceoName"],
@@ -288,10 +288,10 @@ class ComInfo extends Component {
               
              
                     <span className='title'>公司信息</span>
-                    <span className='com-search'>
+                    {/* <span className='com-search'>
                         <Input placeholder="公司名称" className="input" />
                         <Button type="primary">搜索</Button>
-                    </span>
+                    </span> */}
                 </div>
 
             <div>

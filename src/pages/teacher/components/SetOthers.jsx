@@ -64,7 +64,7 @@ class SetOthers extends React.Component {
     }
     submit = () => {
         console.log(this.state.memberScore);
-        updateConfigOther(this.state.title[0].value, this.state.title[1].value, this.state.title[2].value, this.state.title[3].value).then(rs => {
+        updateConfigOther(this.state.title[0].value, this.state.title[1].value, this.state.title[2].value, this.state.title[3].value,this.state.teachclass).then(rs => {
             if (rs.data.flag === true) {
                 notification.open({
                     message: '提示',
