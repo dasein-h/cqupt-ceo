@@ -65,7 +65,7 @@ class SetPersonal extends React.Component {
     }
     submit = () => {
         console.log(this.state.memberScore);
-        updateConfigMember(this.state.title[0].value, this.state.title[1].value, this.state.title[2].value).then(rs => {
+        updateConfigMember(this.state.title[0].value, this.state.title[1].value, this.state.title[2].value,this.state.teachclass).then(rs => {
             if (rs.data.flag === true) {
                 notification.open({
                     message: '提示',

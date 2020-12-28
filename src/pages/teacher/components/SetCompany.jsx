@@ -101,7 +101,7 @@ class SetCompany extends React.Component {
         })
     }
     submit = () => {
-        updateConfigCompany(this.state.title[0].value,this.state.title[1].value,this.state.title[2].value,this.state.title[3].value,this.state.title[4].value,this.state.title[5].value,this.state.title[6].value,this.state.title[7].value).then(rs => {
+        updateConfigCompany(this.state.title[0].value,this.state.title[1].value,this.state.title[2].value,this.state.title[3].value,this.state.title[4].value,this.state.title[5].value,this.state.title[6].value,this.state.title[7].value,this.state.teachclass).then(rs => {
             if (rs.data.flag === true) {
                 notification.open({
                     message: '提示',

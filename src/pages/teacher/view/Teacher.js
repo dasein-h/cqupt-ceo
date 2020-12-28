@@ -184,7 +184,6 @@ class Teacher extends Component {
         },300000);
         
     }
-
     changeClass = () => {
         document.querySelector('.teachbackground').style.display = 'block';
     }
