@@ -11,17 +11,12 @@ import { ShowComInfo, putScore,deleteCompany,ShowComMember,ChoseCompany } from '
 class ComInfo extends Component { 
     constructor(props) { 
       super(props);
-      this.handleDelete = this.handleDelete.bind(this);
+      // this.handleDelete = this.handleDelete.bind(this);
       this.expandedRowRender = this.expandedRowRender.bind(this);
       this.onExpand = this.onExpand.bind(this);
       this.textInput = React.createRef();
       this.state = {
         columns : [
-          // {
-          //   title: '公司ID',
-          //   dataIndex: 'companyID',
-          //   key:'companyID'
-          // },
           {
             title: '公司名称',
             dataIndex: 'comName',
@@ -89,9 +84,10 @@ class ComInfo extends Component {
             dataIndex: 'operation',
             render: (text, record) =>
               this.state.data.length >= 1 ? (
-                <Popconfirm title="确认删除该公司?" onConfirm={() => this.handleDelete(record.key,record.ceoID,record.companyName)}>
-                  <a>删除公司</a>
-                </Popconfirm>
+                <DelPop record={record} data={this.state.data} parent={ this}/>
+                // <Popconfirm title="确认删除该公司?" onConfirm={() => this.handleDelete(record.key,record.ceoID,record.companyName)}>
+                //   <a>删除公司</a>
+                // </Popconfirm>
               ) : null,
           },
         ],
@@ -113,30 +109,35 @@ class ComInfo extends Component {
   }
 
 
-  handleDelete = (key,ceo,companyName) => {
-    const dataSource = [...this.state.data];
-    // console.log(ceo);
-    let res = deleteCompany(ceo,companyName);
-    res.then(
-      (result) => { 
-        console.log(result);
-        if (result.data.flag == true) { 
-          this.setState({
-            data: dataSource.filter((item) => item.key !== key),
-          });
-          message.success('删除成功！');
-        }
-        else {
-          message.error('删除失败！');
-        }
-      },
-      (err) => { 
-        console.log(err);
-        message.warning("请求超时或服务器异常，请检查网络或联系管理员!");
-      }
-    )
+  getChildrenData = (result,msg) => { 
+    this.setState({
+        data:msg
+    })
+}
+  // handleDelete = (key,ceo,companyName) => {
+  //   const dataSource = [...this.state.data];
+  //   // console.log(ceo);
+  //   let res = deleteCompany(ceo,companyName);
+  //   res.then(
+  //     (result) => { 
+  //       console.log(result);
+  //       if (result.data.flag == true) { 
+  //         this.setState({
+  //           data: dataSource.filter((item) => item.key !== key),
+  //         });
+  //         message.success('删除成功！');
+  //       }
+  //       else {
+  //         message.error('删除失败！');
+  //       }
+  //     },
+  //     (err) => { 
+  //       console.log(err);
+  //       message.warning("请求超时或服务器异常，请检查网络或联系管理员!");
+  //     }
+  //   )
 
-  };
+  // };
   expandedRowRender = (record) => {
 
 
@@ -186,6 +187,7 @@ class ComInfo extends Component {
         (result) => {
           let mydata = [];
           for (let i in result.data.data) {
+            
             mydata.push({
               key: i,
               'studentId': result.data.data[i].studentId,
@@ -194,6 +196,9 @@ class ComInfo extends Component {
               'position': result.data.data[i].position,
               'academy': result.data.data[i].academy
             })
+            if (result.data.data[i].position == 'null') { 
+              mydata.companyName = '无';
+            }
           }
           
           this.setState({
@@ -312,6 +317,114 @@ class ComInfo extends Component {
         );
     }
 }
+
+
+
+// 子组件
+class DelPop extends React.Component { 
+  constructor(props) { 
+      super(props);
+      this.showModal = this.showModal.bind(this);
+      this.handleDelete = this.handleDelete.bind(this);
+      this.handleCancel = this.handleCancel.bind(this);
+      this.state = {
+          loading: false,
+          visible: false,
+      }        
+  }
+
+  showModal = () => { 
+      this.setState({
+          visible:true
+      })
+  }
+
+  // handleDelete = (key,ceo,companyName) => {
+  //   const dataSource = [...this.state.data];
+  //   // console.log(ceo);
+  //   let res = deleteCompany(ceo,companyName);
+  //   res.then(
+  //     (result) => { 
+  //       console.log(result);
+  //       if (result.data.flag == true) { 
+  //         this.setState({
+  //           data: dataSource.filter((item) => item.key !== key),
+  //         });
+  //         message.success('删除成功！');
+  //       }
+  //       else {
+  //         message.error('删除失败！');
+  //       }
+  //     },
+  //     (err) => { 
+  //       console.log(err);
+  //       message.warning("请求超时或服务器异常，请检查网络或联系管理员!");
+  //     }
+  //   )
+
+  // };
+
+  handleDelete = () => {
+      const dataSource = [...this.props.parent.state.data];
+      const key = this.props.record.key;
+      const ceo = this.props.record.ceoID;
+      const companyName = this.props.record.companyName;
+      let res = deleteCompany(ceo,companyName);
+      res.then(
+        (result) => { 
+          console.log(result);
+          console.log(result.data.flag);
+          this.props.parent.setState({
+                data: dataSource.filter((item) => item.key !== key)
+          })
+          if (result.data.flag == true) { 
+              message.success('删除成功！');
+              }
+          else {
+              message.error('删除失败！');
+          }
+          
+        },
+        (err) => { 
+          console.log(err);
+          message.warning("请求超时或服务器异常，请检查网络或联系管理员!");
+        }
+      )
+  
+
+  };
+  
+  handleCancel = () => {
+      this.setState({ visible: false });
+  };
+
+  render(){ 
+      const { visible, loading } = this.state;
+      return (
+          <>
+          <a onClick={ this.showModal}>删除</a>
+          <Modal
+          width="15vw"
+          visible={visible}
+          title=""
+          onOk={this.handleDelete}
+          onCancel={this.handleCancel}
+          footer={[
+              <Button key="back" onClick={this.handleCancel}>
+              取消
+              </Button>,
+              <Button key="submit" type="primary" loading={loading} onClick={this.handleDelete}>
+              确定
+              </Button>,
+          ]}
+          >
+                  <p style={{textAlign:'center'}}>确认删除？</p>
+          </Modal>
+      </>
+          );
+  }
+}
+
 
 // 子组件
 class CustomTextInput extends React.Component {

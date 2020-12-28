@@ -1,11 +1,106 @@
 import React, { Component, Fragment } from 'react';
 import { showFile,DeleteUpload,download } from '../../../until/api/teacherApi';
-import {Table,Popconfirm,message} from 'antd';
+import { Table, message, Modal, Button } from 'antd';
+import baseUrl from '../../../until/BaseUrl';
+
+
+class DelPop extends React.Component { 
+    constructor(props) { 
+        super(props);
+        this.showModal = this.showModal.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
+        this.handleCancel = this.handleCancel.bind(this);
+        this.state = {
+            loading: false,
+            visible: false,
+        }        
+    }
+
+    showModal = () => { 
+        this.setState({
+            visible:true
+        })
+    }
+
+    handleDelete = () => {
+        const dataSource = [...this.props.parent.state.data];
+        const key = this.props.record.key;
+        const id = this.props.record.id;
+        const page = this.props.parent.state.pagination.current;
+        // console.log(this.props.record);
+        // console.log(id);
+        let res = DeleteUpload(id);
+        this.setState({loading:true})
+        res.then(
+          (result) => { 
+            // console.log(result);
+            // console.log(result.data.flag);
+            // this.props.parent.setState({
+            //       data: dataSource.filter((item) => item.key !== key)
+            // })
+            if (result.data.flag == true) { 
+                message.success(result.data.message);
+                this.setState({ loading: false })
+                this.setState({ visible: false });
+                // console.log(page);
+                this.props.parent.onchange(page);
+                
+                }
+            else {
+                message.error('删除失败');
+                this.setState({ loading: false });
+                this.setState({ visible: false });
+            }
+            
+          },
+          (err) => { 
+            // console.log(err);
+            message.warning('删除失败');
+            this.setState({ loading: false });
+            this.setState({ visible: false });
+          }
+        )
+    
+        
+
+    };
+    
+    handleCancel = () => {
+        this.setState({ visible: false });
+    };
+
+    render(){ 
+        const { visible, loading } = this.state;
+        return (
+            <>
+            <a onClick={ this.showModal}>删除</a>
+            <Modal
+            width="15vw"
+            visible={visible}
+            title=""
+            onOk={this.handleDelete}
+            onCancel={this.handleCancel}
+            footer={[
+                <Button key="back" onClick={this.handleCancel}>
+                取消
+                </Button>,
+                <Button key="submit" type="primary" loading={loading} onClick={this.handleDelete}>
+                确定
+                </Button>,
+            ]}
+            >
+                    <p style={{textAlign:'center'}}>确认删除？</p>
+            </Modal>
+        </>
+            );
+    }
+}
+
 
 class Download extends Component { 
     constructor(props) { 
         super(props);
-        this.onchange = this.onchange.bind(this);
+        // this.onchange = this.onchange.bind(this);
         this.state = {
             columns: [
                   {
@@ -24,12 +119,8 @@ class Download extends Component {
                     dataIndex: 'filename',
                     key: 'filename',
                       render: (text, record) => { 
-                          console.log(record.id);
-                          let url = `http://120.79.207.60:8089/upload/download?id=` + record.id;
+                          let url = baseUrl + "/upload/download?id=" + record.id;
                           return (
-                            //   <a
-                            //       onClick={() => { this.handleDownload(record.id) }}
-                            //   >{text}</a>
                               <a href={url}>{ text}</a>
                         )
                       }
@@ -38,12 +129,11 @@ class Download extends Component {
                 {
                     title: '删除',
                     dataIndex: 'delete',
-                    key:'delete',
+                    key: 'delete',
                     render: (text, record) =>
-                      this.state.data.length >= 1 ? (
-                        <Popconfirm title="确认删除该文件?" onConfirm={() => this.handleDelete(record,record.key,record.id)}>
-                          <a>删除</a>
-                        </Popconfirm>
+                    
+                    this.state.data.length >= 1 ? (
+                        <DelPop record={record} data={this.state.data} parent={ this}/>
                       ) : null,
                   },
             ],
@@ -51,60 +141,36 @@ class Download extends Component {
             loading: false,
             pagination: {
                 onChange: this.onchange,
-                pageSize:15,
+                pageSize: 7,
+                hideOnSinglePage:false
             }
             
         }
     }
 
-    // handleDownload = (id) => { 
-    //     let res = download(id);
-    //     res.then((result) => { 
-    //         console.log(result);
-    //     },
-    //     (error) => { 
-    //         console.log(error);
-    //     })
-    // }
-    handleDelete = (record, key, id) => {
-        const dataSource = [...this.state.data];
-        console.log(id);
-        let res = DeleteUpload(id);
-        res.then(
-          (result) => { 
-            console.log(result);
-            console.log(result.data.flag);    
-            this.setState({
-              data: dataSource.filter((item) => item.key !== key),
-            });
-            if (result.data.flag == true) { 
-                message.success('删除成功！');
-                }
-            else {
-                message.error('删除失败！');
-            }
-            
-          },
-          (err) => { 
-            console.log(err);
-            message.warning("请求超时或服务器异常，请检查网络或联系管理员!");
-          }
-        )
-    
+    getChildrenData = (result,msg) => { 
+        this.setState({
+            data:msg
+        })
+    }
 
-      };
-    onchange(page) { 
+    onchange=(page)=> { 
+        // console.log(page);
+        // console.log(this.state.pagination);
         this.setState({
             loading:true
         })
-        let res = showFile(localStorage.class,page);
+        // console.log(localStorage.teachclass);
+        let res = showFile(localStorage.teachclass,page);
         res.then(
             (result) => { 
                 let data = JSON.parse(result.data);
+                // console.log(data);
                 let newData = [];
                 for (let i in data) { 
                     newData.push({
                         key: i,
+                        "id":data[i].id,
                         "stuid": data[i].studentId,
                         "teachclass":data[i].teachclass,
                         "filename":data[i].fileName
@@ -114,10 +180,11 @@ class Download extends Component {
                     data: newData,
                     loading:false
                 });
-                console.log(this.state.loading);
+                // console.log(this.state.loading);
                 
             },
             (err) => { 
+                message.warning('跳转失败');
                 console.log(err);
             }
         )
@@ -126,10 +193,19 @@ class Download extends Component {
         this.setState({
             loading:true
         })
-        let res = showFile(localStorage.teachclass,0);
+        let res = showFile(localStorage.teachclass,1);
         res.then(
             (result) => { 
                 let data = JSON.parse(result.data);
+                if (data.length <= 7) { 
+                    this.setState({
+                        pagination: {
+                            onChange: this.onchange,
+                            pageSize: 7,
+                            hideOnSinglePage:true
+                        }
+                    })
+                }
                 // console.log(data);
                 let newData = [];
                 for (let i in data) { 
@@ -145,7 +221,7 @@ class Download extends Component {
                     data: newData,
                     loading:false
                 });
-                console.log(this.state.loading);
+                // console.log(this.state.loading);
                 
             },
             (err) => { 
@@ -165,8 +241,12 @@ class Download extends Component {
                     pagination={this.state.pagination}
                 />
 
+                
             </Fragment>
         )
     }
 }
+
+
+
 export default Download;

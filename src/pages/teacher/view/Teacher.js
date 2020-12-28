@@ -34,7 +34,7 @@ class Teacher extends Component {
           }
         this.handleDisTeach = this.handleDisTeach.bind(this);
         this.handleExit = this.handleExit.bind(this);
-        this.isLogin = this.isLogin.bind(this);
+        // this.isLogin = this.isLogin.bind(this);
         this.changeClass = this.changeClass.bind(this);
     }
     render() {
@@ -129,7 +129,7 @@ class Teacher extends Component {
             userid: userId,
             username:userName
         },()=>{
-            this.isLogin()
+            // this.isLogin()
         })
         
         if(localStorage.hasOwnProperty("teachclass")){
@@ -164,23 +164,23 @@ class Teacher extends Component {
             }
         )
     }
-    isLogin = () => {
-        setInterval(() => {
-            LoginApi.KeepLogin(this.state.userid).then(
-            (res) => {
-                console.log(1);
-                console.log(res);
-                if(!res.data.flag){
-                    this.props.history.push('/Student/AllCompanies/ChosenClasses');
-                }
-            },
-            (err) => {
-                console.log(err);
-            }
-        )
-        },300000);
+    // isLogin = () => {
+    //     setInterval(() => {
+    //         LoginApi.KeepLogin(this.state.userid).then(
+    //         (res) => {
+    //             console.log(1);
+    //             console.log(res);
+    //             if(!res.data.flag){
+    //                 this.props.history.push('/Student/AllCompanies/ChosenClasses');
+    //             }
+    //         },
+    //         (err) => {
+    //             console.log(err);
+    //         }
+    //     )
+    //     },300000);
         
-    }
+    // }
     changeClass = () => {
         document.querySelector('.teachbackground').style.display = 'block';
     }

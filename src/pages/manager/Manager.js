@@ -77,7 +77,7 @@ class Manager extends Component {
             userid: userId,
             username:userName
         },()=>{
-            this.isLogin()
+            // this.isLogin()
         })
         if(localStorage.hasOwnProperty("userId") && localStorage.getItem("type")=="admin"){
            message.success("登录成功",1);
@@ -102,23 +102,23 @@ class Manager extends Component {
             }
         )
     }
-    isLogin = () => {
-        setInterval(() => {
-            LoginApi.KeepLogin(this.state.userid).then(
-            (res) => {
-                console.log(1);
-                console.log(res);
-                if(!res.data.flag){
-                    this.props.history.push('/Student/AllCompanies/ChosenClasses');
-                }
-            },
-            (err) => {
-                console.log(err);
-            }
-        )
-        },30000);
+    // isLogin = () => {
+    //     setInterval(() => {
+    //         LoginApi.KeepLogin(this.state.userid).then(
+    //         (res) => {
+    //             console.log(1);
+    //             console.log(res);
+    //             if(!res.data.flag){
+    //                 this.props.history.push('/Student/AllCompanies/ChosenClasses');
+    //             }
+    //         },
+    //         (err) => {
+    //             console.log(err);
+    //         }
+    //     )
+    //     },30000);
         
-    }
+    // }
 }
 
 export default Manager
