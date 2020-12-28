@@ -13,7 +13,7 @@ import MyCompany from "./components/MyCompany";
 
 import CompanyItem from "./components/CompanyItem";
 
-import './position.scss'
+import './style/position.scss'
 
 const positions = [
   'ceo',
@@ -99,6 +99,7 @@ function Company(props) {
     )
     showAllCompany(userId, 0).then(
       res => {
+        if (!res.flag) return
         dispatch({
           type: 'SET_COMPANY_STATE',
           payload: res.data
@@ -140,6 +141,10 @@ function Company(props) {
     }
   }
   const createCompany = async (userId) => {
+    if (!companyName) {
+      message.info("请输入公司名")
+      return
+    }
     const res = await createCompanyImpl(userId, companyName, companyType)
     message.info(res.msg ? res.msg : res.message)
   }
@@ -175,6 +180,7 @@ function Company(props) {
   const NoMember = () => {
     return (
       <Card
+        hoverable={true}
         className="card"
         loading={false}
         title="无成员"
@@ -184,6 +190,7 @@ function Company(props) {
   const LoadingMember = () => {
     return (
       <Card
+        hoverable={true}
         className="card"
         loading={true}
         title="请稍等..."
@@ -194,7 +201,9 @@ function Company(props) {
   return (
     <div>
       <PageHeader title="我的公司"/>
-      <Card style={{margin: '15px'}}>
+      <Card
+        hoverable={true}
+        style={{margin: '15px'}}>
         {
           state.companyName
             ? <MyCompany companyName={state.companyName}/>
@@ -272,7 +281,9 @@ function Company(props) {
       </List>
 
       <PageHeader title="创建公司"/>
-      <Card style={{margin: '15px'}}>
+      <Card
+        hoverable={true}
+        style={{margin: '15px'}}>
         <WithModal
           render={
             (close) => <Button {...close}>创建公司</Button>

@@ -3,10 +3,11 @@ import React, {memo, useEffect, useReducer, useState} from 'react'
 import {showApplication, agreeApplication, downloadFile, fetchFileList} from "../../../../until/api/ceo";
 
 import FileList from './components/FileList'
+import ApplicationItem from "./components/ApplicationItem";
 
 import {Card, PageHeader, Button, List, message} from "antd";
 import {PAGE_SIZE, SET_PAGE, INIT_PAGE, SET_CURR_PAGE, LOADING} from "./consts/constants";
-import './application.scss'
+import './style/application.scss'
 
 const reducer = (state, {type, payload}) => {
   switch (type) {
@@ -26,7 +27,7 @@ const reducer = (state, {type, payload}) => {
         total: payload.totalNumber,
         loading: false,
         data: payload.object,
-        pageSize: payload.pageSize
+        pageSize: payload.pageSize || PAGE_SIZE
       }
   }
 }
@@ -36,7 +37,7 @@ function Application(props) {
   const [state, dispatch] = useReducer(reducer, {
     currentPage: 0,
     loading: true,
-    data: null,
+    data: [],
     pageSize: 0,
     fileList: []
   })
@@ -44,6 +45,7 @@ function Application(props) {
   useEffect(() => {
     showApplication(0, userId).then(
       res => {
+        if (!res.flag) return
         dispatch({
           type: INIT_PAGE,
           payload: res.data
@@ -55,15 +57,16 @@ function Application(props) {
   const handleAgree = (studentId, companyName) => {
     agreeApplication(userId, studentId, companyName)
   }
+  console.log(state)
   return (
     <div>
       <PageHeader title="所有申请" subTitle="all application"/>
       <List
-        dataSource={state.data || []}
+        dataSource={state.data}
         grid={{column: 4}}
         loading={state.loading}
         pagination={{
-          pageSize: state.pageSize,
+          pageSize: state.pageSize || 8,
           total: state.total,
         }}
         renderItem={item => (
@@ -73,36 +76,7 @@ function Application(props) {
             title={item.companyName || '无名'}
           >
             <List.Item>
-              <ul style={{
-                listStyle: 'none',
-                padding: '0'
-              }}>
-                <li> {item.studentName}</li>
-                <li> {item.studentId}</li>
-                <li>专业 {item.academy}</li>
-                <li> {item.position || "无职位"}</li>
-                <li>状态：{item.state}</li>
-                <li>班级id：{item.teachclass}</li>
-              </ul>
-              <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                {
-                  item.state === '等待中'
-                    ? (
-                      <>
-                        <Button
-                          type="primary" shape="round"
-                          onClick={handleAgree.bind(null, item.studentId, item.companyName)}
-                        >同意</Button>
-                        {/*<Button*/}
-                        {/*  type="primary" danger={true}*/}
-                        {/*  shape="round"*/}
-                        {/*  onClick={handleReject.bind(null, item.studentId)}*/}
-                        {/*>拒绝</Button>*/}
-                      </>
-                    )
-                    : <div className="status pass">已同意</div>
-                }
-              </div>
+              <ApplicationItem handleAgree={handleAgree} info={item}/>
             </List.Item>
           </Card>
         )}

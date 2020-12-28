@@ -11,7 +11,7 @@ import NavMenu from './components/NavMenu'
 import {Layout} from "antd";
 import {setUserId} from "./store";
 
-const {Sider, Content} = Layout
+const {Sider, Content, Header} = Layout
 
 const routes = [
   {
@@ -26,13 +26,13 @@ const routes = [
 ]
 
 function CEO(props) {
-  const {dispatch} = props
+  const {dispatch, history} = props
 
   let userId = localStorage.getItem('userId')
   let userName = localStorage.getItem('userName')
   let ceo = localStorage.getItem('ceo')
   if (!ceo && ceo !== '1') {
-    // props.history.replace('/')
+    // history.replace('/')
   }
   dispatch(setUserId(userId))
 
@@ -52,12 +52,21 @@ function CEO(props) {
         }}
         width={300}
       >
-        <WelcomeTitle userName={userName} userId={userId}/>
         <NavMenu routes={routes}/>
       </Sider>
-      <Content>
-        <Router routes={routes} userId={userId}/>
-      </Content>
+      <Layout>
+        <Header
+          style={{
+            background: '#fff',
+            boxShadow: '0 0 15px #d3d3d3'
+          }}>
+          <WelcomeTitle userName={userName} userId={userId}/>
+        </Header>
+        <Content>
+          <Router routes={routes} userId={userId}/>
+        </Content>
+      </Layout>
+
     </Layout>
   )
 }
