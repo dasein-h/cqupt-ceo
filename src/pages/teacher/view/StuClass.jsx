@@ -84,9 +84,12 @@ class StuClass extends React.Component{
         selectedClassTeacher(localStorage.getItem("userId"),currentPage,"5").then(
             (res) => {
                 if(res.data.data!==0){
+                    let pagination = {...this.state.pagination};
+                    pagination.total = parseInt(res.data.page) * parseInt(pagination.pageSize);
                     this.setState({
                     contentList : res.data.data,
-                    loading:false
+                    loading:false,
+                    pagination
                 })
                 }
                 console.log(res);
