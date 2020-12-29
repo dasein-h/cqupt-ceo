@@ -99,7 +99,7 @@ class newLists extends React.Component {
     //直接用 this.state.pagination.current 调用数据？
     console.log(record);//这是这一行的数据
     // console.log(store.getState());
-    agreeChange(record.id, record.error).then((rs) => {
+    agreeChange(record.id, record.error,localStorage.teachclass).then((rs) => {
       let res = rs.data;
       console.log(res);
       if (res.flag === true) {

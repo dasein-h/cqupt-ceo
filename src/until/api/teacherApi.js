@@ -109,9 +109,9 @@ function changeCompanyName(teachclass, currentPage, studentId) {
 }
 
 /*同意修改公司名*/
-function agreeChange(ceo,companyName) {
+function agreeChange(ceo,companyName,teachclass) {
   return Service.post('/teacher/agree', {
-    ceo,companyName
+    ceo,companyName,teachclass
   })
 }
 
