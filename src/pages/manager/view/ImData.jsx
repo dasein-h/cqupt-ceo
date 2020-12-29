@@ -10,14 +10,14 @@ class ImData extends Component {
   constructor(props) { 
     super(props);
     this.state = {
-      stuList: [],
+      // stuList: [],
       classList:[],
-      uploadingStu: false,
+      // uploadingStu: false,
       uploadingClass:false
     }
-    this.handleUploadStu = this.handleUploadStu.bind(this);
+    // this.handleUploadStu = this.handleUploadStu.bind(this);
     this.handleUploadClass = this.handleUploadClass.bind(this);
-    this.handleStatusStu = this.handleStatusStu.bind(this);
+    // this.handleStatusStu = this.handleStatusStu.bind(this);
     this.handleStatusClass = this.handleStatusClass.bind(this);
     this.Ajax = this.Ajax.bind(this);
   }
@@ -56,30 +56,31 @@ class ImData extends Component {
   }
 
 
-  handleUploadStu = () => {
-    const { stuList } = this.state;
-    const formData = new FormData();
-    stuList.forEach(file => {
-      formData.append('stufile', file);
-    });
-    this.setState({
-      uploadingStu: true
-    });
-    this.Ajax(0, baseurl + '/admin/stufile', formData);
+  // handleUploadStu = () => {
+  //   const { stuList } = this.state;
+  //   const formData = new FormData();
+  //   stuList.forEach(file => {
+  //     formData.append('stufile', file);
+  //   });
+  //   this.setState({
+  //     uploadingStu: true
+  //   });
+  //   this.Ajax(0, baseurl + '/admin/stufile', formData);
+  //   // this.Ajax(1, baseurl + '/admin/file', formData);
     
-  };
+  // };
 
-  handleStatusStu = (status) => { 
-    console.log(status);
-    if (status == true) { 
-      this.setState({
-        uploadingStu: false,
-        stuList:[]
-      });
+  // handleStatusStu = (status) => { 
+  //   console.log(status);
+  //   if (status == true) { 
+  //     this.setState({
+  //       uploadingStu: false,
+  //       stuList:[]
+  //     });
 
-    }
+  //   }
       
-  }
+  // }
 
 
   handleUploadClass = () => {
@@ -107,26 +108,27 @@ class ImData extends Component {
   }
   
   render() {
+    // const { uploadingStu, stuList } = this.state;
     const { uploadingStu,uploadingClass, stuList,classList } = this.state;
-    const stuprops = {
-      onRemove: file => {
-        this.setState(state => {
-          const index = state.stuList.indexOf(file);
-          const newstuList = state.stuList.slice();
-          newstuList.splice(index, 1);
-          return {
-            stuList: newstuList,
-          };
-        });
-      },
-      beforeUpload: file => {
-        this.setState(state => ({
-          stuList: [...state.stuList, file],
-        }));
-        return false;
-      },
-      stuList,
-    };
+    // const stuprops = {
+    //   onRemove: file => {
+    //     this.setState(state => {
+    //       const index = state.stuList.indexOf(file);
+    //       const newstuList = state.stuList.slice();
+    //       newstuList.splice(index, 1);
+    //       return {
+    //         stuList: newstuList,
+    //       };
+    //     });
+    //   },
+    //   beforeUpload: file => {
+    //     this.setState(state => ({
+    //       stuList: [...state.stuList, file],
+    //     }));
+    //     return false;
+    //   },
+    //   stuList,
+    // };
     const classprops = {
       onRemove: file => {
         this.setState(state => {
@@ -150,7 +152,7 @@ class ImData extends Component {
     return (
       <>
         <div id="div">
-          <div className="StuInfo">
+          {/* <div className="StuInfo">
               <Upload {...stuprops}>
                   <Button icon={<UploadOutlined />} className="button">导入教学信息</Button>
               </Upload>
@@ -162,7 +164,7 @@ class ImData extends Component {
                   >
                     {uploadingStu ? '上传中' : '开始上传'}
               </Button>
-          </div>
+          </div> */}
           <div className="StuInfo">
               <Upload {...classprops}>
                   <Button icon={<UploadOutlined />} className="button">更新学生信息</Button>

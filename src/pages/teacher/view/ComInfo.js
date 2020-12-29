@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import {
-  Table, Badge, Menu, Dropdown, Space, Tag,
-  Input, Button, InputNumber, Form, Popconfirm, message,FormItem,Modal
+  Table, Button, message,Modal
 } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import '../../teacher/style/ComInfo.css';
@@ -9,9 +8,9 @@ import { ShowComInfo, putScore,deleteCompany,ShowComMember,ChoseCompany } from '
 
 // 父组件
 class ComInfo extends Component { 
-    constructor(props) { 
+  constructor(props) { 
       super(props);
-      // this.handleDelete = this.handleDelete.bind(this);
+      this.handleDelete = this.handleDelete.bind(this);
       this.expandedRowRender = this.expandedRowRender.bind(this);
       this.onExpand = this.onExpand.bind(this);
       this.textInput = React.createRef();
@@ -97,47 +96,54 @@ class ComInfo extends Component {
         pagination: {
           total:20,
           pageSize: 10,
+          // onChange:this.onchange,
         },
         expandedData: {},
         loading: false,
         disabled: true,
-        expandedloading:false
+        expandedloading: {}
       };
 
       
 
   }
-
-
   getChildrenData = (result,msg) => { 
     this.setState({
         data:msg
     })
 }
-  // handleDelete = (key,ceo,companyName) => {
-  //   const dataSource = [...this.state.data];
-  //   // console.log(ceo);
-  //   let res = deleteCompany(ceo,companyName);
-  //   res.then(
-  //     (result) => { 
-  //       console.log(result);
-  //       if (result.data.flag == true) { 
-  //         this.setState({
-  //           data: dataSource.filter((item) => item.key !== key),
-  //         });
-  //         message.success('删除成功！');
-  //       }
-  //       else {
-  //         message.error('删除失败！');
-  //       }
-  //     },
-  //     (err) => { 
-  //       console.log(err);
-  //       message.warning("请求超时或服务器异常，请检查网络或联系管理员!");
-  //     }
-  //   )
+  handleDelete = (key,ceo,companyName) => {
+    const dataSource = [...this.state.data];
+    // console.log(ceo);
+    let res = deleteCompany(ceo,companyName);
+    res.then(
+      (result) => { 
+        console.log(result);
+        if (result.data.flag == true) { 
+          this.setState({
+            data: dataSource.filter((item) => item.key !== key),
+          });
+          message.success('删除成功！');
+        }
+        else {
+          message.error('删除失败！');
+        }
+      },
+      (err) => { 
+        console.log(err);
+        message.warning("请求超时或服务器异常，请检查网络或联系管理员!");
+      }
+    )
 
-  // };
+  };
+  IsPagination = (record) => { 
+    if (this.state.expandedData[record.comName] > 10) {
+      return true
+    }
+    else { 
+      return false
+    }
+  }
   expandedRowRender = (record) => {
 
 
@@ -150,15 +156,17 @@ class ComInfo extends Component {
       { title: '职位', dataIndex: 'position', key: 'position' },
       { title:'专业',dataIndex:'academy',key:'academy' },
     ]; 
-
+    
+    
+    
     return (
       <Fragment>
           <Table
           rowKey={record => record.studentId}
           columns={columns}
           dataSource={this.state.expandedData[record.comName]}
-          loading={this.state.expandedloading}
-          pagination="false"
+          loading={this.state.expandedloading[record.comName]}
+          pagination={ this.IsPagination(record)}
         />
 
         
@@ -181,7 +189,27 @@ class ComInfo extends Component {
     }
     else {
       // console.log("展开！");
-      this.setState({ expandedloading: true });
+      // this.setState({
+      //   expandedloading: {
+      //   ...this.state.expandedloading,
+      //   [record.comName]:true
+      // } });
+
+      if (this.state.expandedloading[record.comName] == undefined) {
+        this.setState({
+          expandedloading: {
+            ...this.state.expandedloading,
+            [record.comName]: true
+          }
+        })
+      }
+      else { 
+        let loading = this.state.expandedloading;
+        loading[record.comName] = true;
+        this.setState({
+          expandedloading: loading
+        })
+      }
       let res = ShowComMember(record.ceoID);
       res.then(
         (result) => {
@@ -205,9 +233,22 @@ class ComInfo extends Component {
             expandedData: {
               ...this.state.expandedData,
               [record.comName]: mydata,
-            }
+            },
+            
+            
           });
-          this.setState({ expandedloading: false })
+          let loading = this.state.expandedloading;
+          if (loading[record.comName] == true) {
+            loading[record.comName] = false;
+          }
+          // else if (loading[record.comName] == null) { 
+          //   loading
+          // }
+
+          this.setState({
+            // expandedloading[record.comName]:false
+          })
+          // this.setState({expandedloading: false})
         },
         (err) => {
           message.warning("请求超时或服务器异常，请检查网络或联系管理员!");
@@ -228,6 +269,7 @@ class ComInfo extends Component {
         pagination: {
           total:20,
           pageSize: 10,
+          hideOnSinglePage:false
           },
         loading: true,
       })
@@ -264,15 +306,31 @@ class ComInfo extends Component {
   
   
             }
-                  this.setState({
-                    data: mydata,
-                    pagination: {
-                      total:result.data.data["totalNumber"],
-                      pageSize: result.data.data["pageSize"]
-                      },
-                    loading: false,
-                    
-                  })
+            if (result.data.data["object"].length > result.data.data["pageSize"]) {
+              this.setState({
+                data: mydata,
+                pagination: {
+                  total: result.data.data["totalNumber"],
+                  pageSize: result.data.data["pageSize"],
+                  hideOnSinglePage:false
+                },
+                loading: false,
+                
+              })
+            }
+            else { 
+              this.setState({
+                data: mydata,
+                pagination: {
+                  total: result.data.data["totalNumber"],
+                  pageSize: result.data.data["pageSize"],
+                  hideOnSinglePage:true
+                },
+                loading: false,
+                
+              })
+            }
+                  
           }
           
           // console.log(this.state);
@@ -286,6 +344,7 @@ class ComInfo extends Component {
     
       } 
     
+  
     render() { 
         return (
             <Fragment>
@@ -492,6 +551,7 @@ class CustomTextInput extends React.Component {
   }
 }
 
+
 // 子组件
 class AddStudent extends React.Component {
   constructor(props) {
@@ -526,12 +586,12 @@ class AddStudent extends React.Component {
     res.then(
       (result) => { 
         console.log(result);
-        
-        if (result.data.error) {
-          message.error('修改失败！');
+       
+        if (result.data.flag) {
+          message.success(result.data.message);
         }
         else { 
-          message.success('修改成功！');
+          message.warning(result.data.message);
         }
         this.setState({ loading: false, visible: false });
         
@@ -539,7 +599,7 @@ class AddStudent extends React.Component {
       },
       (err) => { 
         console.log(err);
-        message.warning("请求超时或服务器异常，请检查网络或联系管理员!");
+        message.warning(err.data.message);
         this.setState({ loading: false, visible: false });
         }
       )
