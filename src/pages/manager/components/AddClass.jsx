@@ -22,7 +22,7 @@ class AddClass extends Component{
                 showSizeChanger:false,
                 defaultCurrent:1,
                 current: 1,
-                pageSize: 5,
+                pageSize: 7,
                 total:'',
                 hideOnSinglePage: true,
                 onChange: (page, pageSize) => {

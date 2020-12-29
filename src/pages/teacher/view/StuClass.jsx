@@ -38,18 +38,18 @@ class StuClass extends React.Component{
                 showSizeChanger:false,
                 defaultCurrent:1,
                 current: 1,
-                pageSize: 7,
+                pageSize: 5,
                 total:'',
                 hideOnSinglePage: true,
                 onChange: (page, pageSize) => {
-                console.log(this.changePage);
-                this.changePage(page);
-                this.state.pagination.current = page
-            }
+                  console.log(this.changePage);
+                  this.changePage(page);
+                  this.state.pagination.current = page
+                }
             }
       }
         this.handleIntoClass = this.handleIntoClass.bind(this);
-        this.handleClick = this.handleClick.bind(this);
+        // this.handleClick = this.handleClick.bind(this);
     }
     render() { 
         return (
@@ -57,12 +57,6 @@ class StuClass extends React.Component{
                 <div className="topnav">
                     <Menu theme="light"  mode="horizontal" defaultSelectedKeys="1">
                         <Menu.Item key = "1">请选择的班级</Menu.Item>
-                        <Button
-                          type="primary" 
-                          ghost size="middle"
-                          style = {{float:"right",top:"10px",right:"20px"}} 
-                          onClick = {this.handleClick}
-                        >{this.state.btntext}</Button>
                     </Menu>
                 </div>
                 <div>
@@ -80,34 +74,31 @@ class StuClass extends React.Component{
 
     }
     componentDidMount(){
+        this.changePage(1);
+    }
+    changePage = (currentPage) => {
         this.setState({
-          loading:true
+            loading:true
         })
-        //请求班级
-        selectedClassTeacher(localStorage.getItem("userId"),"1","5").then((res) => {  
-          if(res.data.data!==null){
-            this.setState({
-              loading:false,
-              contentList : res.data.data,
-              loading:false
-            })
-          }else{
-            this.setState({
-              loading:false
-            })
-          } 
-        },() => {
-          notification.success({
-              description : '请求超时或服务器异常,请检查网络或联系管理员!',
-              message : '警告',
-              placement:'bottomRight'
-            })  
-        }) 
-        if(localStorage.hasOwnProperty("teachclass")){
-            this.setState({
-              btntext:"取消选择"
-            })
-        }
+        selectedClassTeacher(localStorage.getItem("userId"),currentPage,"5").then(
+            (res) => {
+                if(res.data.data!==0){
+                    this.setState({
+                    contentList : res.data.data,
+                    loading:false
+                })
+                }
+                console.log(res);
+            },
+            (err) => {
+                this.setState({ loading: false })
+                notification.open({
+                    message: '警告',
+                    placement: "bottomRight",
+                    description:  '请求超时或服务器异常,请检查网络或联系管理员!',
+                });
+            }
+        )
     }
     handleIntoClass = (text,record) => {
       //存teachclass
@@ -115,14 +106,6 @@ class StuClass extends React.Component{
       //重新刷新页面
       window.location.reload()
       this.props.handleDisTeach();
-    }
-
-    handleClick = () => {
-      if(this.state.btntext === "退出登录"){
-        this.props.handleExit();
-      }else if(this.state.btntext === "取消选择"){
-        this.props.handleDisTeach();
-      }
     }
 
 }
