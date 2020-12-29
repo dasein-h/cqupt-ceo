@@ -27,7 +27,7 @@ class AddClass extends Component{
                 hideOnSinglePage: true,
                 onChange: (page, pageSize) => {
                 console.log(this.changePage);
-                this.changePage(this.props.teacherId,page);
+                this.changePage(page);
                 this.state.pagination.current = page
             }
             }  
@@ -58,23 +58,23 @@ class AddClass extends Component{
         )
     }
     componentDidMount(){
-        console.log(this.props);
-        this.changePage(localStorage.getItem("teachclass"),1);
+        this.changePage(1);
     }
-    changePage = (teacherId,currentPage) => {
+    changePage = (currentPage) => {
         this.setState({
             loading:true
         })
-        unSelectedClassTeacher(teacherId,currentPage).then(
+        unSelectedClassTeacher(localStorage.getItem("teachclass"),currentPage).then(
             (res) => {
                 if(res.data.data!==0){
+                    let pagination = {...this.state.pagination};
+                    pagination.total = parseInt(res.data.page) * parseInt(pagination.pageSize);
                     this.setState({
                     dataSource: res.data.data,
-                    loading:false
+                    loading:false,
+                    pagination
                 })
-                }
-                
-                console.log(res);
+            }
             },
             (err) => {
                 this.setState({ loading: false })
@@ -85,6 +85,7 @@ class AddClass extends Component{
                     '请求超时或服务器异常,请检查网络或联系管理员!',
                 });
             }
+            
         )
     }
     selectRow = (record) => {
