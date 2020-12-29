@@ -15,13 +15,14 @@ import SetCom from './Set'
 import StuClass from './StuClass';
 import Download from './Download';
 import '../../teacher/style/contentNav.css';
-import {  Menu,Button,message,Modal } from 'antd';
+import {  Menu,Button,message,Modal,notification } from 'antd';
 import LoginApi from '../../../until/api/LoginApi'
 import {
     UserOutlined, VideoCameraOutlined,
     EditOutlined, OrderedListOutlined, CarryOutOutlined,
     FolderOpenOutlined,SettingOutlined,BarsOutlined 
 } from '@ant-design/icons';
+import changeNav from "../../../until/changeNav";
 
 class Teacher extends Component { 
     constructor(props) {
@@ -55,27 +56,27 @@ class Teacher extends Component {
                                     onClick = {this.handleExit}
                                 >退出登录</Button>
                             </div>
-                            <Menu theme="light" mode="inline">
+                            <Menu theme="light" mode="inline" defaultSelectedKeys={[sessionStorage.getItem("count1")||"1"]}>
                                 <Menu.Item key="1" icon={<UserOutlined />}>
-                                    <Link to="/Teacher/StuInfo">学生信息</Link>
+                                    <Link to="/Teacher/StuInfo"  onClick={changeNav.bind(this,1,1)}>学生信息</Link>
                                 </Menu.Item>
                                 <Menu.Item key="2" icon={<BarsOutlined />}>
-                                    <Link to="/Teacher/ComInfo">公司情况</Link> 
+                                    <Link to="/Teacher/ComInfo"  onClick={changeNav.bind(this,1,2)}>公司情况</Link> 
                                 </Menu.Item>
                                 <Menu.Item key="3" icon={<EditOutlined />}>
-                                    <Link to="/Teacher/VotSit">投票情况</Link> 
+                                    <Link to="/Teacher/VotSit"  onClick={changeNav.bind(this,1,3)}>投票情况</Link> 
                                 </Menu.Item>
                                 <Menu.Item key="4" icon={<OrderedListOutlined />}>
-                                    <Link to="/Teacher/News">消息</Link> 
+                                    <Link to="/Teacher/News"  onClick={changeNav.bind(this,1,4)}>消息</Link> 
                                 </Menu.Item>
                                 <Menu.Item key="5" icon={<CarryOutOutlined />}>
-                                    <Link to="/Teacher/Sign">签到</Link> 
+                                    <Link to="/Teacher/Sign"  onClick={changeNav.bind(this,1,5)}>签到</Link> 
                                 </Menu.Item>
                                 <Menu.Item key="6" icon={<SettingOutlined />}>
-                                    <Link to="/Teacher/Set">修改配置</Link> 
+                                    <Link to="/Teacher/Set"  onClick={changeNav.bind(this,1,6)}>修改配置</Link> 
                                 </Menu.Item>
                                 <Menu.Item key="7" icon={<FolderOpenOutlined />}>
-                                    <Link to="/Teacher/Download">查看上传文件</Link> 
+                                    <Link to="/Teacher/Download"  onClick={changeNav.bind(this,1,7)}>查看上传文件</Link> 
                                 </Menu.Item>
                             </Menu>
                             
@@ -110,6 +111,7 @@ class Teacher extends Component {
                                     <Route path="/Teacher/Download">
                                         <Download />  
                                     </Route>
+                                    <Redirect from="/Teacher" to="/Teacher/StuInfo"></Redirect>
                                 </Switch>
                             </div> 
                     </div>
@@ -145,10 +147,8 @@ class Teacher extends Component {
         this.setState({
             userid: userId,
             username:userName
-        },()=>{
-            // this.isLogin()
         })
-        
+        //判断弹框
         if(localStorage.hasOwnProperty("teachclass")){
             this.handleDisTeach();
         }else{
@@ -157,6 +157,7 @@ class Teacher extends Component {
                 isMask:true
             })
         }
+        //简单的拦截
         if(localStorage.hasOwnProperty("userId") && localStorage.getItem("type")==="admin") {
             this.props.history.push('/Manager');
         }
@@ -165,13 +166,11 @@ class Teacher extends Component {
             this.props.history.push('/Student/AllCompanies/ChosenClasses');
         }
     }
-    
+    //modal隐藏
     handleDisTeach = () => {
         this.setState({
             isModalVisible:false,
             isMask:false
-        },() => {
-            console.log(this.state.isMask);
         })
     }
     //退出登录
@@ -181,34 +180,24 @@ class Teacher extends Component {
                 console.log(res);
                 if(res.data.flag){
                     message.success("退出成功",1);
+                    //退出后将localstorage清空
                     localStorage.clear();
                     this.props.history.push('/Student/AllCompanies/ChosenClasses');
                 }else{
-                    message.info("退出失败，请重新登录",1)
+                    message.info("退出失败",1)
                 }
             },
             (err) => {
-                console.log(err);
+                 notification.open({
+                    message: '警告',
+                    placement: "bottomRight",
+                    description:
+                    '请求超时或服务器异常,请检查网络或联系管理员!',
+                });
             }
         )
-    }
-    // isLogin = () => {
-    //     setInterval(() => {
-    //         LoginApi.KeepLogin(this.state.userid).then(
-    //         (res) => {
-    //             console.log(1);
-    //             console.log(res);
-    //             if(!res.data.flag){
-    //                 this.props.history.push('/Student/AllCompanies/ChosenClasses');
-    //             }
-    //         },
-    //         (err) => {
-    //             console.log(err);
-    //         }
-    //     )
-    //     },300000);
-        
-
+    }   
+    //更加班级按钮点击后调用 修改按钮内容
     changeClass = () => {
         this.setState({
             isModalVisible:true,
@@ -216,6 +205,7 @@ class Teacher extends Component {
             btntext:"取消选择"
         })
     }
+    //不同按钮内容调用不同的方法
     handleClick = () => {
       if(this.state.btntext === "退出登录"){
         this.handleExit();
