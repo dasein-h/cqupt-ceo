@@ -122,9 +122,9 @@ function rejectChange(ceo,companyName) {
   })
 }
 /*删除公司*/
-function deleteCompany(ceo,companyName) {
+function deleteCompany(ceo,companyName,teachclass) {
   return Service.post('/teacher/deletecompany', {
-    ceo,companyName
+    ceo,companyName,teachclass
   })
 }
 

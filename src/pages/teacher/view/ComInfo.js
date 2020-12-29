@@ -10,7 +10,7 @@ import { ShowComInfo, putScore,deleteCompany,ShowComMember,ChoseCompany } from '
 class ComInfo extends Component { 
   constructor(props) { 
       super(props);
-      this.handleDelete = this.handleDelete.bind(this);
+      // this.handleDelete = this.handleDelete.bind(this);
       this.expandedRowRender = this.expandedRowRender.bind(this);
       this.onExpand = this.onExpand.bind(this);
       this.textInput = React.createRef();
@@ -47,6 +47,12 @@ class ComInfo extends Component {
             key:'level'
           },
           {
+
+            title: '得分',
+            dataIndex: 'ShowScore',
+            // width: '20%'
+          },
+          {
             title: '老师打分',
             dataIndex: 'scoreTeacher',
             key: 'scoreTeacher',
@@ -55,7 +61,7 @@ class ComInfo extends Component {
              
               return (
                 <Fragment>
-                  <CustomTextInput ref={this.textInput} txt={text} record={ record}/>      
+                  <CustomTextInput parent={ this} ref={this.textInput} txt={text} record={ record}/>      
                 </Fragment>
 
               )
@@ -71,7 +77,7 @@ class ComInfo extends Component {
              
               return (
                 <Fragment>
-                  <AddStudent ref={this.textInput} txt={text} record={ record}/>      
+                  <AddStudent parent={ this} ref={this.textInput} txt={text} record={ record}/>      
                 </Fragment>
 
               )
@@ -112,30 +118,32 @@ class ComInfo extends Component {
         data:msg
     })
 }
-  handleDelete = (key,ceo,companyName) => {
-    const dataSource = [...this.state.data];
-    // console.log(ceo);
-    let res = deleteCompany(ceo,companyName);
-    res.then(
-      (result) => { 
-        console.log(result);
-        if (result.data.flag == true) { 
-          this.setState({
-            data: dataSource.filter((item) => item.key !== key),
-          });
-          message.success('删除成功！');
-        }
-        else {
-          message.error('删除失败！');
-        }
-      },
-      (err) => { 
-        console.log(err);
-        message.warning("请求超时或服务器异常，请检查网络或联系管理员!");
-      }
-    )
+  // handleDelete = (key,ceo,companyName) => {
+  //   const dataSource = [...this.state.data];
+  //   // console.log(ceo);
+  //   let res = deleteCompany(ceo,companyName,localStorage.teachclass);
+  //   res.then(
+  //     (result) => { 
+  //       console.log(result);
+  //       if (result.data.flag == true) { 
+  //         this.setState({
+  //           data: dataSource.filter((item) => item.key !== key),
+  //         });
+  //         message.success('删除成功！');
+  //       }
+  //       else {
+  //         message.error('删除失败！');
+  //       }
+  //     },
+  //     (err) => { 
+  //       console.log(err);
+  //       message.warning("请求超时或服务器异常，请检查网络或联系管理员!");
+  //     }
+  //   )
 
-  };
+  // };
+
+
   IsPagination = (record) => { 
     if (this.state.expandedData[record.comName] > 10) {
       return true
@@ -215,7 +223,12 @@ class ComInfo extends Component {
         (result) => {
           let mydata = [];
           for (let i in result.data.data) {
-            
+            if (result.data.data[i].position == null || result.data.data[i].position === undefined ||
+              result.data.data[i].position == 'null') { 
+              console.log("有null!!!!");
+              result.data.data[i].position = '';
+              
+            }
             mydata.push({
               key: i,
               'studentId': result.data.data[i].studentId,
@@ -224,9 +237,10 @@ class ComInfo extends Component {
               'position': result.data.data[i].position,
               'academy': result.data.data[i].academy
             })
-            if (result.data.data[i].position == 'null') { 
-              mydata.companyName = '无';
-            }
+            
+            // if (result.data.data[i].position == null || result.data.data[i].position === undefined) { 
+            //   mydata.position = '';
+            // }
           }
           
           this.setState({
@@ -259,6 +273,86 @@ class ComInfo extends Component {
 
 
     }
+  }
+  changeScore() { 
+    this.setState({
+        
+      data: [],
+      pagination: {
+        total:20,
+        pageSize: 10,
+        hideOnSinglePage:false
+        },
+      loading: true,
+    })
+    let res = ShowComInfo(localStorage.teachclass);
+    let mydata=[];
+    res.then(
+      (result) => { 
+        // console.log(result);
+        if (result.data.data == undefined) {
+          this.setState({
+            data: [],
+            
+            loading: false,
+            
+          })
+        }
+        else { 
+          let newData = [];
+          for (let j = 0; j < result.data.data["totalNumber"];j++) { 
+            newData.push(false);
+          }
+          for (let i in result.data.data["object"]) { 
+            mydata.push({
+              key:i,
+              // "companyID": result.data.data["object"][i]["companyID"],
+              "comName": result.data.data["object"][i]["companyName"],
+              "ceoID":result.data.data["object"][i]["ceo"],
+              "ceoname":result.data.data["object"][i]["ceoName"],
+              "companyScore":result.data.data["object"][i]["companyScore"],
+              "count":result.data.data["object"][i]["count"],
+              "level": result.data.data["object"][i]["level"],
+              "ShowScore":result.data.data["object"][i]["scoreTeacher"],
+              "scoreTeacher":result.data.data["object"][i]["scoreTeacher"],
+            })
+
+
+          }
+          if (result.data.data["object"].length > result.data.data["pageSize"]) {
+            this.setState({
+              data: mydata,
+              pagination: {
+                total: result.data.data["totalNumber"],
+                pageSize: result.data.data["pageSize"],
+                hideOnSinglePage:false
+              },
+              loading: false,
+              
+            })
+          }
+          else { 
+            this.setState({
+              data: mydata,
+              pagination: {
+                total: result.data.data["totalNumber"],
+                pageSize: result.data.data["pageSize"],
+                hideOnSinglePage:true
+              },
+              loading: false,
+              
+            })
+          }
+                
+        }
+        
+        // console.log(this.state);
+      },
+      (err) => { 
+        message.warning("请求超时或服务器异常，请检查网络或联系管理员!");
+        console.log(err);
+      }
+  )
   }
     // 表格
   componentDidMount() {
@@ -300,7 +394,8 @@ class ComInfo extends Component {
                 "ceoname":result.data.data["object"][i]["ceoName"],
                 "companyScore":result.data.data["object"][i]["companyScore"],
                 "count":result.data.data["object"][i]["count"],
-                "level":result.data.data["object"][i]["level"],
+                "level": result.data.data["object"][i]["level"],
+                "ShowScore":result.data.data["object"][i]["scoreTeacher"],
                 "scoreTeacher":result.data.data["object"][i]["scoreTeacher"],
               })
   
@@ -398,37 +493,13 @@ class DelPop extends React.Component {
       })
   }
 
-  // handleDelete = (key,ceo,companyName) => {
-  //   const dataSource = [...this.state.data];
-  //   // console.log(ceo);
-  //   let res = deleteCompany(ceo,companyName);
-  //   res.then(
-  //     (result) => { 
-  //       console.log(result);
-  //       if (result.data.flag == true) { 
-  //         this.setState({
-  //           data: dataSource.filter((item) => item.key !== key),
-  //         });
-  //         message.success('删除成功！');
-  //       }
-  //       else {
-  //         message.error('删除失败！');
-  //       }
-  //     },
-  //     (err) => { 
-  //       console.log(err);
-  //       message.warning("请求超时或服务器异常，请检查网络或联系管理员!");
-  //     }
-  //   )
-
-  // };
-
   handleDelete = () => {
       const dataSource = [...this.props.parent.state.data];
       const key = this.props.record.key;
       const ceo = this.props.record.ceoID;
-      const companyName = this.props.record.companyName;
-      let res = deleteCompany(ceo,companyName);
+      const companyName = this.props.record.comName;
+      console.log(companyName);
+      let res = deleteCompany(ceo,companyName,localStorage.teachclass);
       res.then(
         (result) => { 
           console.log(result);
@@ -484,43 +555,98 @@ class DelPop extends React.Component {
   }
 }
 
-
 // 子组件
-class CustomTextInput extends React.Component {
-  constructor(props) {
-    super(props);
-    this.textInput = React.createRef();
-    this.focusTextInput = this.focusTextInput.bind(this);
-    this.handleInput = this.handleInput.bind(this);
-    this.state = {
-      inputValue: this.props.txt,
-      record:this.props.record
-    }
+class CustomTextInput extends React.Component { 
+  constructor(props) { 
+      super(props);
+      this.showModal = this.showModal.bind(this);
+      this.handleCancel = this.handleCancel.bind(this);
+      this.textInput = React.createRef();
+      this.focusTextInput = this.focusTextInput.bind(this);
+      this.handleInput = this.handleInput.bind(this);
+      this.state = {
+          loading: false,
+          visible: false,
+          inputValue: this.props.txt,
+          record:this.props.record
+      }        
   }
 
-  focusTextInput() {
-    let ceo=this.state.record.ceoID;
-    let scoreTeacher = this.textInput.current.value;
-    console.log(ceo);
-    let res = putScore(ceo, scoreTeacher);
-    res.then(
-      (result) => { 
-        console.log(result);
-        if (result.data.error) {
-          message.error('修改失败！');
-        }
-        else { 
-          message.success('修改成功！');
-        }
+  showModal = () => { 
+      this.setState({
+          visible:true
+      })
+  }
+
+  // handleDelete = (key,ceo,companyName) => {
+  //   const dataSource = [...this.state.data];
+  //   // console.log(ceo);
+  //   let res = deleteCompany(ceo,companyName);
+  //   res.then(
+  //     (result) => { 
+  //       console.log(result);
+  //       if (result.data.flag == true) { 
+  //         this.setState({
+  //           data: dataSource.filter((item) => item.key !== key),
+  //         });
+  //         message.success('删除成功！');
+  //       }
+  //       else {
+  //         message.error('删除失败！');
+  //       }
+  //     },
+  //     (err) => { 
+  //       console.log(err);
+  //       message.warning("请求超时或服务器异常，请检查网络或联系管理员!");
+  //     }
+  //   )
+
+  // };
+
+  
+  handleCancel = () => {
+      this.setState({ visible: false });
+  };
+
+  focusTextInput(e) {
+    console.log(e.target.value);
+    if (e.target.value == '修改') {
+      e.target.value = '保存';
+      e.target.readOnly = false;
+    }
+    else { 
+      e.target.value = '修改';
+      let ceo=this.state.record.ceoID;
+      let scoreTeacher = this.textInput.current.value;
+      console.log(ceo);
+      let res = putScore(ceo, scoreTeacher);
+      res.then(
+        (result) => { 
+          console.log(result);
+          if (result.data.error) {
+            message.error('修改失败！');
+            
+          }
+          else { 
+            message.success('修改成功！');
+            
+          }
+          
+          
+          
+        },
+        (err) => { 
+          console.log(err);
+          message.warning("请求超时或服务器异常，请检查网络或联系管理员!");
+         
+          }
+      ).then(() => { 
         
-        
-        
-      },
-      (err) => { 
-        console.log(err);
-        message.warning("请求超时或服务器异常，请检查网络或联系管理员!");
-        }
-      )
+        this.handleCancel();
+        this.props.parent.changeScore();
+      })
+    }
+    
     
   }
 
@@ -530,26 +656,133 @@ class CustomTextInput extends React.Component {
       inputValue:value
     })
   }
-  render() {
-    return (
-      <div className="Inp-Sco-div">
-        <input
-          className='InpSco'
-          type="text"
-          ref={this.textInput}
-          value={this.state.inputValue}
-          onChange={this.handleInput}
-        />
-        <input
-          className='InpBut'
-          type="button"
-          value="保存"
-          onClick={this.focusTextInput}
-        />
-      </div>
-    );
+
+
+  render(){ 
+      const { visible, loading } = this.state;
+      return (
+          <>
+          <a onClick={ this.showModal}>打分</a>
+          <Modal
+          width="15vw"
+          visible={visible}
+          title=""
+          onOk={this.handleDelete}
+          onCancel={this.handleCancel}
+          footer={[
+              <Button key="back" onClick={this.handleCancel}>
+              取消
+              </Button>,
+              <Button key="submit" type="primary" loading={loading} onClick={this.focusTextInput}>
+              确定
+              </Button>,
+          ]}
+          >
+            
+            <div className="Inp-Sco-div">
+                <input
+                  className='InpSco'
+                  type="text"
+                  ref={this.textInput}
+                  value={this.state.inputValue}
+                  onChange={this.handleInput}
+                />
+                {/* <a onClick={this.focusTextInput} className='InBut'>保存</a> */}
+                {/* <input
+                  className='InpBut'
+                  type="button"
+                  value="修改"
+                  onClick={this.focusTextInput}
+                /> */}
+              </div>
+                  
+          </Modal>
+      </>
+          );
   }
 }
+
+
+
+// 子组件
+// class CustomTextInput extends React.Component {
+//   constructor(props) {
+//     super(props);
+//     this.textInput = React.createRef();
+//     this.focusTextInput = this.focusTextInput.bind(this);
+//     this.handleInput = this.handleInput.bind(this);
+//     this.state = {
+//       inputValue: this.props.txt,
+//       record:this.props.record
+//     }
+//   }
+
+//   focusTextInput(e) {
+//     console.log(e.target.value);
+//     if (e.target.value == '修改') {
+//       e.target.value = '保存';
+//       e.target.readOnly = false;
+//     }
+//     else { 
+//       e.target.value = '修改';
+//       let ceo=this.state.record.ceoID;
+//       let scoreTeacher = this.textInput.current.value;
+//       console.log(ceo);
+//       let res = putScore(ceo, scoreTeacher);
+//       res.then(
+//         (result) => { 
+//           console.log(result);
+//           if (result.data.error) {
+//             message.error('修改失败！');
+//           }
+//           else { 
+//             message.success('修改成功！');
+//           }
+          
+          
+          
+//         },
+//         (err) => { 
+//           console.log(err);
+//           message.warning("请求超时或服务器异常，请检查网络或联系管理员!");
+//           }
+//         )
+//     }
+    
+    
+//   }
+
+//   handleInput(e) { 
+//     let value = e.target.value;
+//     this.setState({
+//       inputValue:value
+//     })
+//   }
+//   render() {
+//     return (
+//       <div className="Inp-Sco-div">
+//         <input
+//           className='InpSco'
+//           type="text"
+//           ref={this.textInput}
+//           value={this.state.inputValue}
+//           onChange={this.handleInput}
+//           readOnly={ false}
+//         />
+//         {/* <a onClick={this.focusTextInput} className='InBut'>保存</a> */}
+//         <input
+//           className='InpBut'
+//           type="button"
+//           value="修改"
+//           onClick={this.focusTextInput}
+//         />
+//       </div>
+//     );
+//   }
+// }
+
+
+
 
 
 // 子组件
@@ -602,7 +835,9 @@ class AddStudent extends React.Component {
         message.warning(err.data.message);
         this.setState({ loading: false, visible: false });
         }
-      )
+    ).then(() => { 
+      this.props.parent.onExpand(true, this.state.record);
+    })
 
     
 

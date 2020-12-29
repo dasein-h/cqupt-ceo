@@ -72,9 +72,10 @@ class StuInfo extends Component {
       this.setState({loading:false});
       let rs = JSON.parse(res.data);
       let companyName
-      for(let i = 0;i<rs.length;i++){
-        if(rs[i].companyName === undefined || rs[i].companyName == "null")
-          companyName = "无"
+      for (let i = 0; i < rs.length; i++){
+        
+        if(rs[i].companyName === undefined|| rs[i].companyName == "null")
+          companyName = ""
         else companyName = rs[i].companyName
         lists.push({
           "name":rs[i].userName,
