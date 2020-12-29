@@ -15,7 +15,7 @@ import SetCom from './Set'
 import StuClass from './StuClass';
 import Download from './Download';
 import '../../teacher/style/contentNav.css';
-import {  Menu,Button,message } from 'antd';
+import {  Menu,Button,message,Modal } from 'antd';
 import LoginApi from '../../../until/api/LoginApi'
 import {
     UserOutlined, VideoCameraOutlined,
@@ -29,12 +29,16 @@ class Teacher extends Component {
         
         this.state = {
             userid:" ",
-            username:""
+            username:"",
+            isModalVisible:false,
+            isMask:false,
+            btntext:"退出登录"
           }
         this.handleDisTeach = this.handleDisTeach.bind(this);
         this.handleExit = this.handleExit.bind(this);
         // this.isLogin = this.isLogin.bind(this);
         this.changeClass = this.changeClass.bind(this);
+        this.handleClick = this.handleClick.bind(this);
     }
     render() {
         return (
@@ -110,14 +114,26 @@ class Teacher extends Component {
                             </div> 
                     </div>
                 </Router>
-                    <div className="teachbackground">
-                        <div className="chooseteachClass">
+                        <Modal 
+                            visible={this.state.isModalVisible}
+                            width={800}
+                            centered
+                            footer={[
+                                <Button
+                                type="primary" 
+                                ghost size="middle"
+                                onClick = {this.handleClick}
+                                >{this.state.btntext}</Button>
+                            ]}
+                            closable={false}
+                            okType={null}
+                            mask={this.state.isMask}
+                            maskClosable={false}>
                             <StuClass 
                                 handleDisTeach = {()=>{this.handleDisTeach()}}
                                 handleExit = {()=>{this.handleExit()}}
                             />
-                        </div>
-                    </div>
+                        </Modal>
                 
             </div>
         )
@@ -135,6 +151,11 @@ class Teacher extends Component {
         
         if(localStorage.hasOwnProperty("teachclass")){
             this.handleDisTeach();
+        }else{
+            this.setState({
+                isModalVisible:true,
+                isMask:true
+            })
         }
         if(localStorage.hasOwnProperty("userId") && localStorage.getItem("type")==="admin") {
             this.props.history.push('/Manager');
@@ -146,7 +167,12 @@ class Teacher extends Component {
     }
     
     handleDisTeach = () => {
-        document.querySelector('.teachbackground').style.display = 'none';
+        this.setState({
+            isModalVisible:false,
+            isMask:false
+        },() => {
+            console.log(this.state.isMask);
+        })
     }
     //退出登录
     handleExit = () => {
@@ -182,9 +208,20 @@ class Teacher extends Component {
     //     )
     //     },300000);
         
-    // }
+
     changeClass = () => {
-        document.querySelector('.teachbackground').style.display = 'block';
+        this.setState({
+            isModalVisible:true,
+            isMask:true,
+            btntext:"取消选择"
+        })
+    }
+    handleClick = () => {
+      if(this.state.btntext === "退出登录"){
+        this.handleExit();
+      }else if(this.state.btntext === "取消选择"){
+        this.handleDisTeach();
+      }
     }
 }
 

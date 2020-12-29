@@ -23,14 +23,14 @@ class DeleteClass extends Component{
                 showSizeChanger:false,
                 defaultCurrent:1,
                 current: 1,
-                pageSize: 5,
+                pageSize: 7,
                 total:'',
                 hideOnSinglePage: true,
                 onChange: (page, pageSize) => {
-                console.log(this.changePage);
-                this.changePage(this.props.teacherId,page);
-                this.state.pagination.current = page
-            }
+                    console.log(this.changePage);
+                    this.changePage(this.props.teacherId,page);
+                    this.state.pagination.current = page
+                }
             }  
         }
         this.changePage = this.changePage.bind(this);
@@ -66,7 +66,7 @@ class DeleteClass extends Component{
         this.setState({
             loading:true
         })
-        selectedClassTeacher(teacherId,currentPage,"5").then(
+        selectedClassTeacher(teacherId,currentPage,"7").then(
             (res) => {
                 if(res.data.data!==0){
                     this.setState({
