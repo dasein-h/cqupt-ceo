@@ -181,10 +181,6 @@ class newLists extends React.Component {
     // }
     changeCompanyName(this.state.teachclass, newPage, "1").then(
       res => {
-        if(!res.data.flag && res.data.message === "没有登录，请先登录"){
-          localStorage.clear();
-          this.props.history.push('/Student/AllCompanies/ChosenClasses');
-        }
         this.setState({ loading: false })
         let rs = JSON.parse(res.data);
         if (rs.length === 0) {

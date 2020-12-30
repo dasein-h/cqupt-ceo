@@ -15,7 +15,8 @@ import SetCom from './Set'
 import StuClass from './StuClass';
 import Download from './Download';
 import '../../teacher/style/contentNav.css';
-import {  Menu,Button,message,Modal,notification } from 'antd';
+import '../../../static/style/style.scss';
+import {  Menu,Button,message,Modal,notification,Layout } from 'antd';
 import LoginApi from '../../../until/api/LoginApi'
 import {
     UserOutlined, VideoCameraOutlined,
@@ -23,6 +24,9 @@ import {
     FolderOpenOutlined,SettingOutlined,BarsOutlined 
 } from '@ant-design/icons';
 import changeNav from "../../../until/changeNav";
+
+const { Header, Content, Footer, Sider } = Layout;
+
 
 class Teacher extends Component { 
     constructor(props) {
@@ -46,15 +50,6 @@ class Teacher extends Component {
                 <Router>
                     <div id="All">
                         <div className="nav-div">
-                            <div className="login">
-                                <span >欢迎您,{this.state.username}</span>
-                                <Button 
-                                    type="primary" 
-                                    ghost size="small" 
-                                    style={{marginLeft:'15px'}}
-                                    onClick = {this.handleExit}
-                                >退出登录</Button>
-                            </div>
                             <Menu theme="light" mode="inline" defaultSelectedKeys={[sessionStorage.getItem("count1")||"1"]}>
                                 <Menu.Item key="1" icon={<UserOutlined />}>
                                     <Link to="/Teacher/StuInfo"  onClick={changeNav.bind(this,1,1)}>学生信息</Link>
@@ -78,41 +73,55 @@ class Teacher extends Component {
                                     <Link to="/Teacher/Download"  onClick={changeNav.bind(this,1,7)}>查看宣讲文件</Link> 
                                 </Menu.Item>
                             </Menu>
-                            
-                            <Button 
-                                    type="primary" 
-                                    ghost size="middle" 
-                                    style={{width:"180px",marginTop:"20px"}}
-                                    onClick={this.changeClass}
-                                >更改班级</Button>
+                        
                         </div>
 
-                                <div className="content">
-                                <Switch>
-                                    <Route exact path="/Teacher/StuInfo">
-                                        <StuInfo/>
-                                    </Route>
-                                    <Route path="/Teacher/ComInfo">
-                                        <ComInfo/>
-                                    </Route>
-                                    <Route path="/Teacher/VotSit">
-                                        <VotSit/>
-                                    </Route>
-                                    <Route path="/Teacher/News">
-                                        <NewsCom/>  
-                                    </Route> 
-                                    <Route path="/Teacher/Sign">
-                                        <SignCom />  
-                                    </Route>
-                                    <Route path="/Teacher/Set">
-                                        <SetCom />
-                                    </Route>
-                                    <Route path="/Teacher/Download">
-                                        <Download />  
-                                    </Route>
-                                    <Redirect from="/Teacher" to="/Teacher/StuInfo"></Redirect>
-                                </Switch>
-                            </div> 
+                                <div className="teachcontent">
+                                    <Layout>
+                                        <Header className="site-layout-background" style={{ padding: 0 }}>
+                                            <span style={{marginLeft:"10px"}}>仿真辅助系统</span>
+                                            <span style={{float:"right"}}>
+                                            <span >欢迎你，{localStorage.getItem("userName")}</span>
+                                            <Button type="primary"  onClick={this.changeClass} style={{marginLeft:"10px",marginRight:"10px"}}
+                                            >更改班级</Button>
+                                            <Button className="exit" type="primary" onClick = {this.handleExit}>
+                                                退出登陆</Button>
+                                            </span>
+                                            
+                                        </Header>
+                                        <Content  style={{ margin: '24px 16px 0', overflow: 'initial' }}>
+                                            <div className="site-layout-background" style={{ padding: 24, textAlign: 'center', borderRadius: 10 }}>
+
+                                            <Switch>
+                                                <Route exact path="/Teacher/StuInfo">
+                                                    <StuInfo/>
+                                                </Route>
+                                                <Route path="/Teacher/ComInfo">
+                                                    <ComInfo/>
+                                                </Route>
+                                                <Route path="/Teacher/VotSit">
+                                                    <VotSit/>
+                                                </Route>
+                                                <Route path="/Teacher/News">
+                                                    <NewsCom/>  
+                                                </Route> 
+                                                <Route path="/Teacher/Sign">
+                                                    <SignCom />  
+                                                </Route>
+                                                <Route path="/Teacher/Set">
+                                                    <SetCom />
+                                                </Route>
+                                                <Route path="/Teacher/Download">
+                                                    <Download />  
+                                                </Route>
+                                                <Redirect from="/Teacher" to="/Teacher/StuInfo"></Redirect>
+                                            </Switch>
+                                            </div>
+                                        </Content>
+                                        <Footer style={{ textAlign: 'center' }}>版权所有 极客工作室</Footer>
+                                    </Layout>
+                                
+                                </div> 
                     </div>
                 </Router>
                         <Modal 
@@ -174,12 +183,8 @@ class Teacher extends Component {
     }
     //退出登录
     handleExit = () => {
-        LoginApi.Exit(this.state.userid).then(
+        LoginApi.Exit().then(
             (res) => {
-                if(!res.data.flag && res.data.message === "没有登录，请先登录"){
-                    localStorage.clear();
-                    this.props.history.push('/Student/AllCompanies/ChosenClasses');
-                  }
                 if(res.data.flag){
                     message.success("退出成功",1);
                     //退出后将localstorage清空

@@ -9,10 +9,14 @@ import {
 import ChoseClass from './view/ChoseClass'
 import ImData from './view/ImData'
 import './style/Nav.css';
-import {  Menu,Button,message,notification } from 'antd';
+import {  Menu,Button,message,notification,Layout } from 'antd';
 import LoginApi from '../../until/api/LoginApi'
 import { UserOutlined, VideoCameraOutlined, EditOutlined, OrderedListOutlined } from '@ant-design/icons';
 import changeNav from '../../until/changeNav' ;
+import '../../static/style/style.scss';
+
+const { Header, Content, Footer, Sider } = Layout;
+
 
 class Manager extends Component { 
     constructor(props) {
@@ -29,15 +33,6 @@ class Manager extends Component {
             <Router>
                 <div id="All">
                     <div className="nav-div">
-                        <div className="login">
-                                <span >欢迎您,{this.state.username}</span>
-                                <Button 
-                                    type="primary" 
-                                    ghost size="small" 
-                                    style={{marginLeft:'15px'}}
-                                    onClick = {this.handleExit}
-                                >退出登录</Button>
-                        </div>
                         <Menu theme="light" mode="inline" defaultSelectedKeys={[sessionStorage.getItem("count1")||"1"]}>
                             <Menu.Item key="1" icon={<UserOutlined />}>
                                 <Link to="/Manager/ChoseClass" onClick={changeNav.bind(this,1,1)}>选择班级</Link>
@@ -45,26 +40,39 @@ class Manager extends Component {
                             <Menu.Item key="2" icon={<EditOutlined />}>
                                 <Link to="/Manager/data" onClick={changeNav.bind(this,1,2)}>导入数据</Link> 
                             </Menu.Item>
-                            
-
+                        
                         </Menu>
                         
                     </div>
 
+                    <div className="teachcontent">
+                        <Layout>
+                            <Header className="site-layout-background" style={{ padding: 0 }}>
+                                <span style={{marginLeft:"10px"}}>仿真辅助系统</span>
+                                <span style={{float:"right"}}>
+                                    <span style={{marginRight:"10px"}}>欢迎你，{localStorage.getItem("userName")}</span>
+                                    <Button className="exit" type="primary" onClick = {this.handleExit}>退出登陆</Button>
+                                    </span>
+                                                
+                            </Header>
+                            <Content  style={{ margin: '24px 16px 0', overflow: 'initial' }}>
+                                <div className="site-layout-background" style={{ padding: 24, borderRadius: 10 }}>
 
-                    <div className="content">
-                        <Switch>
-                            <Route path="/Manager/ChoseClass">
-                                <ChoseClass/>
-                            </Route>
-                            
-                            <Route path="/Manager/data">
-                                <ImData/>
-                            </Route>
-                            <Redirect from="/Manager" to="/Manager/ChoseClass" />
-                        </Switch>
+                                <Switch>
+                                    <Route path="/Manager/ChoseClass">
+                                        <ChoseClass/>
+                                    </Route>
+                                                    
+                                    <Route path="/Manager/data">
+                                        <ImData/>                
+                                    </Route>
+                                        <Redirect from="/Manager" to="/Manager/ChoseClass" />
+                                </Switch>                                            
+                                </div>                
+                            </Content>
+                        <Footer style={{ textAlign: 'center' }}>版权所有 极客工作室</Footer>
+                        </Layout>                                                                                                                              
                     </div>
-                    
                 </div>
             </Router>
 
@@ -88,16 +96,20 @@ class Manager extends Component {
         }
     }
     handleExit = () => {
-        LoginApi.Exit(this.state.userid).then(
+        LoginApi.Exit().then(
             (res) => {
                 console.log(res);
                 if(res.data.flag){
                     message.success("退出成功",1);
                     localStorage.clear();
                     this.props.history.push('/Student/AllCompanies/ChosenClasses');
+                }else if(!res.data.flag && res.data.message === "没有登录，请先登录"){
+                    localStorage.clear();
+                    this.props.history.push('/Student/AllCompanies/ChosenClasses');
                 }else{
-                    message.info("退出失败，请重新登录",1)
+                    message.info("退出失败",1)
                 }
+                
             },
             (err) => {
                 notification.open({

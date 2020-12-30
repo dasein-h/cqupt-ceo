@@ -16,6 +16,7 @@ class VotSit extends Component {
           isrunvote:'',
           teachclass:'',
           loading:true,
+          btnloading:true,
           pagination:{
             showSizeChanger:false,
             defaultCurrent:1,
@@ -131,9 +132,6 @@ class VotSit extends Component {
             pagination
             })
             this.addAction(this.state.dataSource);
-          }else if(!res.data.flag && res.data.message === "没有登录，请先登录"){
-            localStorage.clear();
-            this.props.history.push('/Student/AllCompanies/ChosenClasses');
           }else{
             this.setState({
               loading:false
@@ -160,10 +158,6 @@ class VotSit extends Component {
     isRunVote = () => {
       isRunVote(this.state.teachclass).then(
         (res)=>{
-          if(!res.data.flag && res.data.message === "没有登录，请先登录"){
-          localStorage.clear();
-          this.props.history.push('/Student/AllCompanies/ChosenClasses');
-        }
           this.setState({
             isrunvote:res.data.data
           },
@@ -172,9 +166,6 @@ class VotSit extends Component {
               this.setState({
                 btuValue:"关闭投票"
               })
-            }else if(!res.data.flag && res.data.message === "没有登录，请先登录"){
-              localStorage.clear();
-              this.props.history.push('/Student/AllCompanies/ChosenClasses');
             }else{
               this.setState({
                 btuValue:"开启投票"
@@ -190,30 +181,33 @@ class VotSit extends Component {
     //开启投票\关闭投票
     handleChange = () => {
       if(this.state.isrunvote){
-        
+        this.setState({
+          btnloading:false
+        })
         closeCeo(this.state.teachclass).then(
         (res) => {
-          if(!res.data.flag && res.data.message === "没有登录，请先登录"){
-            localStorage.clear();
-            this.props.history.push('/Student/AllCompanies/ChosenClasses');
-          }
           this.setState({
             btuValue:"开启投票",
-            isrunvote:!this.state.isrunvote
+            isrunvote:!this.state.isrunvote,
+            btnloading:true
           })
           message.success("关闭成功",1)
         },
         (err) => {
-          console.log(err);
+          message.success("关闭失败，清明重试",1)
         }
       )
       }else if(!this.state.isrunvote){
+        this.setState({
+          btnloading:false
+        })
         runCeo(this.state.teachclass).then(
         (res) => {
           console.log(res);
           this.setState({
             btuValue:"关闭投票",
-            isrunvote:!this.state.isrunvote
+            isrunvote:!this.state.isrunvote,
+            btnloading:true
           })
           message.success("开启成功",1)
         },

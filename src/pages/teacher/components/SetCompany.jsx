@@ -61,10 +61,6 @@ class SetCompany extends React.Component {
     }
     componentDidMount() {
         showConfig(this.state.teachclass).then(rs => {
-            if(!rs.data.flag && rs.data.message === "没有登录，请先登录"){
-                localStorage.clear();
-                this.props.history.push('/Student/AllCompanies/ChosenClasses');
-              }
             console.log(rs);
             if (rs.data.flag === true) {
                 let res = rs.data.data
@@ -107,10 +103,6 @@ class SetCompany extends React.Component {
     }
     submit = () => {
         updateConfigCompany(this.state.title[0].value,this.state.title[1].value,this.state.title[2].value,this.state.title[3].value,this.state.title[4].value,this.state.title[5].value,this.state.title[6].value,this.state.title[7].value,this.state.teachclass).then(rs => {
-            if(!rs.data.flag && rs.data.message === "没有登录，请先登录"){
-                localStorage.clear();
-                this.props.history.push('/Student/AllCompanies/ChosenClasses');
-              }
             if (rs.data.flag === true) {
                 notification.open({
                     message: '提示',

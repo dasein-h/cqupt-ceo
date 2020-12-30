@@ -1,15 +1,8 @@
 import React, { Component, Fragment } from 'react'
-import { Table,notification } from 'antd'
+import { Table,notification,Space,Button } from 'antd'
 import {unSelectedClassTeacher} from '../../../until/api/teacherApi'
 
  
-const columns = [
-                {
-                    title: '教学班',
-                    dataIndex: 'teachclass',
-                    key: 'teachclass'
-                }
-            ]
 
 class AddClass extends Component{
     constructor(props){
@@ -29,13 +22,32 @@ class AddClass extends Component{
                 console.log(this.changePage);
                 this.changePage(page);
                 this.state.pagination.current = page
-            }
-            }  
+                }
+            },
+            columns:[
+                {
+                    title: '教学班',
+                    dataIndex: 'teachclass',
+                    key: 'teachclass'
+                },
+                {
+                    title: '操作',
+                    key: 'action',
+                    align:'center',
+                    render: (text, record) => (
+                        <Space size="middle">
+                        <Button type="primary" ghost onClick={() => {this.handleClick(text,record)}}>添加班级</Button>
+                        </Space>
+                    ),
+                }
+
+            ]  
         }
         this.changePage = this.changePage.bind(this);
         this.selectRow = this.selectRow.bind(this);
         this.onSelectedRowKeysChange = this.onSelectedRowKeysChange.bind(this);
         this.toBeList = this.toBeList.bind(this);
+        this.handleClick = this.handleClick.bind(this);
     }
     render(){
         const { selectedRowKeys } = this.state;
@@ -47,7 +59,7 @@ class AddClass extends Component{
             <Fragment>
                 <Table 
                     dataSource={this.state.dataSource} 
-                    columns={columns}  
+                    columns={this.state.columns}  
                     rowSelection={{type:"checkbox"}}
                     rowKey={record => record.teachclass}
                     rowSelection={rowSelection}
@@ -66,10 +78,6 @@ class AddClass extends Component{
         })
         unSelectedClassTeacher(localStorage.getItem("teachclass"),currentPage).then(
             (res) => {
-                if(!res.data.flag && res.data.message === "没有登录，请先登录"){
-                    localStorage.clear();
-                    this.props.history.push('/Student/AllCompanies/ChosenClasses');
-                  }
                 if(res.data.data!==0){
                     let pagination = {...this.state.pagination};
                     pagination.total = parseInt(res.data.page) * parseInt(pagination.pageSize);
@@ -107,22 +115,32 @@ class AddClass extends Component{
     onSelectedRowKeysChange = (selectedRowKeys) => {
         this.setState({ selectedRowKeys },() => {
             console.log(selectedRowKeys);
-            this.toBeList();
+            this.toBeList(selectedRowKeys);
         });
     }
-    toBeList = () => {
+    toBeList = (arr) => {
+        console.log(1);
         let dataList = [];
         let temp = {};
-        for(let i=0;i<this.state.selectedRowKeys.length;i++){
+        for(let i=0;i<arr.length;i++){
             temp.teacherId = localStorage.getItem("teachclass");
-            console.log(this.state.selectedRowKeys[i]);
-            temp.teachclass = this.state.selectedRowKeys[i];
+            console.log(arr[i]);
+            temp.teachclass = arr[i];
             dataList.push(temp);
             temp = {};
         }
         console.log(dataList);
         this.props.getTeachClassList(dataList,this);
     } 
+
+    handleClick = (text,record) => {
+        let teachlist = [];
+        let temp = {};
+        temp.teacherId = localStorage.getItem("teachclass");
+        temp.teachclass = record.teachclass;
+        teachlist.push(temp)
+        this.props.addClass(teachlist)
+    }
 }
 
 export default AddClass

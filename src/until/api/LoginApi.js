@@ -10,10 +10,8 @@ const LoginApi = {
       userId:payload
     })
   },
-  Exit: (userId) => {
-    return Service.post('/login/quituser', {
-      userId
-    })
+  Exit: () => {
+    return Service.post('/login/quituser')
   },
 }
 export default LoginApi

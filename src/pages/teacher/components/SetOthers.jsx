@@ -30,10 +30,6 @@ class SetOthers extends React.Component {
     }
     componentDidMount() {
         showConfig(this.state.teachclass).then(rs => {
-            if(!rs.data.flag && rs.data.message === "没有登录，请先登录"){
-                localStorage.clear();
-                this.props.history.push('/Student/AllCompanies/ChosenClasses');
-              }
             console.log(rs);
             if (rs.data.flag === true) {
                 let res = rs.data.data
@@ -70,10 +66,6 @@ class SetOthers extends React.Component {
     submit = () => {
         console.log(this.state.memberScore);
         updateConfigOther(this.state.title[0].value, this.state.title[1].value, this.state.title[2].value, this.state.title[3].value,this.state.teachclass).then(rs => {
-            if(!rs.data.flag && rs.data.message === "没有登录，请先登录"){
-                localStorage.clear();
-                this.props.history.push('/Student/AllCompanies/ChosenClasses');
-              }
             if (rs.data.flag === true) {
                 notification.open({
                     message: '提示',

@@ -103,10 +103,6 @@ class UnsignCom extends React.Component {
     changePage = (page) => {
         let lists = [];
         noSign(this.state.teachclass).then((res) => {
-            if(!res.data.flag && res.data.message === "没有登录，请先登录"){
-                localStorage.clear();
-                this.props.history.push('/Student/AllCompanies/ChosenClasses');
-              }
             this.setState({ loading: false });
             if (res.data.flag === false) {
                 this.setState({
@@ -174,10 +170,6 @@ class UnsignCom extends React.Component {
     }
     setOn = (record,index) => {
         setNosign(this.state.teachclass,record.id,1,0,record.time).then( rs => {
-            if(!rs.data.flag && rs.data.message === "没有登录，请先登录"){
-                localStorage.clear();
-                this.props.history.push('/Student/AllCompanies/ChosenClasses');
-              }
             if(rs.data.flag===true){
                 let data = [...this.state.data];
                 data.splice(index,1);
@@ -200,10 +192,6 @@ class UnsignCom extends React.Component {
             type = 1;
         }
         setNosign(this.state.teachclass,record.id,1,type,record.time).then( rs => {
-            if(!rs.data.flag && rs.data.message === "没有登录，请先登录"){
-                localStorage.clear();
-                this.props.history.push('/Student/AllCompanies/ChosenClasses');
-              }
             if(rs.data.flag === true){
                 let data = this.state.data;
                 console.log(data[index]);
