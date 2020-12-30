@@ -1,11 +1,11 @@
 import React, { Component, Fragment } from 'react'
 import {
-  Table, Button, message,Modal
+  Table, Button, message,Modal,InputNumber
 } from 'antd';
-import { DownOutlined } from '@ant-design/icons';
+import { DownloadOutlined } from '@ant-design/icons';
 import '../../teacher/style/ComInfo.css';
-import { ShowComInfo, putScore,deleteCompany,ShowComMember,ChoseCompany } from '../../../until/api/teacherApi';
-
+import { ShowComInfo, putScore,deleteCompany,ShowComMember,ChoseCompany,ShowComLevel } from '../../../until/api/teacherApi';
+import baseUrl from '../../../until/BaseUrl';
 // 父组件
 class ComInfo extends Component { 
   constructor(props) { 
@@ -13,7 +13,8 @@ class ComInfo extends Component {
       // this.handleDelete = this.handleDelete.bind(this);
       this.expandedRowRender = this.expandedRowRender.bind(this);
       this.onExpand = this.onExpand.bind(this);
-      this.textInput = React.createRef();
+      this.ShowCompanyLevel = this.ShowCompanyLevel.bind(this);
+      // this.textInput = React.createRef();
       this.state = {
         columns : [
           {
@@ -101,13 +102,15 @@ class ComInfo extends Component {
         ],
         pagination: {
           total:20,
-          pageSize: 10,
+          pageSize: 7,
           // onChange:this.onchange,
         },
         expandedData: {},
         loading: false,
         disabled: true,
-        expandedloading: {}
+        expandedloading: {},
+        // 是否能看公司等级
+        ComLeLoading:false
       };
 
       
@@ -225,7 +228,6 @@ class ComInfo extends Component {
           for (let i in result.data.data) {
             if (result.data.data[i].position == null || result.data.data[i].position === undefined ||
               result.data.data[i].position == 'null') { 
-              console.log("有null!!!!");
               result.data.data[i].position = '';
               
             }
@@ -354,6 +356,120 @@ class ComInfo extends Component {
       }
   )
   }
+
+  Refresh = () => { 
+    this.setState({
+        
+      data: [],
+      pagination: {
+        total:20,
+        pageSize: 10,
+        hideOnSinglePage:false
+        },
+      loading: true,
+    })
+    let res = ShowComInfo(localStorage.teachclass);
+    let mydata=[];
+    res.then(
+      (result) => { 
+        // console.log(result);
+        if (result.data.data == undefined) {
+          this.setState({
+            data: [],
+            
+            loading: false,
+            
+          })
+        }
+        else { 
+          let newData = [];
+          for (let j = 0; j < result.data.data["totalNumber"];j++) { 
+            newData.push(false);
+          }
+          for (let i in result.data.data["object"]) { 
+            mydata.push({
+              key:i,
+              // "companyID": result.data.data["object"][i]["companyID"],
+              "comName": result.data.data["object"][i]["companyName"],
+              "ceoID":result.data.data["object"][i]["ceo"],
+              "ceoname":result.data.data["object"][i]["ceoName"],
+              "companyScore":result.data.data["object"][i]["companyScore"],
+              "count":result.data.data["object"][i]["count"],
+              "level": result.data.data["object"][i]["level"],
+              "ShowScore":result.data.data["object"][i]["scoreTeacher"],
+              "scoreTeacher":result.data.data["object"][i]["scoreTeacher"],
+            })
+
+
+          }
+          // result.data.data["pageSize"]
+          if (result.data.data["object"].length > 7) {
+            this.setState({
+              data: mydata,
+              pagination: {
+                total: result.data.data["totalNumber"],
+                pageSize: 7,
+                hideOnSinglePage:false
+              },
+              loading: false,
+              
+            })
+          }
+          else { 
+            this.setState({
+              data: mydata,
+              pagination: {
+                total: result.data.data["totalNumber"],
+                pageSize:7,
+                // pageSize: result.data.data["pageSize"],
+                hideOnSinglePage:true
+              },
+              loading: false,
+              
+            })
+          }
+                
+        }
+        
+        // console.log(this.state);
+      },
+      (err) => { 
+        message.warning(err.result.message);
+        console.log(err);
+      }
+  )
+  }
+  ShowCompanyLevel=()=> { 
+
+    // console.log(localStorage.teachclass);
+    let res = ShowComLevel(localStorage.teachclass);
+    this.setState({
+      ComLeLoading:true
+    })
+    res.then(
+      (result) => { 
+
+        if (result.data.flag == true) {
+          message.success(result.data.message);
+          this.Refresh();
+        }
+        else { 
+          message.error(result.data.message);
+        }
+      },
+      (err) => { 
+        message.error('一键生成公司等级失败');
+      }
+    ).then(
+      () => { 
+
+        this.setState({
+          ComLeLoading:false
+        })
+      }
+    )
+
+  }
     // 表格
   componentDidMount() {
     
@@ -401,12 +517,13 @@ class ComInfo extends Component {
   
   
             }
-            if (result.data.data["object"].length > result.data.data["pageSize"]) {
+            // result.data.data["pageSize"]
+            if (result.data.data["object"].length > 7) {
               this.setState({
                 data: mydata,
                 pagination: {
                   total: result.data.data["totalNumber"],
-                  pageSize: result.data.data["pageSize"],
+                  pageSize: 7,
                   hideOnSinglePage:false
                 },
                 loading: false,
@@ -418,7 +535,8 @@ class ComInfo extends Component {
                 data: mydata,
                 pagination: {
                   total: result.data.data["totalNumber"],
-                  pageSize: result.data.data["pageSize"],
+                  pageSize:7,
+                  // pageSize: result.data.data["pageSize"],
                   hideOnSinglePage:true
                 },
                 loading: false,
@@ -435,18 +553,25 @@ class ComInfo extends Component {
           console.log(err);
         }
     )
-
-    
       } 
     
   
     render() { 
         return (
             <Fragment>
-            <div>
+            <div style={{display:'flex',justifyContent:'space-between'}}>
               
              
-                    <span className='title'>公司信息</span>
+                <span className='title'>公司信息</span>
+                <Button
+                icon={<DownloadOutlined />}
+                disabled={this.state.IsShowlevel}
+                type='primary'
+                onClick={this.ShowCompanyLevel}
+                loading={this.state.ComLeLoading}
+                >
+                  生成公司等级
+                </Button>
                     {/* <span className='com-search'>
                         <Input placeholder="公司名称" className="input" />
                         <Button type="primary">搜索</Button>
@@ -577,47 +702,14 @@ class CustomTextInput extends React.Component {
           visible:true
       })
   }
-
-  // handleDelete = (key,ceo,companyName) => {
-  //   const dataSource = [...this.state.data];
-  //   // console.log(ceo);
-  //   let res = deleteCompany(ceo,companyName);
-  //   res.then(
-  //     (result) => { 
-  //       console.log(result);
-  //       if (result.data.flag == true) { 
-  //         this.setState({
-  //           data: dataSource.filter((item) => item.key !== key),
-  //         });
-  //         message.success('删除成功！');
-  //       }
-  //       else {
-  //         message.error('删除失败！');
-  //       }
-  //     },
-  //     (err) => { 
-  //       console.log(err);
-  //       message.warning("请求超时或服务器异常，请检查网络或联系管理员!");
-  //     }
-  //   )
-
-  // };
-
   
   handleCancel = () => {
       this.setState({ visible: false });
   };
 
-  focusTextInput(e) {
-    console.log(e.target.value);
-    if (e.target.value == '修改') {
-      e.target.value = '保存';
-      e.target.readOnly = false;
-    }
-    else { 
-      e.target.value = '修改';
-      let ceo=this.state.record.ceoID;
-      let scoreTeacher = this.textInput.current.value;
+  focusTextInput() {
+      let ceo = this.state.record.ceoID;
+      let scoreTeacher = this.state.inputValue;
       console.log(ceo);
       let res = putScore(ceo, scoreTeacher);
       res.then(
@@ -645,15 +737,14 @@ class CustomTextInput extends React.Component {
         this.handleCancel();
         this.props.parent.changeScore();
       })
-    }
+    
     
     
   }
 
   handleInput(e) { 
-    let value = e.target.value;
     this.setState({
-      inputValue:value
+      inputValue:e
     })
   }
 
@@ -666,8 +757,7 @@ class CustomTextInput extends React.Component {
           <Modal
           width="15vw"
           visible={visible}
-          title=""
-          onOk={this.handleDelete}
+          title="老师打分"
           onCancel={this.handleCancel}
           footer={[
               <Button key="back" onClick={this.handleCancel}>
@@ -680,20 +770,14 @@ class CustomTextInput extends React.Component {
           >
             
             <div className="Inp-Sco-div">
-                <input
-                  className='InpSco'
-                  type="text"
-                  ref={this.textInput}
-                  value={this.state.inputValue}
-                  onChange={this.handleInput}
-                />
-                {/* <a onClick={this.focusTextInput} className='InBut'>保存</a> */}
-                {/* <input
-                  className='InpBut'
-                  type="button"
-                  value="修改"
-                  onClick={this.focusTextInput}
-                /> */}
+              <InputNumber
+                className='InpSco'
+                type="text"
+                value={this.state.inputValue}
+                onChange={this.handleInput}
+                min={1}
+                max={ 100}
+              />
               </div>
                   
           </Modal>
@@ -701,88 +785,6 @@ class CustomTextInput extends React.Component {
           );
   }
 }
-
-
-
-// 子组件
-// class CustomTextInput extends React.Component {
-//   constructor(props) {
-//     super(props);
-//     this.textInput = React.createRef();
-//     this.focusTextInput = this.focusTextInput.bind(this);
-//     this.handleInput = this.handleInput.bind(this);
-//     this.state = {
-//       inputValue: this.props.txt,
-//       record:this.props.record
-//     }
-//   }
-
-//   focusTextInput(e) {
-//     console.log(e.target.value);
-//     if (e.target.value == '修改') {
-//       e.target.value = '保存';
-//       e.target.readOnly = false;
-//     }
-//     else { 
-//       e.target.value = '修改';
-//       let ceo=this.state.record.ceoID;
-//       let scoreTeacher = this.textInput.current.value;
-//       console.log(ceo);
-//       let res = putScore(ceo, scoreTeacher);
-//       res.then(
-//         (result) => { 
-//           console.log(result);
-//           if (result.data.error) {
-//             message.error('修改失败！');
-//           }
-//           else { 
-//             message.success('修改成功！');
-//           }
-          
-          
-          
-//         },
-//         (err) => { 
-//           console.log(err);
-//           message.warning("请求超时或服务器异常，请检查网络或联系管理员!");
-//           }
-//         )
-//     }
-    
-    
-//   }
-
-//   handleInput(e) { 
-//     let value = e.target.value;
-//     this.setState({
-//       inputValue:value
-//     })
-//   }
-//   render() {
-//     return (
-//       <div className="Inp-Sco-div">
-//         <input
-//           className='InpSco'
-//           type="text"
-//           ref={this.textInput}
-//           value={this.state.inputValue}
-//           onChange={this.handleInput}
-//           readOnly={ false}
-//         />
-//         {/* <a onClick={this.focusTextInput} className='InBut'>保存</a> */}
-//         <input
-//           className='InpBut'
-//           type="button"
-//           value="修改"
-//           onClick={this.focusTextInput}
-//         />
-//       </div>
-//     );
-//   }
-// }
-
-
-
 
 
 // 子组件

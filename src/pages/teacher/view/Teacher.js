@@ -27,7 +27,6 @@ import changeNav from "../../../until/changeNav";
 class Teacher extends Component { 
     constructor(props) {
         super(props);
-        
         this.state = {
             userid:" ",
             username:"",
@@ -76,7 +75,7 @@ class Teacher extends Component {
                                     <Link to="/Teacher/Set"  onClick={changeNav.bind(this,1,6)}>修改配置</Link> 
                                 </Menu.Item>
                                 <Menu.Item key="7" icon={<FolderOpenOutlined />}>
-                                    <Link to="/Teacher/Download"  onClick={changeNav.bind(this,1,7)}>查看上传文件</Link> 
+                                    <Link to="/Teacher/Download"  onClick={changeNav.bind(this,1,7)}>查看宣讲文件</Link> 
                                 </Menu.Item>
                             </Menu>
                             
@@ -140,7 +139,7 @@ class Teacher extends Component {
             </div>
         )
     }
-
+    
     componentDidMount(){
         let userId = localStorage.getItem("userId");
         let userName = localStorage.getItem('userName')
@@ -177,14 +176,21 @@ class Teacher extends Component {
     handleExit = () => {
         LoginApi.Exit(this.state.userid).then(
             (res) => {
-                console.log(res);
+                if(!res.data.flag && res.data.message === "没有登录，请先登录"){
+                    localStorage.clear();
+                    this.props.history.push('/Student/AllCompanies/ChosenClasses');
+                  }
                 if(res.data.flag){
                     message.success("退出成功",1);
                     //退出后将localstorage清空
                     localStorage.clear();
                     this.props.history.push('/Student/AllCompanies/ChosenClasses');
-                }else{
-                    message.info("退出失败",1)
+                } else if (!res.data.flag && res.data.message === "没有登录，请先登录") {
+                    message.open("登录已过期",1);
+                    localStorage.clear();
+                    this.props.history.push('/Student/AllCompanies/ChosenClasses');
+                } else {
+                    message.open("请先登录",1);
                 }
             },
             (err) => {

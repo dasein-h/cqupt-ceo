@@ -83,6 +83,10 @@ class StuClass extends React.Component{
         })
         selectedClassTeacher(localStorage.getItem("userId"),currentPage,"5").then(
             (res) => {
+              if(!res.data.flag && res.data.message === "没有登录，请先登录"){
+                localStorage.clear();
+                this.props.history.push('/Student/AllCompanies/ChosenClasses');
+              }
                 if(res.data.data!==0){
                     let pagination = {...this.state.pagination};
                     pagination.total = parseInt(res.data.page) * parseInt(pagination.pageSize);

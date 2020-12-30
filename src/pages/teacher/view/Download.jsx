@@ -1,7 +1,8 @@
 import React, { Component, Fragment } from 'react';
-import { showFile,DeleteUpload,download } from '../../../until/api/teacherApi';
+import { showFile,DeleteUpload,download,voteStatus,isRunSpeakVot } from '../../../until/api/teacherApi';
 import { Table, message, Modal, Button } from 'antd';
 import baseUrl from '../../../until/BaseUrl';
+
 
 
 class DelPop extends React.Component { 
@@ -138,6 +139,8 @@ class Download extends Component {
                   },
             ],
             data: [],
+            voteValue: '开启宣讲投票',
+            isvot:'',
             loading: false,
             pagination: {
                 onChange: this.onchange,
@@ -229,11 +232,86 @@ class Download extends Component {
             }
         )
 
+        res = isRunSpeakVot(localStorage.teachclass,localStorage.userId);
+        res.then(
+            (result) => { 
+                console.log(result);
+                if (result.data.flag == true) {
+                    this.setState({
+                        voteValue: '关闭宣讲投票'
+                    })
+                }
+                else if (result.data.flag == false) { 
+                    this.setState({
+                        voteValue:'开启宣讲投票'
+                    })
+                }
+            },
+            (err) => { 
+                message.error(err.data.message);
+            }
+        )
 
+
+    }
+
+    handleVot = () => { 
+        if (this.state.voteValue == '开启宣讲投票') {
+            // console.log('开启');
+            let res = voteStatus(1, localStorage.userId, localStorage.teachclass);
+            res.then(
+                (result) => { 
+                    if (result.data.flag == true) {
+                        message.success(result.data.message);
+                        // 可能有问题
+                        this.setState({
+                            voteValue:'关闭宣讲投票'
+                        })
+                    }
+                    else { 
+                        message.error(result.data.message);
+                    }
+                },
+                (err) => { 
+                    message.error('开启失败')
+                })
+
+        }
+        else if(this.state.voteValue=='关闭宣讲投票'){ 
+            // console.log('关闭');
+            let res = voteStatus(0, localStorage.userId, localStorage.teachclass);
+            res.then(
+                (result) => { 
+                    if (result.data.flag == true) {
+                        message.success(result.data.message);
+                        // 可能有问题
+                        this.setState({
+                            voteValue:'开启宣讲投票'
+                        })
+                    }
+                    else { 
+                        message.error(result.data.message);
+                    }
+                },
+                (err) => { 
+                    message.error('关闭失败')
+                })
+
+        }
     }
     render() { 
         return (
             <Fragment>
+                <div style={{ display: 'flex',justifyContent:'space-between'}}>
+                    <span className='title'>宣讲文件</span>
+                    <Button
+                    onClick={this.handleVot}
+                    type="primary"
+                    >
+                    { this.state.voteValue}
+                    </Button>
+                </div>
+                
                 <Table
                     dataSource={this.state.data}
                     columns={this.state.columns}
