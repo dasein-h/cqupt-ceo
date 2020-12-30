@@ -126,6 +126,10 @@ class MenuClass extends Component{
         })
         ManagerApi.addClass(list).then(
             (res) => {
+                if(!res.data.flag && res.data.message === "没有登录，请先登录"){
+                    localStorage.clear();
+                    this.props.history.push('/Student/AllCompanies/ChosenClasses');
+                  }
                 if(res.data.flag){
                     message.success("添加成功",1);
                     this.setState({
@@ -145,6 +149,10 @@ class MenuClass extends Component{
         })
         ManagerApi.deleteClass(list).then(
             (res) => {
+                if(!res.data.flag && res.data.message === "没有登录，请先登录"){
+                    localStorage.clear();
+                    this.props.history.push('/Student/AllCompanies/ChosenClasses');
+                  }
                 if(res.data.flag){
                     message.success("删除成功",1);
                     this.setState({
