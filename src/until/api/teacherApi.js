@@ -130,7 +130,7 @@ function deleteCompany(ceo,companyName,teachclass) {
 
 /*撤销ceo*/
 function deleteCeo(studentId) {
-  return Service.post('/teacher/deletecompany', {
+  return Service.post('/teacher/deleteceo', {
     studentId
   })
 }
