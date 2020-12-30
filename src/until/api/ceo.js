@@ -70,7 +70,9 @@ async function changeCompanyName(ceo, companyName) {
 
 async function downloadFile(id) {
   try {
-    const res = await Service.get('/upload/download?id=' + id)
+    const res = await Service.get('/upload/download?id=' + id, {
+      responseType: 'blob'
+    })
     return res.data
   } catch (e) {
     message.warn('网络错误')
@@ -109,9 +111,9 @@ async function createCompany(studentId, companyName, type) {
   )
 }
 
-async function fetchFileList(teacherClass, currentPage) {
+async function fetchFileList(teachclass, currentPage) {
   return Service.post('/upload/showAll', {
-    teacherClass,
+    teachclass,
     currentPage
   }).then(
     res => JSON.parse(res.data),/*不知道为什么后端的data是个字符串*/

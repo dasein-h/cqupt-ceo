@@ -19,7 +19,8 @@ const fileReducer = (state, action) => {
     case 'INIT_FILE':
       return {...state, loading: true}
     case 'FETCH_OK':
-      const list = action.payload?.map((item, i) => item.key = i)
+      const list = action.payload
+      list.forEach((item, i) => item.key = i)
       return {...state, loading: false, list}
     case 'FETCH_FAIL':
       return {...state, loading: false}
@@ -63,36 +64,32 @@ const FileList = props => {
     const res = await deleteFile(id)
     console.log(res)
   }
+  console.log(state.list)
   const columns = [
     {
-      title: '文件名',
+      title: '文件',
       dataIndex: 'fileName',
-      key: 'fileName',
+      render(text, {fileName, id}) {
+        return (
+          <a onClick={downloadFile.bind(null, id)}>{fileName}</a>
+        )
+      }
     }, {
       title: '学生id',
       dataIndex: 'studentId',
-      key: 'studentId',
     }, {
       title: '班级',
       dataIndex: 'teachclass',
-      key: 'teachclass',
     }, {
-      title: '下载/删除',
+      title: '删除',
       dataIndex: 'download',
-      key: 'download',
       render(_, {studentId, id}) {
         console.log(studentId)
         return (
           <div>
-            <Confirm render={
-              (onClick, onOk) => {
-                onOk(downloadFile.bind(null, id))
-                return (<a onClick={onClick}>下载</a>)
-              }
-            }/>
             {
               studentId === userId
-                ? (<a onClick={handleDelete.bind(null, id)}>删除</a>) : null
+                ? (<a onClick={handleDelete.bind(null, id)}>删除</a>) : <span>无权限</span>
             }
           </div>
         )

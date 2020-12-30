@@ -74,20 +74,20 @@ function Application(props) {
   return (
     <div>
       <PageHeader title="所有申请"/>
-      <Lists
-        dataSource={state.data}
-        render={item => (
-          <Card
-            hoverable
-            style={{margin: '10px'}}
-            title={item.companyName || '无名'}
-          >
-            <List.Item>
-              <ApplicationItem handleAgree={handleAgree} info={item}/>
-            </List.Item>
-          </Card>
-        )}
-      />
+      {/*<Lists*/}
+      {/*  dataSource={state.data}*/}
+      {/*  render={item => (*/}
+      {/*    <Card*/}
+      {/*      hoverable*/}
+      {/*      style={{margin: '10px'}}*/}
+      {/*      title={item.companyName || '无名'}*/}
+      {/*    >*/}
+      {/*      <List.Item>*/}
+      {/*        <ApplicationItem handleAgree={handleAgree} info={item}/>*/}
+      {/*      </List.Item>*/}
+      {/*    </Card>*/}
+      {/*  )}*/}
+      {/*/>*/}
       <MyTable
         dataSource={state.data}
         columns={[
