@@ -149,9 +149,15 @@ function putScore(ceo,scoreTeacher) {
   })
 }
 /*老师修改宣讲状态*/
-function voteStatus(flag, teacherId) {
+function voteStatus(flag, teacherId,teachclass) {
   return Service.post('/teacher/speakvote', {
-    flag, teacherId
+    flag, teacherId,teachclass
+  })
+}
+// 返回宣讲投票状态
+function isRunSpeakVot(teachclass,teacherId) { 
+  return Service.post('/teacher/checkSpeak', {
+    teachclass,teacherId
   })
 }
 /*给学生打分*/
@@ -246,6 +252,12 @@ function download(id) {
   })
 }
 
+// 查看是否能够生成公司等级
+function ShowComLevel(teachclass) { 
+  return Service.post('/teacher/companyLevel', {
+    teachclass
+  })
+}
 
 export{
   selectedClassTeacher,
@@ -262,6 +274,7 @@ export{
   deleteCeo,
   putScore,
   voteStatus,
+  isRunSpeakVot,
   setScore,
   showCeo,
   showAll,
@@ -278,5 +291,6 @@ export{
   updateConfigOther,
   ChoseCompany,
   DeleteUpload,
-  download
+  download,
+  ShowComLevel
 }
