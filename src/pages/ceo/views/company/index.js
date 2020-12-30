@@ -1,5 +1,6 @@
 import React, {useState, useEffect, useReducer, memo} from 'react'
-import {Card, PageHeader, Button, Modal, Input, Radio, Divider, message, List, Checkbox} from "antd";
+import Lists from '../../components/Lists'
+import {Card, PageHeader, Button, Modal, Input, Radio, Divider, message, List} from "antd";
 import {
   setPosition as requestSetPos,
   getMember,
@@ -7,10 +8,9 @@ import {
   voteForCompany,
   createCompany as createCompanyImpl
 } from "../../../../until/api/ceo";
-
+import MyTable from "../../components/MyTable";
 import WithModal from "../../components/WithModal";
 import MyCompany from "./components/MyCompany";
-
 import CompanyItem from "./components/CompanyItem";
 
 import './style/position.scss'
@@ -31,6 +31,16 @@ const companyTypes = [
   '工商局',
   '税务局'
 ]
+
+let cancel = () => {
+}
+
+const validateVote = (myType, target) => {
+  myType = myType << 0
+  target = target << 0
+  if (!myType) return true
+  return (myType < 3 && target >= 3) || (myType >= 3 && target < 3)
+}
 
 const reducer = (state, action) => {
   const {payload, type} = action
@@ -64,11 +74,12 @@ const reducer = (state, action) => {
   }
 }
 
+
 function Company(props) {
   const {userId} = props
 
   const [state, dispatch] = useReducer(reducer, {
-    companies: [],
+    companies: null,
     companyCurrentPage: 0,
     companyTotal: 0,
     members: null
@@ -76,7 +87,6 @@ function Company(props) {
 
   const [posValue, setPosValue] = useState(null)
   const [stuId, setStuId] = useState(null)
-  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     getMember(userId).then(
@@ -93,7 +103,7 @@ function Company(props) {
         dispatch({
           type: 'SET_MEMBER_STATE',
           payload: res.data
-          // payload: mockData
+          // payload: mockMembers
         })
       }
     )
@@ -104,14 +114,11 @@ function Company(props) {
           type: 'SET_COMPANY_STATE',
           payload: res.data
         })
-        setLoading(false)
       }
     )
   }, [])
 
   const [visible, setVisible] = useState(false)
-  const [companyType, setCompanyType] = useState('')
-  const [companyName, setCompanyName] = useState('')
 
   const updateMember = async () => {
     const res = await getMember(userId)
@@ -140,61 +147,110 @@ function Company(props) {
       message.warning(e)
     }
   }
-  const createCompany = async (userId) => {
-    if (!companyName) {
-      message.info("请输入公司名")
-      return
+  const vote = async (targetTypeCode, ceo) => {
+    const typeCode = localStorage.getItem('typeCode')
+    if (!validateVote(typeCode, targetTypeCode)) {
+      message.info("普通公司和其他机构不能给自己一方公司投票")
     }
-    const res = await createCompanyImpl(userId, companyName, companyType)
-    message.info(res.msg ? res.msg : res.message)
+    const res = await voteForCompany(userId, ceo)
+    if (!res.flag) {
+      message.info(res.message || "网络异常")
+    }
   }
+
+  const companyColumns = [
+    {
+      title: '公司名',
+      dataIndex: 'companyName'
+    }, {
+      title: '公司类别',
+      dataIndex: 'type'
+    }, {
+      title: "机构类型",
+      dataIndex: 'typeCode',
+      render(text, {typeCode}) {
+        return (typeCode < 3 ? <div>普通公司</div> : <div>其他机构</div>)
+      }
+    }, {
+      title: 'ceo',
+      dataIndex: 'ceoName'
+    }, {
+      title: 'ceo学号',
+      dataIndex: 'ceo'
+    },
+    {
+      title: '班级号',
+      dataIndex: 'teachclass'
+    }, {
+      title: '创建时间',
+      dataIndex: 'creatTime'
+    }, {
+      title: '操作',
+      render(text, {ceo, typeCode}) {
+        return (
+          <>
+            <Button
+              disabled={!validateVote(localStorage.getItem('typeCode'), typeCode)}
+              onClick={vote.bind(null, typeCode, ceo)}>投票</Button>
+
+            <WithModal
+              render={props => (
+                <Button
+                  disabled={!validateVote(localStorage.getItem('typeCode'), typeCode)}
+                  {...props}
+                >
+                  打分
+                </Button>
+              )}
+            >
+              div
+            </WithModal>
+          </>
+        )
+      }
+    }
+  ]
 
   /* UI组件 */
   const Member = ({member}) => {
     return (
       <Card
         key={member.id}
-        title={member.userName}
         hoverable={true}
-        className="card"
       >
-        <ul style={{
-          listStyle: 'none',
-          padding: '0',
-          margin: '10px 0'
+        <div style={{fontSize: '16px'}}>{member.userName}</div>
+        <div style={{
+          display: 'flex', justifyContent: 'space-between',
+          margin: '15px 0', alignItems: 'flex-end', fontSize: '16px'
         }}>
-          <li> {member.companyName}</li>
-          <li> {member.studentId}</li>
-          <li>专业 {member.academy}</li>
-          <li> {member.position || "无职位"}</li>
-          <li>分数：{member.personalScore}</li>
-        </ul>
-        <Button
-          type={"primary"}
-          shape="round"
-          onClick={openPosition.bind(null, member.id)}
-        >设置</Button>
+          <div>
+            <div className="row">
+              <span className="dscr">专业</span>{member.academy}</div>
+            <div className="row">
+              <span className="dscr">学号</span>{member.studentId}</div>
+          </div>
+          <div>
+            <div className="row">
+              <span className="dscr">职位</span>{member.position || "无职位"}</div>
+            <div className="row">
+              <span className="dscr">分数</span>{member.personalScore}</div>
+          </div>
+        </div>
+        <footer style={{
+          display: 'flex', justifyContent: 'space-between'
+        }}>
+          <Button
+            type={"primary"}
+            shape="round"
+            onClick={openPosition.bind(null, member.id)}
+          >设置职位</Button>
+          <Button
+            type="primary"
+            shape="round"
+          >为他投票</Button>
+        </footer>
+
       </Card>
-    )
-  }
-  const NoMember = () => {
-    return (
-      <Card
-        hoverable={true}
-        className="card"
-        loading={false}
-        title="无成员"
-      />
-    )
-  }
-  const LoadingMember = () => {
-    return (
-      <Card
-        hoverable={true}
-        className="card"
-        loading={true}
-        title="请稍等..."
-      />
     )
   }
 
@@ -204,25 +260,16 @@ function Company(props) {
       <Card
         hoverable={true}
         style={{margin: '15px'}}>
-        {
-          state.companyName
-            ? <MyCompany companyName={state.companyName}/>
-            : (<div>你还没有创建公司</div>)
-        }
+        <MyCompany/>
       </Card>
 
-      <PageHeader title="成员" subTitle="member"/>
-      <div className="member">
-        {
-          state.members
-            ? (
-              state.members?.length
-                ? state.members.map(member => <Member key={member.id} member={member}/>)
-                : <NoMember/>
-            )
-            : <LoadingMember/>
-        }
-      </div>
+      <PageHeader title="成员"/>
+      <Lists
+        column={3}
+        dataSource={state.members}
+        render={item => <Member member={item}/>}
+      />
+
       <Modal
         visible={visible}
         onCancel={() => {
@@ -235,7 +282,6 @@ function Company(props) {
         }}>
           <PageHeader
             title="职位"
-            subTitle="position"
             style={{padding: '16px 0'}}
           />
           {
@@ -264,60 +310,12 @@ function Company(props) {
         </Button>
       </Modal>
 
-      <PageHeader title="所有公司" subTitle="all company"/>
-      <List
-        style={{padding: '15px'}}
-        dataSource={state.companies || []}
-        grid={{column: 4}}
-        loading={loading}
-        pagination={{
-          pageSize: state.pageSize || 7,
-          total: state.companyTotal || 0
-        }}
-        renderItem={(company, i) => {
-          return <CompanyItem key={i} company={company} userId={userId}/>
-        }}
-      >
-      </List>
+      <PageHeader title="所有公司"/>
+      <MyTable
+        columns={companyColumns}
+        dataSource={state.companies}
+      />
 
-      <PageHeader title="创建公司"/>
-      <Card
-        hoverable={true}
-        style={{margin: '15px'}}>
-        <WithModal
-          render={
-            (close) => <Button {...close}>创建公司</Button>
-          }
-        >
-          <Input placeholder="公司名" onChange={e => setCompanyName(e.target.value)}/>
-          公司类型
-          <Radio.Group
-            defaultValue='贸易公司'
-            onChange={({target: {value}}) => {
-              setPosValue(value)
-            }}
-          >
-            {
-              companyTypes.map(type => (
-                <Radio.Button
-                  buttonStyle="solid"
-                  key={type}
-                  value={type}
-                  onChange={e => {
-                    setCompanyType(e.target.value)
-                  }}
-                >
-                  {type}
-                </Radio.Button>
-              ))
-            }
-          </Radio.Group>
-          <br/>
-          <Button
-            onClick={createCompany.bind(null, userId)}
-            type="primary"> 创 建 </Button>
-        </WithModal>
-      </Card>
     </div>
   )
 }
