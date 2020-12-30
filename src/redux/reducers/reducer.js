@@ -91,46 +91,8 @@ export default (state = newstate, action) => {
       return {isShowCompanyMember:false, ...data,isLogin:state.isLogin, ...action.payload}
     case "Exist" :
       return {...data,...action,isLogin:state.isLogin}
-    case "CEO_SET_MEMBER":
-      return {
-        ...state,
-        // member: action.payload.member
-        member: [
-          {
-            "id": 1,
-            "ceoId": 0,
-            "studentId": "1",
-            "companyName": "qwqw",
-            "position": "副总裁",
-            "teacherId": "tiansh"
-          },
-          {
-            "id": 2,
-            "ceoId": 0,
-            "studentId": "2",
-            "companyName": "hhhh",
-            "position": "副总裁",
-            "teacherId": "tiansh"
-          },
-          {
-            "id": 3,
-            "ceoId": 0,
-            "studentId": "2010211506",
-            "companyName": "hhhh",
-            "position": "ceo",
-            "teacherId": "tiansh"
-          },
-          {
-            "id": 4,
-            "ceoId": 0,
-            "studentId": "3",
-            "companyName": "hhhh",
-            "position": null,
-            "teacherId": "tiansh"
-          }
-          ,
-        ]
-      }
+    case "SET_HAS_COMPANY":
+      return {...state, hasCompany: action.payload}
     default:
       return {...action,isLogin:state.isLogin,...data,};
   }

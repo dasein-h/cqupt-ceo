@@ -2,6 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux'
 import {withRouter} from 'react-router-dom'
 
+import File from "./views/file";
 import Application from "./views/application";
 import Company from "./views/company";
 import Router from "./components/Router";
@@ -16,12 +17,16 @@ const {Sider, Content, Header} = Layout
 const routes = [
   {
     path: '/CEO/application',
-    name: '申请/文件',
+    name: '申请',
     component: Application
   }, {
     path: '/CEO/company',
     name: '公司',
     component: Company
+  }, {
+    path: '/CEO/file',
+    name: '文件',
+    component: File
   }
 ]
 
@@ -30,6 +35,7 @@ function CEO(props) {
 
   let userId = localStorage.getItem('userId')
   let userName = localStorage.getItem('userName')
+  let teachclass = localStorage.getItem('class')
   let ceo = localStorage.getItem('ceo')
   if (!ceo && ceo !== '1') {
     // history.replace('/')
@@ -63,7 +69,7 @@ function CEO(props) {
           <WelcomeTitle userName={userName} userId={userId}/>
         </Header>
         <Content>
-          <Router routes={routes} userId={userId}/>
+          <Router routes={routes} userId={userId} teachclass={teachclass}/>
         </Content>
       </Layout>
 

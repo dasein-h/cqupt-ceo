@@ -1,5 +1,6 @@
 import Service from "../Service";
 import {message} from 'antd'
+import Axios from "axios";
 
 async function agreeApplication(ceoId, studentId, companyName) {
   try {
@@ -8,11 +9,6 @@ async function agreeApplication(ceoId, studentId, companyName) {
       studentId,
       companyName
     })
-    if (res.data.flag) {
-      message.success('已同意')
-    } else {
-      message.warn('未知错误')
-    }
     return res.data
   } catch (e) {
     message.warn('网络错误')
@@ -74,7 +70,9 @@ async function changeCompanyName(ceo, companyName) {
 
 async function downloadFile(id) {
   try {
-    const res = await Service.get('/upload/download?id=' + id)
+    const res = await Service.get('/upload/download?id=' + id, {
+      responseType: 'blob'
+    })
     return res.data
   } catch (e) {
     message.warn('网络错误')
@@ -113,14 +111,47 @@ async function createCompany(studentId, companyName, type) {
   )
 }
 
-async function fetchFileList(teacherClass, currentPage) {
+async function fetchFileList(teachclass, currentPage) {
   return Service.post('/upload/showAll', {
-    teacherClass,
+    teachclass,
     currentPage
   }).then(
     res => JSON.parse(res.data),/*不知道为什么后端的data是个字符串*/
     e => '网络错误'
   )
+}
+
+async function companyInfo(studentId) {
+  const res = await Service.post('/student/showCompanySelf', {
+    studentId
+  }).catch(e => {
+    message.warn('网络异常')
+  })
+  return res.data
+}
+
+async function uploadPPT(fd) {
+  const res = await Axios.post('http://localhost:3000/api/upload/up', fd, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  }).catch(e => {
+    message.warn('网络异常')
+  })
+
+  return res?.data
+}
+
+async function deleteFile(id) {
+  try {
+    const res = await Service.post('/upload/delete')
+    return res.data
+  } catch (e) {
+    message.warn("网络异常")
+    return {
+      flag: false
+    }
+  }
 }
 
 export {
@@ -133,7 +164,10 @@ export {
   voteForCompany,
   createCompany,
   fetchFileList,
-  changeCompanyName
+  changeCompanyName,
+  companyInfo,
+  uploadPPT,
+  deleteFile
 }
 
 
