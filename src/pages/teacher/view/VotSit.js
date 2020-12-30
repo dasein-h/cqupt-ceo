@@ -122,7 +122,6 @@ class VotSit extends Component {
       })
       showCeo(currentPage,this.state.teachclass).then(
         (res) => {
-          
           if(res.data.data.object.length !== 0){ 
             let pagination = {...this.state.pagination};
             pagination.total = res.data.data.totalNumber;
@@ -222,24 +221,34 @@ class VotSit extends Component {
         decideCeo(record.studentId).then(
           (res) => {
             console.log(res);
+            message.success("任命成功",1);
           },(err) => {
-            console.log(err);
+            message.warn("任命失败，请重试",1);
           }
         )
       }else{
-        record.action = "任命为CEO";
-        this.setState({
-          dataSource: this.state.dataSource
-        })
+        
+        
+        //取消为CEO
         deleteCeo(record.studentId).then(
           (res) => {
-            console.log(res);
+            if(res.data.flag){
+              message.success("取消成功");
+              record.action = "任命为CEO";
+              this.setState({
+                  dataSource: this.state.dataSource
+              }) 
+            }else if(!res.data.flag){
+              message.warn(res.data.message,1);
+            }
+
           },(err) => {
             console.log(err);
           }
         )
+        
+
       }
-      console.log(record);
     }
 
     //为dataSource增加action
@@ -253,7 +262,6 @@ class VotSit extends Component {
           action = '取消为CEO';
         }
         dataSource[i].action = action;
-        
       }
       this.setState({
           dataSource:dataSource
