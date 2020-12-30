@@ -1,11 +1,7 @@
 import React, {memo, useEffect, useReducer} from 'react'
 
 import {showApplication, agreeApplication} from "../../../../until/api/ceo";
-import Lists from "../../components/Lists";
-import FileList from '../file/components/FileList'
-import ApplicationItem from "./components/ApplicationItem";
-import Uploader from "../file/components/Uploader";
-import {Card, PageHeader, List, message} from "antd";
+import {PageHeader, message} from "antd";
 import {PAGE_SIZE, SET_PAGE, INIT_PAGE, SET_CURR_PAGE, LOADING, MARK_STATE} from "./consts/constants";
 import './style/application.scss'
 import MyTable from "../../components/MyTable";
@@ -32,18 +28,18 @@ const reducer = (state, {type, payload}) => {
         pageSize: payload.pageSize || PAGE_SIZE
       }
     case MARK_STATE:
-      const newState = state.slice()
+      const newState = state.data.slice()
       newState.data[payload] = '已同意'
-      return {...state, state: newState}
+      return {...state, data: newState}
   }
 }
 
 function Application(props) {
-  const {userId, teachclass} = props
+  const {userId} = props
   const [state, dispatch] = useReducer(reducer, {
     currentPage: 0,
     loading: true,
-    data: [],
+    data: null,
     pageSize: 0,
   })
 

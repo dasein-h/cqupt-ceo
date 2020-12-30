@@ -9,6 +9,7 @@ export default props => {
     gutter = 15,
     render
   } = props
+
   return (
     <List
       style={{margin: '15px'}}
@@ -19,7 +20,8 @@ export default props => {
       dataSource={dataSource || []}
       loading={!dataSource}
       pagination={{
-        pageSize: PAGE_SIZE
+        hideOnSinglePage: true,
+        pageSize: PAGE_SIZE,
       }}
       renderItem={item => (
         <List.Item>

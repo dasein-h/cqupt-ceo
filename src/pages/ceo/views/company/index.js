@@ -1,7 +1,6 @@
 import React, {useState, useEffect, useReducer, memo} from 'react'
-import {PAGE_SIZE} from "../application/consts/constants";
 import Lists from '../../components/Lists'
-import {Card, PageHeader, Button, Modal, Input, Radio, Divider, message, List, Checkbox} from "antd";
+import {Card, PageHeader, Button, Modal, Input, Radio, Divider, message, List} from "antd";
 import {
   setPosition as requestSetPos,
   getMember,
@@ -9,10 +8,9 @@ import {
   voteForCompany,
   createCompany as createCompanyImpl
 } from "../../../../until/api/ceo";
-
+import MyTable from "../../components/MyTable";
 import WithModal from "../../components/WithModal";
 import MyCompany from "./components/MyCompany";
-
 import CompanyItem from "./components/CompanyItem";
 
 import './style/position.scss'
@@ -34,7 +32,15 @@ const companyTypes = [
   '税务局'
 ]
 
-let cancel = () => {}
+let cancel = () => {
+}
+
+const validateVote = (myType, target) => {
+  myType = myType << 0
+  target = target << 0
+  if (!myType) return true
+  return (myType < 3 && target >= 3) || (myType >= 3 && target < 3)
+}
 
 const reducer = (state, action) => {
   const {payload, type} = action
@@ -68,45 +74,12 @@ const reducer = (state, action) => {
   }
 }
 
-const mockMembers = [
-  {
-    "id": 985,
-    "ceoId": 0,
-    "userName": "甘雅婷",
-    "studentId": "2016211032",
-    "companyName": "第一贸易企业",
-    "position": "ceo",
-    "teacherId": "1",
-    "personalScore": 10,
-    "academy": "信息管理与信息系统"
-  }, {
-    "id": 985,
-    "ceoId": 0,
-    "userName": "甘雅婷",
-    "studentId": "2016211032",
-    "companyName": "第一贸易企业",
-    "position": "ceo",
-    "teacherId": "1",
-    "personalScore": 10,
-    "academy": "信息管理与信息系统"
-  }, {
-    "id": 985,
-    "ceoId": 0,
-    "userName": "甘雅婷",
-    "studentId": "2016211032",
-    "companyName": "第一贸易企业",
-    "position": "ceo",
-    "teacherId": "1",
-    "personalScore": 10,
-    "academy": "信息管理与信息系统"
-  }
-]
 
 function Company(props) {
   const {userId} = props
 
   const [state, dispatch] = useReducer(reducer, {
-    companies: [],
+    companies: null,
     companyCurrentPage: 0,
     companyTotal: 0,
     members: null
@@ -114,7 +87,6 @@ function Company(props) {
 
   const [posValue, setPosValue] = useState(null)
   const [stuId, setStuId] = useState(null)
-  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     getMember(userId).then(
@@ -142,14 +114,11 @@ function Company(props) {
           type: 'SET_COMPANY_STATE',
           payload: res.data
         })
-        setLoading(false)
       }
     )
   }, [])
 
   const [visible, setVisible] = useState(false)
-  const [companyType, setCompanyType] = useState('')
-  const [companyName, setCompanyName] = useState('')
 
   const updateMember = async () => {
     const res = await getMember(userId)
@@ -178,20 +147,69 @@ function Company(props) {
       message.warning(e)
     }
   }
-  const createCompany = async (userId) => {
-    if (!companyName) {
-      message.info("请输入公司名")
-      return
+  const vote = async (targetTypeCode, ceo) => {
+    const typeCode = localStorage.getItem('typeCode')
+    if (!validateVote(typeCode, targetTypeCode)) {
+      message.info("普通公司和其他机构不能给自己一方公司投票")
     }
-    const res = await createCompanyImpl(userId, companyName, companyType)
-    if (!res) return
-    if (res.flag) {
-      message.success('创建公司成功')
-      cancel()
-    } else {
-      message.warn(res.message || '数据库异常')
+    const res = await voteForCompany(userId, ceo)
+    if (!res.flag) {
+      message.info(res.message || "网络异常")
     }
   }
+
+  const companyColumns = [
+    {
+      title: '公司名',
+      dataIndex: 'companyName'
+    }, {
+      title: '公司类别',
+      dataIndex: 'type'
+    }, {
+      title: "机构类型",
+      dataIndex: 'typeCode',
+      render(text, {typeCode}) {
+        return (typeCode < 3 ? <div>普通公司</div> : <div>其他机构</div>)
+      }
+    }, {
+      title: 'ceo',
+      dataIndex: 'ceoName'
+    }, {
+      title: 'ceo学号',
+      dataIndex: 'ceo'
+    },
+    {
+      title: '班级号',
+      dataIndex: 'teachclass'
+    }, {
+      title: '创建时间',
+      dataIndex: 'creatTime'
+    }, {
+      title: '操作',
+      render(text, {ceo, typeCode}) {
+        return (
+          <>
+            <Button
+              disabled={!validateVote(localStorage.getItem('typeCode'), typeCode)}
+              onClick={vote.bind(null, typeCode, ceo)}>投票</Button>
+
+            <WithModal
+              render={props => (
+                <Button
+                  disabled={!validateVote(localStorage.getItem('typeCode'), typeCode)}
+                  {...props}
+                >
+                  打分
+                </Button>
+              )}
+            >
+              div
+            </WithModal>
+          </>
+        )
+      }
+    }
+  ]
 
   /* UI组件 */
   const Member = ({member}) => {
@@ -235,26 +253,6 @@ function Company(props) {
       </Card>
     )
   }
-  const NoMember = () => {
-    return (
-      <Card
-        hoverable={true}
-        className="card"
-        loading={false}
-        title="无成员"
-      />
-    )
-  }
-  const LoadingMember = () => {
-    return (
-      <Card
-        hoverable={true}
-        className="card"
-        loading={true}
-        title="请稍等..."
-      />
-    )
-  }
 
   return (
     <div>
@@ -271,6 +269,7 @@ function Company(props) {
         dataSource={state.members}
         render={item => <Member member={item}/>}
       />
+
       <Modal
         visible={visible}
         onCancel={() => {
@@ -312,62 +311,11 @@ function Company(props) {
       </Modal>
 
       <PageHeader title="所有公司"/>
-      <List
-        style={{padding: '15px'}}
-        dataSource={state.companies || []}
-        grid={{column: 4}}
-        loading={loading}
-        pagination={{
-          pageSize: state.pageSize || PAGE_SIZE,
-          total: state.companyTotal || 0
-        }}
-        renderItem={(company, i) => {
-          return <CompanyItem key={i} company={company} userId={userId}/>
-        }}
-      >
-      </List>
+      <MyTable
+        columns={companyColumns}
+        dataSource={state.companies}
+      />
 
-      <PageHeader title="创建公司"/>
-      <Card
-        hoverable={true}
-        style={{margin: '15px'}}>
-        <WithModal
-          render={
-            (props, onCancel) => {
-              cancel = onCancel
-              return (<Button {...props}>创建公司</Button>)
-            }
-          }
-        >
-          <Input placeholder="公司名" onChange={e => setCompanyName(e.target.value)}/>
-          公司类型
-          <Radio.Group
-            defaultValue='贸易公司'
-            onChange={({target: {value}}) => {
-              setPosValue(value)
-            }}
-          >
-            {
-              companyTypes.map(type => (
-                <Radio.Button
-                  buttonStyle="solid"
-                  key={type}
-                  value={type}
-                  onChange={e => {
-                    setCompanyType(e.target.value)
-                  }}
-                >
-                  {type}
-                </Radio.Button>
-              ))
-            }
-          </Radio.Group>
-          <br/>
-          <Button
-            onClick={createCompany.bind(null, userId)}
-            type="primary"> 创 建 </Button>
-        </WithModal>
-      </Card>
     </div>
   )
 }
