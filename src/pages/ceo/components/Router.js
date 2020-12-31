@@ -2,7 +2,7 @@ import React from 'react'
 import {Redirect, Route, Switch} from "react-router-dom";
 
 export default props => {
-  const {userId, routes} = props
+  const {routes} = props
   return (
     <Switch>
       {
