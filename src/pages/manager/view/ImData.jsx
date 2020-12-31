@@ -10,8 +10,7 @@ class ImData extends Component {
   constructor(props) { 
     super(props);
     this.state = {
-
-      classList:[],
+      classList: [],
       uploadingClass:false
     }
     this.handleUploadClass = this.handleUploadClass.bind(this);
@@ -79,18 +78,43 @@ class ImData extends Component {
   
   IsDisabled = () => { 
     if (this.state.classList.length == 0) {
-      console.log(this.state.classList.length);
+      // console.log(this.state.classList.length);
       return true;
     }
     else if (this.state.classList.length > 1) {
-      console.log(this.state.classList.length);
+      // console.log(this.state.classList.length);
       message.warning('只能上传一份文件');
       return true;
     }
     
   }
+
+  handleChange = (info) => { 
+
+
+    let fileList = [...info.fileList];
+
+    // console.log(fileList);
+    // console.log(1);
+    fileList = fileList.slice(-1);
+    // console.log(fileList);
+
+    // console.log(2);
+    this.setState(
+      {
+        classList:fileList
+      }
+    )
+    // setTimeout(() => {
+    //   console.log(3);
+    //   console.log(this.state.classList);
+    // }, 1000);
+    
+    
+  }
+
   render() {
-    const { uploadingClass,classList } = this.state;
+    const { uploadingClass} = this.state;
     const classprops = {
       onRemove: file => {
         this.setState(state => {
@@ -104,14 +128,10 @@ class ImData extends Component {
        
       },
       beforeUpload: file => {
-        console.log(this.state.classList)
-        this.setState(state => ({
-          classList: [...state.classList, file],
-        }));
-        this.IsDisabled();
         return false;
       },
-      // classList,
+      onChange: this.handleChange,
+      multiple:true
     };
     
     return (
@@ -121,7 +141,7 @@ class ImData extends Component {
               <span className="Nav-top">导入数据</span>
           </div>
           <div className="StuInfo">
-              <Upload {...classprops}>
+            <Upload {...classprops} fileList={ this.state.classList}>
                   <Button icon={<UploadOutlined />} className="button">更新学生信息</Button>
               </Upload>
               <Button
@@ -132,6 +152,9 @@ class ImData extends Component {
                   >
                     {uploadingClass ? '上传中' : '开始上传'}
               </Button>
+            <span
+              style={{color:'#1890FF',fontSize:'1vw',paddingLeft:'5%'}}
+            >一次只能上传一份文件</span>
           </div> 
         </div>
         

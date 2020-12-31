@@ -259,6 +259,13 @@ function ShowComLevel(teachclass) {
   })
 }
 
+// 修改公司类型
+function ChangeComType(ceo, type) { 
+  return Service.post('/teacher/updateType', {
+    ceo,type
+  })
+}
+
 export{
   selectedClassTeacher,
   unSelectedClassTeacher,
@@ -292,5 +299,6 @@ export{
   ChoseCompany,
   DeleteUpload,
   download,
-  ShowComLevel
+  ShowComLevel,
+  ChangeComType
 }
