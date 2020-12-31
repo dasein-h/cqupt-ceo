@@ -429,6 +429,9 @@ class ComInfo extends Component {
   componentDidMount() {
     
 
+      this.setState({
+        loading:true
+      })
       let res = ShowComInfo(localStorage.teachclass);
       let mydata=[];
       res.then(
@@ -591,13 +594,14 @@ class DelPop extends React.Component {
           if (result.data.flag == true) { 
             message.success('删除成功！');
             // let newdata = this.props.parent.pagination;
-            this.props.parent.Refresh(this.props.parent.state.pagination.current);
-            // if (this.props.record.length % this.props.parent.state.pagination.pageSize == 0) {
-            //   this.props.parent.Refresh(this.props.parent.state.pagination.current - 1);
-            // }
-            // else { 
-            //   this.props.parent.Refresh(this.props.parent.state.pagination.current);
-            // }
+            // this.props.parent.Refresh(this.props.parent.state.pagination.current);
+            let rest = this.props.parent.state.data.length % this.props.parent.state.pagination.pageSize;
+            if (rest == 0) {
+              this.props.parent.Refresh(this.props.parent.state.pagination.current - 1);
+            }
+            else { 
+              this.props.parent.Refresh(this.props.parent.state.pagination.current);
+            }
             
 
             // console.log(this.props.parent.pagination.current);
