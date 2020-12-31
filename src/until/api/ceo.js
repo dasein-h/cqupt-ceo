@@ -127,13 +127,15 @@ async function createCompany(studentId, companyName, type) {
 }
 
 async function fetchFileList(teachclass, currentPage) {
-  return Service.post('/upload/showAll', {
-    teachclass,
-    currentPage
-  }).then(
-    res => JSON.parse(res.data),/*不知道为什么后端的data是个字符串*/
-    e => '网络错误'
-  )
+  try {
+    const res = await Service.post('/upload/showAll', {
+      teachclass,
+      currentPage
+    })
+    return typeof res.data === 'object' ? res.data :  JSON.parse(res.data)
+  } catch (e) {
+    message.info('网络错误')
+  }
 }
 
 async function companyInfo(studentId) {
@@ -183,7 +185,7 @@ async function companyScore(scorer, score, scored) {
 
 async function studentScore(score, scored, scorer) {
   try {
-    const res = Service.post('/score/stuScore', {
+    const res = await Service.post('/score/stuScore', {
       score,
       scored,
       scorer
@@ -193,7 +195,16 @@ async function studentScore(score, scored, scorer) {
     message.info('网络错误')
   }
 }
-
+async function showScored(studentId) {
+  try {
+    const res = await Service.post('/score/showScore', {
+      studentId
+    })
+    return res.data
+  }catch (e) {
+    message.info('网络错误')
+  }
+}
 export {
   agreeApplication,
   getMember,
@@ -209,7 +220,8 @@ export {
   uploadPPT,
   deleteFile,
   companyScore,
-  studentScore
+  studentScore,
+  showScored
 }
 
 

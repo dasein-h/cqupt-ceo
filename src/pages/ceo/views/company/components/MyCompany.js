@@ -38,14 +38,9 @@ const MyCompany = (props) => {
               return
             }
             setHasCompany(true)
-            const {companyName, creatTime, studentNum, typeCode} = res.data
+            const {typeCode} = res.data
             localStorage.setItem('typeCode', typeCode)
-            setInfo({
-              companyName,
-              creatTime,
-              studentNum,
-              typeCode
-            })
+            setInfo(res.data)
           }
         )
     }, []
@@ -93,7 +88,12 @@ const MyCompany = (props) => {
         render={
           (props, onCancel) => {
             cancel = onCancel
-            return (<Button {...props}>创建公司</Button>)
+            return (
+              <Button
+                style={{width: '100%', height: '100%'}}
+                {...props}
+              >创建公司</Button>
+            )
           }
         }
       >
@@ -150,6 +150,12 @@ const MyCompany = (props) => {
                   <div className="item">
                     <span className="dscr">创建于</span>
                     {info.creatTime}</div>
+                  <div className="item">
+                    <span className="dscr">老师打分</span>
+                    {info.scoreTeacher}</div>
+                  <div className="item">
+                    <span className="dscr">公司得分</span>
+                    {info.companyScore}</div>
                 </div>
                 <div>
                   <div className="item">
@@ -162,6 +168,9 @@ const MyCompany = (props) => {
                       机构
                     </span>{(info.typeCode || localStorage.getItem('typeCode')) < 3 ? '普通公司' : '其他机构'}
                   </div>
+                  <div className="item">
+                    <span className="dscr">ceo打分</span>
+                    {info.scoreCeo}</div>
                 </div>
                 <WithModal
                   render={
@@ -173,9 +182,18 @@ const MyCompany = (props) => {
                     }
                   }
                 >
-                  <span>输入公司名</span>
-                  <Input onChange={e => setName(e.target.value)}/>
-                  <Button onClick={changeName} type="primary" style={{marginLeft: '0'}}>确认</Button>
+                  <div className="flex column">
+                    <div style={{textAlign: 'center'}}>输入公司名</div>
+                    <Input
+                      style={{margin: '10px 0'}}
+                      defaultValue={info.companyName}
+                      onChange={e => setName(e.target.value)}
+                    />
+                    <Button
+                      onClick={changeName}
+                      type="primary"
+                      style={{marginLeft: '0'}}>确认</Button>
+                  </div>
                 </WithModal>
               </div>
             ) : <CreateCompany/>
