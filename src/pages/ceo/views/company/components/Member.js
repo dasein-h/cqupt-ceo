@@ -139,7 +139,6 @@ const Member = (props) => {
             (props, onCancel) => {
               cancel = onCancel
               const score = scoreMap.get(studentId)
-              console.log(score)
               return <Button
                 type="primary"
                 shape="round"
