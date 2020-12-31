@@ -31,7 +31,7 @@ class Set extends React.Component {
     }
     render() {
         return (
-            <div className="set">
+            <div className="set" style={{minHeight:'390px'}}>
                 <Menu theme="light" mode="horizontal" defaultSelectedKeys={this.state.num} style={{ marginTop: -10 }}>
                     <Menu.Item key="1" style={{margin:'0'}}><Link to="/Teacher/Set/Person">个人成绩占比</Link></Menu.Item>
                     <Menu.Item key="2"><Link to="/Teacher/Set/Company">公司成绩占比</Link></Menu.Item>

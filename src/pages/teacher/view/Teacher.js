@@ -90,7 +90,7 @@ class Teacher extends Component {
                                             
                                         </Header>
                                         <Content  style={{ margin: '24px 16px 0', overflow: 'initial' }}>
-                                            <div className="site-layout-background" style={{ padding: 24, textAlign: 'center', borderRadius: 10 }}>
+                                            <div className="site-layout-background" style={{ padding: 24, borderRadius: 10 }}>
 
                                             <Switch>
                                                 <Route exact path="/Teacher/StuInfo">

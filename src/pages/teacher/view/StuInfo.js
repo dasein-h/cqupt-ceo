@@ -1,5 +1,5 @@
 import React, { Component} from 'react'
-import { Button, Input, Table, notification, Select, Radio } from 'antd';
+import { Button, Input, Table, notification, Select, Radio,Pagination,message } from 'antd';
 import { DownloadOutlined } from '@ant-design/icons';
 import { showAll} from '../../../until/api/teacherApi'
 import '../../../static/style/teacherStyle.scss'
@@ -47,6 +47,7 @@ class StuInfo extends Component {
       value: "",
       data: [],
       pagination: {
+        showQuickJumper:true,
         showSizeChanger:false,
         defaultCurrent:1,
         current: 1,
@@ -62,9 +63,7 @@ class StuInfo extends Component {
     };
   }
   componentDidMount(){
-    console.log(this.state.pagination.total);
     this.changePage(1)
-    console.log(this.state.pagination.total);
   }
   changePage = (page) => {
     let lists = [];
@@ -77,7 +76,7 @@ class StuInfo extends Component {
       let rs = JSON.parse(res.data);
       let companyName
       for (let i = 0; i < rs.length; i++){
-        if(rs[i].companyName === undefined|| rs[i].companyName === null)
+        if(rs[i].companyName === undefined|| rs[i].companyName === null||rs[i].companyName === 'null')
           companyName = "无"
         else companyName = rs[i].companyName
         lists.push({
@@ -95,7 +94,7 @@ class StuInfo extends Component {
       }
     }).catch(err => {
       this.setState({ loading: false })
-      notification.open({
+      notification.warning({
         message: '警告',
         placement: "bottomRight",
         description:
@@ -110,7 +109,7 @@ class StuInfo extends Component {
         <div className='header'>
           <div className='left'>
             <p className='title'>学生信息</p>
-            {/* <Select defaultValue="name"
+            {/* <Select defaultValue="name" className="select"
               style={{ width: 100 }}
               onSelect={(value) => { this.changeSelect(value) }} >
               <Option value="name">学生姓名</Option>
@@ -121,7 +120,7 @@ class StuInfo extends Component {
               // loading='true'
               enterButton="搜索"
               style={{ width: 200, marginBottom: 10 }}
-              // onSearch={}
+              onSearch={() => {this.search()}}
               onChange={(e) => { this.inputChange(e) }}
               value={this.state.value}
             ></Search> */}
@@ -144,9 +143,11 @@ class StuInfo extends Component {
   }
   search = () => {
     if (this.state.select == "id") {
-
+          console.log('id');
+          console.log(this.state.value);
     } else if (this.state.select == "name") {
-
+        console.log('name');
+        console.log(this.state.value);
     }
     //根据value调用接口 搜索 改变data的值
   }
@@ -167,3 +168,5 @@ class StuInfo extends Component {
 
 
 export default StuInfo
+
+
