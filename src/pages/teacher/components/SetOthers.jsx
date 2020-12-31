@@ -1,11 +1,12 @@
 import React from 'react'
-import { InputNumber, Button, notification, Spin } from 'antd'
+import { InputNumber, Button, notification, Spin,message } from 'antd'
 import { showConfig, updateConfigOther } from '../../../until/api/teacherApi'
 class SetOthers extends React.Component {
     constructor(props) {
         super(props)
         localStorage.setItem("setKey",JSON.stringify({key:3,route:'/Teacher/Set/Other'}))
         this.state = {
+            btnLoad:false,
             title: [{ "title": "迟到一次扣分:", "name": "late", "value": "" }, { "title": "旷到一次扣分:", "name": "absence", "value": "" }, { "title": "公司最多允许人数:", "name": "sameClassMember", "value": "" }, { "title": "一个企业允许同一个班级的同学个数", "name": "companyNum", "value": "" }],
             teachclass: localStorage.getItem("teachclass"),
             loading: true
@@ -23,17 +24,13 @@ class SetOthers extends React.Component {
             <Spin spinning={this.state.loading}>
                 <div className="setChild">
                     {list}
-                    <Button className="submit" onClick={() => this.submit()}>修改</Button>
+                    <Button loading={this.state.btnLoad} className="submit" onClick={() => this.submit()}>修改</Button>
                 </div>
             </Spin>
         )
     }
     componentDidMount() {
         showConfig(this.state.teachclass).then(rs => {
-            if(!rs.data.flag && rs.data.message === "没有登录，请先登录"){
-                localStorage.clear();
-                this.props.history.push('/Student/AllCompanies/ChosenClasses');
-              }
             console.log(rs);
             if (rs.data.flag === true) {
                 let res = rs.data.data
@@ -47,12 +44,12 @@ class SetOthers extends React.Component {
                     loading: false
                 })
             } else {
-                notification.open({
+                notification.warning({
                     message: '警告',
                     placement: "bottomRight",
                     description:
-                        '请求超时或服务器异常,请检查网络或联系管理员!',
-                });
+                      '请求超时或服务器异常,请检查网络或联系管理员!',
+                  });
             }
 
         })
@@ -69,26 +66,18 @@ class SetOthers extends React.Component {
     }
     submit = () => {
         console.log(this.state.memberScore);
+        this.setState({
+            btnLoad:true
+        })
         updateConfigOther(this.state.title[0].value, this.state.title[1].value, this.state.title[2].value, this.state.title[3].value,this.state.teachclass).then(rs => {
-            if(!rs.data.flag && rs.data.message === "没有登录，请先登录"){
-                localStorage.clear();
-                this.props.history.push('/Student/AllCompanies/ChosenClasses');
-              }
+            this.setState({
+                btnLoad:false
+            })
             if (rs.data.flag === true) {
-                notification.open({
-                    message: '提示',
-                    placement: "bottomRight",
-                    description:
-                        '修改成功!',
-                });
+                message.success("修改成功")
 
             } else if (rs.data.flag === false) {
-                notification.open({
-                    message: '提示',
-                    placement: "bottomRight",
-                    description:
-                        '修改失败（占比总和不为1）！',
-                });
+                message.error(`修改失败(${rs.data.message})!`)
             }
         })
     }

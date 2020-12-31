@@ -1,6 +1,6 @@
 import {Button, Card} from "antd";
 import React, {memo} from "react";
-import {voteForCompany} from "../../../../../until/api/ceo";
+import {voteForCompany, createCompany as createCompanyImpl} from "../../../../../until/api/ceo";
 import {message} from "antd";
 import Comfirm from "../../../components/Comfirm";
 
@@ -19,12 +19,17 @@ const CompanyItem = (props) => {
   const {companyName, creatTime, type, ceoName, teachclass, ceo} = company
   return (
     <Card title={companyName} hoverable>
-      <ul>
-        <li>ceo: {ceoName}</li>
-        <li>类别 {type}</li>
-        <li>班级 {teachclass}</li>
-        <li>创建于 {creatTime}</li>
-      </ul>
+      <div className="flex_grid">
+        <div className="item">
+          <div><span className="dscr">ceo</span>{ceoName}</div>
+          <div><span className="dscr">类别</span>{type}</div>
+        </div>
+        <div className="item">
+          <div><span className="dscr">班级</span>{teachclass}
+          </div>
+          <div><span className="dscr">创建于</span>{creatTime}</div>
+        </div>
+      </div>
       <Comfirm
         text="你确定吗，一个人只能投一次票"
         render={

@@ -11,7 +11,7 @@ async function agreeApplication(ceoId, studentId, companyName) {
     })
     return res.data
   } catch (e) {
-    message.warn('网络错误')
+    message.info('网络错误')
     throw e
   }
 }
@@ -23,7 +23,7 @@ async function getMember(studentId) {
     })
     return res.data
   } catch (e) {
-    message.warn('网络错误')
+    message.info('网络错误')
     throw e
   }
 }
@@ -38,7 +38,7 @@ async function setPosition(ceoId, studentId, position) {
     })
     return res.data
   } catch (e) {
-    message.warn('网络错误')
+    message.info('网络错误')
     throw e
   }
 }
@@ -51,7 +51,7 @@ async function showApplication(currentPage, studentId) {
     })
     return res.data
   } catch (e) {
-    message.warn('网络错误')
+    message.info('网络错误')
     throw e
   }
 }
@@ -68,14 +68,25 @@ async function changeCompanyName(ceo, companyName) {
   }
 }
 
-async function downloadFile(id) {
+async function downloadFile(id, fileName) {
   try {
     const res = await Service.get('/upload/download?id=' + id, {
       responseType: 'blob'
     })
+
+    const blob = new Blob([res.data])
+    const elink = document.createElement("a");
+    elink.download = fileName
+    elink.style.display = "none";
+    elink.href = URL.createObjectURL(blob)
+    document.body.appendChild(elink);
+    elink.click();
+    URL.revokeObjectURL(elink.href);
+    document.body.removeChild(elink);
+
     return res.data
   } catch (e) {
-    message.warn('网络错误')
+    message.info('网络错误')
     throw e
   }
 }
@@ -88,17 +99,21 @@ async function showAllCompany(id, currentPage = 1) {
     })
     return res.data
   } catch (e) {
-    message.warn('网络错误')
+    message.info('网络错误')
     throw e
   }
 }
 
 async function voteForCompany(id, ceoId) {
-  const res = await Service.post('/student/voteForCompany', {
-    studentId: id,
-    ceoId
-  })
-  return res.data
+  try {
+    const res = await Service.post('/student/voteForCompany', {
+      studentId: id,
+      ceoId
+    })
+    return res.data
+  } catch (e) {
+    message.info('网络异常')
+  }
 }
 
 async function createCompany(studentId, companyName, type) {
@@ -112,20 +127,22 @@ async function createCompany(studentId, companyName, type) {
 }
 
 async function fetchFileList(teachclass, currentPage) {
-  return Service.post('/upload/showAll', {
-    teachclass,
-    currentPage
-  }).then(
-    res => JSON.parse(res.data),/*不知道为什么后端的data是个字符串*/
-    e => '网络错误'
-  )
+  try {
+    const res = await Service.post('/upload/showAll', {
+      teachclass,
+      currentPage
+    })
+    return typeof res.data === 'object' ? res.data :  JSON.parse(res.data)
+  } catch (e) {
+    message.info('网络错误')
+  }
 }
 
 async function companyInfo(studentId) {
   const res = await Service.post('/student/showCompanySelf', {
     studentId
   }).catch(e => {
-    message.warn('网络异常')
+    message.info('网络异常')
   })
   return res.data
 }
@@ -136,7 +153,7 @@ async function uploadPPT(fd) {
       'Content-Type': 'multipart/form-data'
     }
   }).catch(e => {
-    message.warn('网络异常')
+    message.info('网络异常')
   })
 
   return res?.data
@@ -144,16 +161,50 @@ async function uploadPPT(fd) {
 
 async function deleteFile(id) {
   try {
-    const res = await Service.post('/upload/delete')
+    const res = await Service.post('/upload/delete', {
+      id
+    })
     return res.data
   } catch (e) {
-    message.warn("网络异常")
-    return {
-      flag: false
-    }
+    message.info("网络异常")
   }
 }
 
+async function companyScore(scorer, score, scored) {
+  try {
+    const res = await Service.post('/score/companyScore', {
+      scorer,
+      score,
+      scored
+    })
+    return res.data
+  } catch (e) {
+    message.info("网络错误")
+  }
+}
+
+async function studentScore(score, scored, scorer) {
+  try {
+    const res = await Service.post('/score/stuScore', {
+      score,
+      scored,
+      scorer
+    })
+    return res.data
+  } catch (e) {
+    message.info('网络错误')
+  }
+}
+async function showScored(studentId) {
+  try {
+    const res = await Service.post('/score/showScore', {
+      studentId
+    })
+    return res.data
+  }catch (e) {
+    message.info('网络错误')
+  }
+}
 export {
   agreeApplication,
   getMember,
@@ -167,7 +218,10 @@ export {
   changeCompanyName,
   companyInfo,
   uploadPPT,
-  deleteFile
+  deleteFile,
+  companyScore,
+  studentScore,
+  showScored
 }
 
 

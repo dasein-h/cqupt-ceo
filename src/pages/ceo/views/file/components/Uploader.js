@@ -1,7 +1,8 @@
 import React, {useState, useEffect, useRef} from 'react'
-import {Button, message} from 'antd'
+import {Button, message, Upload} from 'antd'
 import {uploadPPT} from "../../../../../until/api/ceo";
 import isPPT from "../../../../../until/api/isPPT";
+import {UploadOutlined} from '@ant-design/icons';
 
 export default (props) => {
   let {userId, teachclass} = props
@@ -39,6 +40,7 @@ export default (props) => {
     }
     if (res.flag) {
       message.success('上传成功')
+      window.location.reload()
     } else {
       message.warn(res.message || "数据库异常")
     }
@@ -51,13 +53,14 @@ export default (props) => {
         <input
           ref={fileRef}
           style={{
-            visibility: 'hidden'
+            visibility: 'hidden',
+            width: '0'
           }}
           type="file"
           onChange={handleUpload}
         />
       </label>
-       <Button type="primary" onClick={upload}>上传</Button>
+      <Button type="primary" onClick={upload}>上传</Button>
     </div>
   )
 }

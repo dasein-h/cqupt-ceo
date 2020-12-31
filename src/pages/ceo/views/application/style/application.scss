@@ -1,22 +1,49 @@
+.flex {
+  display: flex;
+  justify-content: center;
+}
+.align-center {
+  align-items: center;
+}
+.column{
+  flex-direction: column;
+}
+.flex-evenly {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+}
+
+.flex-around {
+  display: flex;
+  justify-content: space-around;
+}
+
 .status {
   border-radius: 2em;
   padding: .5em 1em;
+
   &.pass {
-    background: #dcffae;
-    color: green;
+    //background: #daf3ff;
+    color: #91b9df;
   }
+
   &.reject {
     background: #ffacb0;
     color: #a10000;
   }
 }
+
 .upload-btn {
-  padding: 1em;
-  background: #fff;
+  display: inline-block;
+  width: fit-content;
+  padding: .5em;
   text-align: center;
-  width: 150px;
-  display: block;
-  height: 50px;
+  z-index: 10;
   cursor: pointer;
   box-shadow: 0 0 15px #f7f7f7;
   transition: .2s;

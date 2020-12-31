@@ -95,10 +95,6 @@ class ChoseTeacher extends Component{
         })
        ManagerApi.showTeacher(currentPage).then(
             (res) => {
-                if(!res.data.flag && res.data.message === "没有登录，请先登录"){
-                    localStorage.clear();
-                    this.props.history.push('/Student/AllCompanies/ChosenClasses');
-                  }
                 let list = JSON.parse(res.data);
                 if(list.length !== 0){
                     let pagination = {...this.state.pagination};

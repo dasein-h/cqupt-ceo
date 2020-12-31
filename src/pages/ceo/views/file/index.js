@@ -17,11 +17,13 @@ const File = props => {
 
   return (
     <>
-      <PageHeader title="文件"/>
+      <PageHeader
+        title="文件"
+        extra={[
+          <Uploader {...props}/>
+        ]}
+      />
       <FileList {...props}/>
-
-      <PageHeader title="上传文件"/>
-      <Uploader {...props}/>
     </>
   )
 }

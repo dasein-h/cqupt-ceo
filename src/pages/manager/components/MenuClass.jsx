@@ -39,7 +39,7 @@ class MenuClass extends Component{
                         <div>
                             <span className="chose-top">选择班级</span>
                             <span className="chose-name">{this.state.teacherName}</span>
-                            <Button type="primary" onClick={this.toChoseClass} style={{marginRight:"10px",marginLeft:"10px"}}>更改班级</Button>
+                            <Button type="primary" onClick={this.toChoseClass} style={{marginRight:"10px",marginLeft:"10px"}}>返回列表</Button>
                             <Button type="primary" onClick={this.handlebtnChange} loading={this.state.loading}>{this.state.btucontent}</Button>
                         </div>
                         <Menu theme="light"  mode="horizontal"  defaultSelectedKeys={[sessionStorage.getItem("count")||"1"]}>
@@ -55,13 +55,13 @@ class MenuClass extends Component{
                         <Switch>
                             <Route path="/Manager/ChoseClass/MenuClass/addClass">
                                 {this.state.thisVisible?
-                                    <AddClass getTeachClassList = {this.getTeachClassList}/>:
+                                    <AddClass getTeachClassList = {this.getTeachClassList} addClass = {this.addClass}/>:
                                     <Spin size="large" style={{marginTop:"100px",marginLeft:"400px"}}></Spin>
                                 }
                             </Route>
                             <Route path="/Manager/ChoseClass/MenuClass/deleteClass">
                                  {this.state.thisVisible?
-                                    <DeleteClass getTeachClassList = {this.getTeachClassList}/>:
+                                    <DeleteClass getTeachClassList = {this.getTeachClassList} deleteClass = {this.deleteClass}/>:
                                     <Spin size="large" style={{marginTop:"100px",marginLeft:"400px"}}></Spin>
                                  }
                             </Route>
@@ -126,10 +126,6 @@ class MenuClass extends Component{
         })
         ManagerApi.addClass(list).then(
             (res) => {
-                if(!res.data.flag && res.data.message === "没有登录，请先登录"){
-                    localStorage.clear();
-                    this.props.history.push('/Student/AllCompanies/ChosenClasses');
-                  }
                 if(res.data.flag){
                     message.success("添加成功",1);
                     this.setState({
@@ -149,10 +145,6 @@ class MenuClass extends Component{
         })
         ManagerApi.deleteClass(list).then(
             (res) => {
-                if(!res.data.flag && res.data.message === "没有登录，请先登录"){
-                    localStorage.clear();
-                    this.props.history.push('/Student/AllCompanies/ChosenClasses');
-                  }
                 if(res.data.flag){
                     message.success("删除成功",1);
                     this.setState({
