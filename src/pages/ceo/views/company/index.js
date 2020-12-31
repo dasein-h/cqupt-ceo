@@ -1,17 +1,17 @@
 import React, {useState, useEffect, useReducer, memo} from 'react'
 import Lists from '../../components/Lists'
-import {Card, PageHeader, Button, Modal, Input, Radio, Divider, message, List} from "antd";
+import {Card, PageHeader, Button, message, InputNumber, Tooltip} from "antd";
 import {
-  setPosition as requestSetPos,
   getMember,
   showAllCompany,
   voteForCompany,
-  createCompany as createCompanyImpl
+  companyScore,
+  showScored
 } from "../../../../until/api/ceo";
 import MyTable from "../../components/MyTable";
 import WithModal from "../../components/WithModal";
 import MyCompany from "./components/MyCompany";
-import CompanyItem from "./components/CompanyItem";
+import Member from "./components/Member";
 
 import './style/position.scss'
 
@@ -32,7 +32,9 @@ const companyTypes = [
   '税务局'
 ]
 
+
 let cancel = () => {
+  /* 占位 */
 }
 
 const validateVote = (myType, target) => {
@@ -56,7 +58,8 @@ const reducer = (state, action) => {
     case 'SET_MEMBER_STATE':
       return {
         ...state,
-        members: payload
+        members: payload.members,
+        scoredList: payload.scoredList
       }
     case 'CHANGE_COMPANY_PAGE':
       return {
@@ -74,7 +77,6 @@ const reducer = (state, action) => {
   }
 }
 
-
 function Company(props) {
   const {userId} = props
 
@@ -84,42 +86,36 @@ function Company(props) {
     companyTotal: 0,
     members: null
   })
-
-  const [posValue, setPosValue] = useState(null)
-  const [stuId, setStuId] = useState(null)
-
-  useEffect(() => {
-    getMember(userId).then(
-      // res => setMembers(res.data)
-      res => {
-        if (!res.data) {
-          message.info(res.msg || res.message)
-          return
-        }
-        dispatch({
-          type: 'SET_COMPANY_NAME',
-          payload: res.data?.[0]?.companyName
-        })
-        dispatch({
-          type: 'SET_MEMBER_STATE',
-          payload: res.data
-          // payload: mockMembers
-        })
+  const [score, setScore] = useState(0)
+  const fetchGetMember = async userId => {
+    const scored = await showScored(userId)
+    const scoredList = scored.data
+    const res = await getMember(userId)
+    if (!res.data) {
+      message.info(res.msg || res.message)
+      return
+    }
+    dispatch({
+      type: 'SET_COMPANY_NAME',
+      payload: res.data?.[0]?.companyName
+    })
+    dispatch({
+      type: 'SET_MEMBER_STATE',
+      payload: {
+        members: res.data,
+        scoredList
       }
-    )
-    showAllCompany(userId, 0).then(
-      res => {
-        if (!res.flag) return
-        dispatch({
-          type: 'SET_COMPANY_STATE',
-          payload: res.data
-        })
-      }
-    )
-  }, [])
-
-  const [visible, setVisible] = useState(false)
-
+      // payload: mockMembers
+    })
+  }
+  const fetchShowAllCompany = async (userId, currentPage) => {
+    const res = await showAllCompany(userId, currentPage)
+    if (!res.flag) return
+    dispatch({
+      type: 'SET_COMPANY_STATE',
+      payload: res.data
+    })
+  }
   const updateMember = async () => {
     const res = await getMember(userId)
     if (res.flag) {
@@ -129,22 +125,6 @@ function Company(props) {
       })
     } else {
       message.warn(res.message)
-    }
-  }
-  const openPosition = id => {
-    setVisible(true)
-    setStuId(id)
-  }
-  const setPosition = async () => {/* 选了职位之后刷新成员 */
-    try {
-      const res = await requestSetPos(userId, stuId, posValue)
-      message.info(res.message)
-      if (res.flag) {
-        setVisible(false)
-        updateMember(userId)
-      }
-    } catch (e) {
-      message.warning(e)
     }
   }
   const vote = async (targetTypeCode, ceo) => {
@@ -157,7 +137,16 @@ function Company(props) {
       message.info(res.message || "网络异常")
     }
   }
-
+  const handleScore = async (studentId) => {
+    const res = await companyScore(userId, score, studentId)
+    if (!res) return
+    if (res.flag) {
+      message.success("打分成功")
+      cancel()
+    } else {
+      message.info(res.message || "网络异常")
+    }
+  }
   const companyColumns = [
     {
       title: '公司名',
@@ -170,6 +159,12 @@ function Company(props) {
       dataIndex: 'typeCode',
       render(text, {typeCode}) {
         return (typeCode < 3 ? <div>普通公司</div> : <div>其他机构</div>)
+      }
+    }, {
+      title: '分数',
+      dataIndex: 'companyScore',
+      render(_, {companyScore}) {
+        return <span>{companyScore || '未评分'}</span>
       }
     }, {
       title: 'ceo',
@@ -187,23 +182,64 @@ function Company(props) {
     }, {
       title: '操作',
       render(text, {ceo, typeCode}) {
+        /*
+        *   检查是不是可以操作的公司类型
+        *   0-2普通公司
+        *   >3 其它机构
+        *   只能互相打分
+        */
+        const canOperate = validateVote(localStorage.getItem('typeCode'), typeCode)
         return (
           <>
             <Button
-              disabled={!validateVote(localStorage.getItem('typeCode'), typeCode)}
+              disabled={!canOperate}
               onClick={vote.bind(null, typeCode, ceo)}>投票</Button>
 
             <WithModal
-              render={props => (
-                <Button
-                  disabled={!validateVote(localStorage.getItem('typeCode'), typeCode)}
-                  {...props}
-                >
-                  打分
-                </Button>
-              )}
+              render={(props, onCancel) => {
+                cancel = onCancel
+                const canOperate = validateVote(localStorage.getItem('typeCode'), typeCode)
+                return (
+                  <Button
+                    type="primary"
+                    disabled={!canOperate}
+                    {...props}
+                  >
+                    打分
+                  </Button>
+                )
+              }}
             >
-              div
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-evenly',
+                alignItems: 'center'
+              }}>
+                <div style={{
+                  textAlign: 'center'
+                }}>
+                  分数
+                  <br/>
+                  <span style={{
+                    color: '#a0a0a0',
+                    fontSize: '14px'
+                  }}>(0 - 100)</span>
+                </div>
+                <Tooltip
+                  title="上下键可以快速调整分数"
+                >
+                  <InputNumber
+                    defaultValue={100}
+                    autoFocus
+                    onChange={score => {
+                      setScore(score >> 0)
+                    }}
+                    max={100}
+                    min={0}
+                  />
+                </Tooltip>
+                <Button type="primary" onClick={handleScore.bind(null, ceo)}>评分</Button>
+              </div>
             </WithModal>
           </>
         )
@@ -211,48 +247,10 @@ function Company(props) {
     }
   ]
 
-  /* UI组件 */
-  const Member = ({member}) => {
-    return (
-      <Card
-        key={member.id}
-        hoverable={true}
-      >
-        <div style={{fontSize: '16px'}}>{member.userName}</div>
-        <div style={{
-          display: 'flex', justifyContent: 'space-between',
-          margin: '15px 0', alignItems: 'flex-end', fontSize: '16px'
-        }}>
-          <div>
-            <div className="row">
-              <span className="dscr">专业</span>{member.academy}</div>
-            <div className="row">
-              <span className="dscr">学号</span>{member.studentId}</div>
-          </div>
-          <div>
-            <div className="row">
-              <span className="dscr">职位</span>{member.position || "无职位"}</div>
-            <div className="row">
-              <span className="dscr">分数</span>{member.personalScore}</div>
-          </div>
-        </div>
-        <footer style={{
-          display: 'flex', justifyContent: 'space-between'
-        }}>
-          <Button
-            type={"primary"}
-            shape="round"
-            onClick={openPosition.bind(null, member.id)}
-          >设置职位</Button>
-          <Button
-            type="primary"
-            shape="round"
-          >为他投票</Button>
-        </footer>
-
-      </Card>
-    )
-  }
+  useEffect(() => {
+    fetchGetMember(userId)
+    fetchShowAllCompany(userId, 0)
+  }, [])
 
   return (
     <div>
@@ -267,48 +265,15 @@ function Company(props) {
       <Lists
         column={3}
         dataSource={state.members}
-        render={item => <Member member={item}/>}
-      />
-
-      <Modal
-        visible={visible}
-        onCancel={() => {
-          setVisible(false)
-        }}
-        footer={false}
-      >
-        <Radio.Group onChange={({target: {value}}) => {
-          setPosValue(value)
-        }}>
-          <PageHeader
-            title="职位"
-            style={{padding: '16px 0'}}
+        render={item => (
+          <Member
+            ceoId={userId}
+            reload={updateMember.bind(null, userId)}
+            member={item}
+            scoredList={state.scoredList}
           />
-          {
-            positions.map(position => (
-              <Radio.Button
-                buttonStyle="solid"
-                key={position}
-                value={position}
-                onChange={e => {
-                  setPosValue(e.target.value)
-                }}
-              >
-                {position}
-              </Radio.Button>
-            ))
-          }
-        </Radio.Group>
-        <Divider/>
-        <Button
-          type="primary"
-          shape="round"
-          onClick={setPosition}
-          disabled={!posValue}
-        >
-          确 认
-        </Button>
-      </Modal>
+        )}
+      />
 
       <PageHeader title="所有公司"/>
       <MyTable

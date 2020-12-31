@@ -1,10 +1,11 @@
 import React, {memo, useEffect, useReducer} from 'react'
 
 import {showApplication, agreeApplication} from "../../../../until/api/ceo";
-import {PageHeader, message} from "antd";
+import {PageHeader, message, Tag} from "antd";
 import {PAGE_SIZE, SET_PAGE, INIT_PAGE, SET_CURR_PAGE, LOADING, MARK_STATE} from "./consts/constants";
 import './style/application.scss'
 import MyTable from "../../components/MyTable";
+import {CheckCircleOutlined} from '@ant-design/icons'
 
 const reducer = (state, {type, payload}) => {
   switch (type) {
@@ -29,7 +30,7 @@ const reducer = (state, {type, payload}) => {
       }
     case MARK_STATE:
       const newState = state.data.slice()
-      newState.data[payload] = '已同意'
+      newState[payload] = '已同意'
       return {...state, data: newState}
   }
 }
@@ -99,9 +100,9 @@ function Application(props) {
             render(text, record) {
               const {state} = record
               return (
-                <span
-                  className={state === '已同意' ? 'status pass' : 'status'}
-                >{state}</span>
+                <Tag
+                  color={state === '已同意' ? 'geekblue' : ''}
+                >{state}</Tag>
               )
             }
           }, {
