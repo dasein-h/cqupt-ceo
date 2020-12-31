@@ -7,6 +7,9 @@ import {Tooltip} from 'antd';
 let cancel = () => {
   /* 占位 */
 }
+let cancelPos = () => {
+  /* 占位 */
+}
 const validateScore = score => {
   score = score << 0
   if (score > 100) return 100
@@ -40,7 +43,7 @@ const Member = (props) => {
     }
     if (res.flag) {
       message.success('设置成功')
-      cancel()
+      cancelPos()
       reload()
     } else {
       message.info(res.message || '网络错误')
@@ -88,7 +91,7 @@ const Member = (props) => {
         <WithModal
           render={
             (props, onCancel) => {
-              cancel = onCancel
+              cancelPos = onCancel
               return (
                 <Button
                   type="primary"

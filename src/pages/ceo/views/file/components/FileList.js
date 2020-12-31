@@ -109,6 +109,7 @@ const FileList = props => {
     <>
       <MyTable
         dataSource={state.list}
+        total={state.list?.[0]?.filePath || 0}
         columns={columns}
         onChange={setPage}
         currentPage={currentPage}

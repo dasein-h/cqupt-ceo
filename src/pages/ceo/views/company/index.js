@@ -87,7 +87,7 @@ function Company(props) {
     members: null
   })
   const [score, setScore] = useState(0)
-  const fetchGetMember = async userId => {
+  const fetchGetMember = async () => {
     const scored = await showScored(userId)
     const scoredList = scored.data
     const res = await getMember(userId)
@@ -105,7 +105,6 @@ function Company(props) {
         members: res.data,
         scoredList
       }
-      // payload: mockMembers
     })
   }
   const fetchShowAllCompany = async (userId, currentPage) => {
@@ -116,17 +115,7 @@ function Company(props) {
       payload: res.data
     })
   }
-  const updateMember = async () => {
-    const res = await getMember(userId)
-    if (res.flag) {
-      dispatch({
-        type: 'SET_MEMBER_STATE',
-        payload: res.data
-      })
-    } else {
-      message.warn(res.message)
-    }
-  }
+
   const vote = async (targetTypeCode, ceo) => {
     const typeCode = localStorage.getItem('typeCode')
     if (!validateVote(typeCode, targetTypeCode)) {
@@ -268,7 +257,7 @@ function Company(props) {
         render={item => (
           <Member
             ceoId={userId}
-            reload={updateMember.bind(null, userId)}
+            reload={fetchGetMember}
             member={item}
             scoredList={state.scoredList}
           />

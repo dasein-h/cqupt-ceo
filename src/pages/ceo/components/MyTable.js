@@ -2,9 +2,8 @@ import React, {memo} from 'react'
 import {Table} from "antd";
 import defaultPagination from "../config/defaultPagination";
 
-let pagination = defaultPagination
-
 const MyTable = props => {
+  let pagination = defaultPagination
   const {
     columns,
     dataSource,
@@ -13,7 +12,6 @@ const MyTable = props => {
     pageSize,
     onChange
   } = props
-
   if (currentPage) {
     pagination = {...pagination, currentPage, total, pageSize, onChange}
   }

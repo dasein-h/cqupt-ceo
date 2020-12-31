@@ -5,7 +5,6 @@ import {PageHeader, message, Tag} from "antd";
 import {PAGE_SIZE, SET_PAGE, INIT_PAGE, SET_CURR_PAGE, LOADING, MARK_STATE} from "./consts/constants";
 import './style/application.scss'
 import MyTable from "../../components/MyTable";
-import {CheckCircleOutlined} from '@ant-design/icons'
 
 const reducer = (state, {type, payload}) => {
   switch (type) {
@@ -32,6 +31,8 @@ const reducer = (state, {type, payload}) => {
       const newState = state.data.slice()
       newState[payload] = '已同意'
       return {...state, data: newState}
+    default:
+      return {...state}
   }
 }
 
@@ -54,7 +55,7 @@ function Application(props) {
         })
       }
     )
-  }, [])
+  }, [userId])
 
   const handleAgree = async (studentId, companyName, idx) => {
     const res = await agreeApplication(userId, studentId, companyName)
@@ -71,20 +72,6 @@ function Application(props) {
   return (
     <div>
       <PageHeader title="所有申请"/>
-      {/*<Lists*/}
-      {/*  dataSource={state.data}*/}
-      {/*  render={item => (*/}
-      {/*    <Card*/}
-      {/*      hoverable*/}
-      {/*      style={{margin: '10px'}}*/}
-      {/*      title={item.companyName || '无名'}*/}
-      {/*    >*/}
-      {/*      <List.Item>*/}
-      {/*        <ApplicationItem handleAgree={handleAgree} info={item}/>*/}
-      {/*      </List.Item>*/}
-      {/*    </Card>*/}
-      {/*  )}*/}
-      {/*/>*/}
       <MyTable
         dataSource={state.data}
         columns={[
