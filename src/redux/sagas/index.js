@@ -2,8 +2,9 @@ import {takeEvery, select, throttle, call, put, takeLatest} from 'redux-saga/eff
 import actions from '../actionCreators/creators'
 import LoginApi from '../../until/api/LoginApi.js'
 import StudentApi from '../../until/api/StudentApi'
-import {getMember, setPosition} from "../../until/api/ceo";
-import { message } from 'antd';
+import {getMember, setPosition} from "../../until/api/ceo"
+import baseurl from '../../until/BaseUrl'
+import { message } from 'antd'
 function setLocalStorage(config) {
   Reflect.ownKeys(config).forEach(key => {
     localStorage.setItem(key, config[key])
@@ -183,7 +184,7 @@ export default function* defSaga() {
     if (res.status === 200 ) {
       yield put(actions.DownloadFile_OK(res.data.message))
       let download = document.createElement('a')
-      download.href = "http://120.79.207.60:8089/upload/download?id="+action.payload.id
+      download.href = baseurl+"/upload/download?id="+action.payload.id
       download.click()
     }
     else if (!res.data.flag && res.data.message === "没有登录，请先登录"){
