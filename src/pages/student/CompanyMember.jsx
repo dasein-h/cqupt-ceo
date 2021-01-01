@@ -55,7 +55,8 @@ class CompanyMember extends Component {
           if( newProps.isRunScore === true && !newProps.message){
             message.success("打分成功")
             this.setState({
-              b_loading:false
+              b_loading:false,
+              disabled:true,
             })
           }
           if( newProps.message ){
