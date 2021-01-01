@@ -1,18 +1,21 @@
 import React from 'react'
-import {
-    showChangeNewsType,
-    agreeNewsType,
-    rejectNewsType
-} from '../../../until/api/teacherApi'
-import { Table, Space, Button, notification, Input, Select, message } from 'antd'
+// import {
+//     showChangeNewsType,
+//     agreeNewsType,
+//     rejectNewsType
+// } from '../../../until/api/teacherApi'
+import { 
+    // Table, Space, Button, notification, 
+    // Input, Select, 
+    message } from 'antd'
 import '../../../static/style/teacherStyle.scss'
-const { Search } = Input
-const { Option } = Select;
+// const { Search } = Input
+// const { Option } = Select;
 class newsType extends React.Component {
     constructor(...props) {
         super(...props)
         localStorage.setItem("newsKey",JSON.stringify({key:2,route:'/Teacher/News/Type'}))
-
+        message.info('暂无数据!')
     //     this.state = {
     //         teachclass: localStorage.getItem("teachclass"),
     //         select: "name",

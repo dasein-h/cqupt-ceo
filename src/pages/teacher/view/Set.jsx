@@ -5,18 +5,15 @@ import SetOther from '../components/SetOthers'
 import { Tabs, Menu } from 'antd'
 import { showConfig } from '../../../until/api/teacherApi'
 import {
-    BrowserRouter as Router,
     Switch,
     Route,
     Link,
     Redirect
 } from "react-router-dom";
-const { TabPane } = Tabs;
 class Set extends React.Component {
     constructor(props) {
         super(props)
         if(localStorage.getItem("setKey")===null){
-            console.log("hahahmeiyou");
             localStorage.setItem("setKey",JSON.stringify({key:1,route:'/Teacher/Set/Person'}))
          }
          let setKey = JSON.parse(localStorage.getItem("setKey"))
@@ -68,7 +65,6 @@ class Set extends React.Component {
     componentDidMount() {
         showConfig(this.state.teachclass).then(rs => {
             let res = rs.data.data
-            console.log(res);
             this.setState({
                 ceoScore: res.ceoScore,
                 memberScore: res.memberScore,

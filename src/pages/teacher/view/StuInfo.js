@@ -1,10 +1,11 @@
 import React, { Component} from 'react'
-import { Button, Input, Table, notification, Select, Radio,Pagination,message } from 'antd';
+import { Button,Table, notification,message } from 'antd';
 import { DownloadOutlined } from '@ant-design/icons';
 import { showAll} from '../../../until/api/teacherApi'
 import '../../../static/style/teacherStyle.scss'
-const { Search } = Input
-const { Option } = Select;
+import axios from 'axios'
+// const { Search } = Input
+// const { Option } = Select;
 // 定义表格的行
 const columns = [
   {
@@ -60,18 +61,54 @@ class StuInfo extends Component {
         }
       },
       loading: true,
+      btnLoad:false
     };
   }
   componentDidMount(){
     this.changePage(1)
   }
+
+  render() {
+    return (
+      <div id="StuInfo">
+        <div className='header'>
+          <div className='left'>
+            <p className='title'>学生信息</p>
+            {/* <Select defaultValue="name" className="select"
+              style={{ width: 100 }}
+              onSelect={(value) => { this.changeSelect(value) }} >
+              <Option value="name">学生姓名</Option>
+              <Option value="id">学生学号</Option>
+            </Select>
+            <Search
+              placeholder="请输入搜索信息"
+              // loading='true'
+              enterButton="搜索"
+              style={{ width: 200, marginBottom: 10 }}
+              onSearch={() => {this.search()}}
+              onChange={(e) => { this.inputChange(e) }}
+              value={this.state.value}
+            ></Search> */}
+          </div>
+          <div className="right">
+            <Button type="primary" loading={this.state.btnLoad} shape="round" icon={<DownloadOutlined />} size='middle' onClick={() => {this.downLoad()}}>导出Excel表</Button>
+          </div>
+        </div>
+        <div>
+          <Table
+          columns={columns}
+          rowKey={record => record.id}
+          dataSource={this.state.data}
+          pagination={this.state.pagination}
+          loading={this.state.loading}
+          />
+        </div>
+      </div>
+    );
+  }
   changePage = (page) => {
     let lists = [];
     showAll(this.state.teachclass,page).then((res) => {
-      if(!res.data.flag && res.data.message === "没有登录，请先登录"){
-        this.props.history.push('/Student/AllCompanies/ChosenClasses');
-        localStorage.clear();
-      }
       this.setState({loading:false});
       let rs = JSON.parse(res.data);
       let companyName
@@ -103,51 +140,10 @@ class StuInfo extends Component {
     })
 
   }
-  render() {
-    return (
-      <div id="StuInfo">
-        <div className='header'>
-          <div className='left'>
-            <p className='title'>学生信息</p>
-            {/* <Select defaultValue="name" className="select"
-              style={{ width: 100 }}
-              onSelect={(value) => { this.changeSelect(value) }} >
-              <Option value="name">学生姓名</Option>
-              <Option value="id">学生学号</Option>
-            </Select>
-            <Search
-              placeholder="请输入搜索信息"
-              // loading='true'
-              enterButton="搜索"
-              style={{ width: 200, marginBottom: 10 }}
-              onSearch={() => {this.search()}}
-              onChange={(e) => { this.inputChange(e) }}
-              value={this.state.value}
-            ></Search> */}
-          </div>
-          <div className="right">
-            <Button type="primary" shape="round" icon={<DownloadOutlined />} size='middle' onClick={() => {this.downLoad()}}>导出Excel表</Button>
-          </div>
-        </div>
-        <div>
-          <Table
-          columns={columns}
-          rowKey={record => record.id}
-          dataSource={this.state.data}
-          pagination={this.state.pagination}
-          loading={this.state.loading}
-          />
-        </div>
-      </div>
-    );
-  }
   search = () => {
-    if (this.state.select == "id") {
-          console.log('id');
-          console.log(this.state.value);
-    } else if (this.state.select == "name") {
-        console.log('name');
-        console.log(this.state.value);
+    if (this.state.select === "id") {
+    } else if (this.state.select === "name") {
+      
     }
     //根据value调用接口 搜索 改变data的值
   }
@@ -162,7 +158,39 @@ class StuInfo extends Component {
     })
   }
   downLoad = () => {
-    window.location.href = "http://localhost:3000/api/upload/export?teachclass="+this.state.teachclass;
+    this.setState({
+      btnLoad:true
+    })
+    // window.location.href = "http://localhost:3000/api/upload/export?teachclass="+this.state.teachclass;
+    // setTimeout(() => {
+    //   this.setState({
+    //   btnLoad:false
+    // })
+    // }, 6000);
+    let param = new URLSearchParams()
+param.append('teachclass', this.state.teachclass)
+    axios({
+      url: `http://localhost:3000/api/upload/export`,
+      method: 'post',
+      data:param,
+     header: {
+       headers: { 'Content-Type': 'application/x-download' }
+     },
+     responseType: 'blob'
+     }).then((res) => {
+      const xlsx = 'application/vnd.ms-excel'
+      const blob = new Blob([res.data], { type: xlsx })
+      const a = document.createElement('a') // 转换完成，创建一个a标签用于下载
+      a.download = `学生成绩表.xlsx`
+      a.href = window.URL.createObjectURL(blob)
+      a.click()
+      a.remove()
+      this.setState({
+        btnLoad:false
+      })
+     }).catch(err => {
+       message.error('导出错误!')
+     })
   }
 }
 

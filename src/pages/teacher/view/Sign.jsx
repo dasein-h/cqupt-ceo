@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-    BrowserRouter as Router,
     Switch,
     Route,
     Link,
@@ -9,7 +8,6 @@ import {
 import { Tabs, Menu } from "antd"
 import SignedCom from "../components/SignedCom"
 import UnsignCom from "../components/UnsignCom"
-const { TabPane } = Tabs;
 
 class Sign extends React.Component {
     constructor(props) {

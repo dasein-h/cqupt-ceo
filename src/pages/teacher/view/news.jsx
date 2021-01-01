@@ -1,12 +1,11 @@
 import React from 'react'
 import {
-    BrowserRouter as Router,
     Switch,
     Route,
     Link,
     Redirect
 } from "react-router-dom";
-import { Tabs, Menu } from "antd"
+import { Menu } from "antd"
 import NewsName from '../components/NewsName'
 import NewsType from '../components/NewsType'
 class News extends React.Component{
