@@ -330,7 +330,7 @@ class Student extends Component {
                 </Switch>
               </div>
             </Content>
-            <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
+            <Footer style={{ textAlign: 'center' }}>版权所有 极客工作室</Footer>
           </Layout>
         </Layout>
       );
