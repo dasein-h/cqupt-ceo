@@ -271,7 +271,7 @@ class Student extends Component {
               <Form.Item
                 label="账号"
                 name="username"
-                rules={[{ required: true, message: '请输入正确的账号!',pattern: new RegExp(/^[1-9]\d*$/, "g")}] }
+                rules={[{ required: true, message: '请输入正确的账号!',}] }
               >
                 <Input />
               </Form.Item>
