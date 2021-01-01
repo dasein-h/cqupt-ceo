@@ -271,7 +271,7 @@ class Student extends Component {
               <Form.Item
                 label="账号"
                 name="username"
-                rules={[{ required: true, message: '请输入正确的账号!',}] }
+                rules={[{ required: true, message: '账号不能为空!',}] }
               >
                 <Input />
               </Form.Item>
