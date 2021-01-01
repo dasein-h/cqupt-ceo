@@ -27,6 +27,7 @@ class Manager extends Component {
             userid:''
           }
           this.handleExit = this.handleExit.bind(this);
+          this.handleClick = this.handleClick.bind(this)
     }
     render() {
         return (
@@ -38,7 +39,7 @@ class Manager extends Component {
                                 <Link to="/Manager/ChoseClass" onClick={changeNav.bind(this,1,1)}>选择班级</Link>
                             </Menu.Item>
                             <Menu.Item key="2" icon={<EditOutlined />}>
-                                <Link to="/Manager/data" onClick={changeNav.bind(this,1,2)}>导入数据</Link> 
+                                <Link to="/Manager/data" onClick={this.handleClick}>导入数据</Link> 
                             </Menu.Item>
                         
                         </Menu>
@@ -84,8 +85,6 @@ class Manager extends Component {
         this.setState({
             userid: userId,
             username:userName
-        },()=>{
-            // this.isLogin()
         })
         if(localStorage.hasOwnProperty("userId") && localStorage.getItem("type")==="teacher") {
             this.props.history.push('/teacher');
@@ -103,9 +102,6 @@ class Manager extends Component {
                     message.success("退出成功",1);
                     localStorage.clear();
                     this.props.history.push('/Student/AllCompanies/ChosenClasses');
-                }else if(!res.data.flag && res.data.message === "没有登录，请先登录"){
-                    localStorage.clear();
-                    this.props.history.push('/Student/AllCompanies/ChosenClasses');
                 }else{
                     message.info("退出失败",1)
                 }
@@ -120,6 +116,10 @@ class Manager extends Component {
                 });
             }
         )
+    }
+    handleClick = () => {
+        changeNav.bind(this,1,2)
+        sessionStorage.removeItem("count");
     }
 }
 

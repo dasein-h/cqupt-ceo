@@ -6,12 +6,10 @@
 .choseteacher{
     display: block;
 }
-.choseclass{
-    // display: none;
-}
-.chose-name{
-    margin-left: 65%;
-}
-button{
-    //margin-left: 10px;
+// .chose-name{
+//     float: right;
+// }
+.chose{
+    display: flex;
+    justify-content: space-between;
 }

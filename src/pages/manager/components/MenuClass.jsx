@@ -36,12 +36,15 @@ class MenuClass extends Component{
             <Fragment>
                 <Router >
                         <div>
-                        <div>
-                            <span className="chose-top">选择班级</span>
-                            <span className="chose-name">{this.state.teacherName}</span>
-                            <Button type="primary" onClick={this.toChoseClass} style={{marginRight:"10px",marginLeft:"10px"}}>返回列表</Button>
-                            <Button type="primary" onClick={this.handlebtnChange} loading={this.state.loading}>{this.state.btucontent}</Button>
-                        </div>
+                            <div className="chose">
+                                <span className="chose-top">选择班级</span>
+                                <span className="chose-name">
+                                    <span>{this.state.teacherName}</span>
+                                    <Button type="primary" onClick={this.toChoseClass} style={{marginRight:"10px",marginLeft:"10px"}}>返回列表</Button>
+                                    <Button type="primary" onClick={this.handlebtnChange} loading={this.state.loading}>{this.state.btucontent}</Button>
+                                </span>
+                                
+                            </div>
                         <Menu theme="light"  mode="horizontal"  defaultSelectedKeys={[sessionStorage.getItem("count")||"1"]}>
                             <Menu.Item key = "1" onClick={(item) => {this.changeBtnContent(item)}}>
                                 <Link to="/Manager/ChoseClass/MenuClass/addClass">选择班级</Link>
@@ -56,13 +59,13 @@ class MenuClass extends Component{
                             <Route path="/Manager/ChoseClass/MenuClass/addClass">
                                 {this.state.thisVisible?
                                     <AddClass getTeachClassList = {this.getTeachClassList} addClass = {this.addClass}/>:
-                                    <Spin size="large" style={{marginTop:"100px",marginLeft:"400px"}}></Spin>
+                                    <Spin size="default" style={{marginTop:"100px",marginLeft:"440px"}}></Spin>
                                 }
                             </Route>
                             <Route path="/Manager/ChoseClass/MenuClass/deleteClass">
                                  {this.state.thisVisible?
                                     <DeleteClass getTeachClassList = {this.getTeachClassList} deleteClass = {this.deleteClass}/>:
-                                    <Spin size="large" style={{marginTop:"100px",marginLeft:"400px"}}></Spin>
+                                    <Spin size="default" style={{marginTop:"100px",marginLeft:"400px"}}></Spin>
                                  }
                             </Route>
                             <Redirect from="/Manager/ChoseClass/MenuClass" to="/Manager/ChoseClass/MenuClass/addClass"></Redirect>
@@ -78,7 +81,7 @@ class MenuClass extends Component{
         this.setState({
             teacherId:teacherid,
             teacherName:teachername,
-            key:localStorage.getItem("count")
+            key:sessionStorage.getItem("count")
         },() => {
         if(this.state.key == 2){
             this.setState({

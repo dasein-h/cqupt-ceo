@@ -72,6 +72,7 @@ class DeleteClass extends Component{
                     rowSelection={rowSelection}
                     loading={this.state.loading}
                     pagination={this.state.pagination}
+                    style={{minHeight:"400px"}}
                 /> 
             </Fragment>
         )
