@@ -14,7 +14,6 @@ export default function* defSaga() {
   yield throttle(2000, 'login', function* () {
     const action = yield select();
     const res = yield call(LoginApi.Login, action.payload)
-    console.log(res)
     if (res.status === 200 && res.data.flag)
     {        
       if(action.payload.studentId!==undefined){
@@ -76,6 +75,9 @@ export default function* defSaga() {
     if (res.status === 200 && res.data.flag) {
       yield put(actions.getAllCompanies_OK(res.data))
     }
+    else if (!res.data.flag && res.data.message === "没有登录，请先登录"){
+      yield put(actions.Exit(localStorage.getItem("userId")))
+    }
     else{
       yield put(actions.getAllCompanies_NO())
     }
@@ -87,6 +89,9 @@ export default function* defSaga() {
       yield put(actions.VoteForCompany_OK(res.data.message))
       yield put(actions.getAllCompanies(localStorage.getItem("userId")))
     }
+    else if (!res.data.flag && res.data.message === "没有登录，请先登录"){
+      yield put(actions.Exit(localStorage.getItem("userId")))
+    }
     else{
       yield put(actions.VoteForCompany_NO(res.data.message))
     }
@@ -96,6 +101,9 @@ export default function* defSaga() {
     const res = yield call(StudentApi.ShowCeo, action.payload)
     if (res.status === 200 && res.data.flag) {
       yield put(actions.ShowCeo_OK(res.data))
+    }
+    else if (!res.data.flag && res.data.message === "没有登录，请先登录"){
+      yield put(actions.Exit(localStorage.getItem("userId")))
     }
     else{
       yield put(actions.ShowCeo_NO())
@@ -108,6 +116,9 @@ export default function* defSaga() {
       yield put(actions.VoteForCeo_OK(res.data.message))
       yield put(actions.ShowCeo(parseInt(sessionStorage.getItem("Page2"))||1,localStorage.getItem("userId")))
     }
+    else if (!res.data.flag && res.data.message === "没有登录，请先登录"){
+      yield put(actions.Exit(localStorage.getItem("userId")))
+    }
     else{
       yield put(actions.VoteForCeo_NO(res.data.message))
     }
@@ -119,6 +130,9 @@ export default function* defSaga() {
       yield put(actions.RunCeo_OK(res.data.message))
       yield put(actions.ShowCeo(parseInt(sessionStorage.getItem("Page2"))||1,localStorage.getItem("userId")))
     }
+    else if (!res.data.flag && res.data.message === "没有登录，请先登录"){
+      yield put(actions.Exit(localStorage.getItem("userId")))
+    }
     else{
       yield put(actions.RunCeo_NO(res.data.message))
     }
@@ -128,6 +142,9 @@ export default function* defSaga() {
     const res = yield call(StudentApi.ShowApplication, action.payload)
     if (res.status === 200 && res.data.flag) {
       yield put(actions.ShowApplication_OK(res.data))
+    }
+    else if (!res.data.flag && res.data.message === "没有登录，请先登录"){
+      yield put(actions.Exit(localStorage.getItem("userId")))
     }
     else{
       yield put(actions.ShowApplication_NO())
@@ -140,6 +157,9 @@ export default function* defSaga() {
       yield put(actions.AddApplication_OK(res.data.message))
       yield put(actions.ShowApplication(parseInt(sessionStorage.getItem("Page3"))||1,localStorage.getItem("userId")))
     }
+    else if (!res.data.flag && res.data.message === "没有登录，请先登录"){
+      yield put(actions.Exit(localStorage.getItem("userId")))
+    }
     else{
       yield put(actions.AddApplication_NO(res.data.message))
     }
@@ -149,6 +169,9 @@ export default function* defSaga() {
     const res = yield call(StudentApi.ShowFile, action.payload)
     if (res.status === 200 ) {
       yield put(actions.ShowFile_OK(JSON.parse(res.data)))
+    }
+    else if (!res.data.flag && res.data.message === "没有登录，请先登录"){
+      yield put(actions.Exit(localStorage.getItem("userId")))
     }
     else{
       yield put(actions.ShowFile_NO())
@@ -163,6 +186,9 @@ export default function* defSaga() {
       download.href = "http://120.79.207.60:8089/upload/download?id="+action.payload.id
       download.click()
     }
+    else if (!res.data.flag && res.data.message === "没有登录，请先登录"){
+      yield put(actions.Exit(localStorage.getItem("userId")))
+    }
     else{
       yield put(actions.DownloadFile_NO(res.data.message))
     }
@@ -174,6 +200,9 @@ export default function* defSaga() {
       yield put(actions.DeleteFile_OK(res.data.message))
       yield put(actions.ShowFile(localStorage.getItem("class"),parseInt(sessionStorage.getItem("Page4"))||1))
     }
+    else if (!res.data.flag && res.data.message === "没有登录，请先登录"){
+      yield put(actions.Exit(localStorage.getItem("userId")))
+    }
     else{
       yield put(actions.DeleteFile_NO(res.data.message))
     }
@@ -184,8 +213,65 @@ export default function* defSaga() {
     if (res.status === 200 && res.data.flag) {
       yield put(actions.ShowCompanyMember_OK(res.data))
     }
+    else if (!res.data.flag && res.data.message === "没有登录，请先登录"){
+      yield put(actions.Exit(localStorage.getItem("userId")))
+    }
     else{
       yield put(actions.ShowCompanyMember_NO())
+    }
+  })
+  yield takeEvery('RunScore', function* () {
+    const action = yield select()
+    const res = yield call(StudentApi.RunScore,action.payload)
+    if (res.status === 200 && res.data.flag) {
+      yield put(actions.RunScore_OK(res.data.message))
+      yield put(actions.ShowScore(localStorage.getItem("userId")))
+    }
+    else if (!res.data.flag && res.data.message === "没有登录，请先登录"){
+      yield put(actions.Exit(localStorage.getItem("userId")))
+    }
+    else{
+      yield put(actions.RunScore_NO(res.data.message))
+    }
+  })
+  yield takeEvery('ShowNumber', function* () {
+    const action = yield select()
+    const res = yield call(StudentApi.ShowNumber,action.payload)
+    if (res.status === 200 && res.data.flag) {
+      yield put(actions.ShowNumber_OK(res.data))
+    }
+    else if (!res.data.flag && res.data.message === "没有登录，请先登录"){
+      yield put(actions.Exit(localStorage.getItem("userId")))
+    }
+    else{
+      yield put(actions.ShowNumber_NO())
+    }
+  })
+  yield takeEvery('ShowScore', function* () {
+    const action = yield select()
+    const res = yield call(StudentApi.ShowScore,action.payload)
+    // if (res.status === 200 && res.data.flag) {
+    if (res.status === 200 ) {
+      yield put(actions.ShowScore_OK(res.data))
+    }
+    else if (!res.data.flag && res.data.message === "没有登录，请先登录"){
+      yield put(actions.Exit(localStorage.getItem("userId")))
+    }
+    else{
+      yield put(actions.ShowScore_NO())
+    }
+  })
+  yield takeEvery('ShowCompany', function* () {
+    const action = yield select()
+    const res = yield call(StudentApi.ShowCompany,action.payload)
+    if (res.status === 200 && res.data.flag) {
+      yield put(actions.ShowCompany_OK(res.data))
+    }
+    else if (!res.data.flag && res.data.message === "没有登录，请先登录"){
+      yield put(actions.Exit(localStorage.getItem("userId")))
+    }
+    else{
+      yield put(actions.ShowCompany_NO())
     }
   })
   /* CEO */

@@ -19,7 +19,8 @@ import {
   Radio,
   message,
   Popover,
-} from 'antd';
+  Form
+} from 'antd'
 import actions from '../../redux/actionCreators/creators'
 
 import {
@@ -28,20 +29,27 @@ import {
   EditOutlined,
   OrderedListOutlined,
   AuditOutlined,
+  ExclamationCircleOutlined,
 } from '@ant-design/icons';
 import CEO from './CEO';
-
+const layout = {
+  labelCol: { span: 8 },
+  wrapperCol: { span: 16 },
+};
+const tailLayout = {
+  wrapperCol: { offset: 8, span: 16 },
+};
 
 const { Header, Content, Footer, Sider } = Layout;
 const options = [
   { label: '老师/管理员', value: '老师' },
   { label: '学生/CEO', value: '学生' },
-];
+]
 const content = (
   <div>
     <p>请补全账号和密码</p>
   </div>
-);
+)
 class Student extends Component {
   constructor(props) {
     super(props);
@@ -50,12 +58,14 @@ class Student extends Component {
       userId: '',
       password: '',
       chooseType: '老师',
-      loginVisible:false
+      loginVisible:false,
+      b_loading:false,
     }
     this.exit = this.exit.bind(this)
     this.loginClick = this.loginClick.bind(this)
     this.userIdchange = this.userIdchange.bind(this)
     this.passwordchange = this.passwordchange.bind(this)
+    this.confirm = this.confirm.bind(this)
   }
   shouldComponentUpdate(nextProps, nextState) {
     if (nextProps !== this.props || nextState!== this.state) {
@@ -68,8 +78,8 @@ class Student extends Component {
   showModal = () => {
     this.setState({
       visible: true,
-    });
-  };
+    })
+  }
   handleOk = e => {
 
     this.setState({
@@ -79,34 +89,34 @@ class Student extends Component {
   handleCancel = e => {
     this.setState({
       visible: false,
-    });
-  };
+    })
+  }
   hide = () => {
     this.setState({
       loginVisible: false,
-    });
+    })
   }
   exit = () => {
-    this.props.Exit()
+    this.props.Exit(this)
   }
+  onFinish = values => {
 
+        // this.props.login(this.state.userId, this.state.password, this.state.chooseType)
+        this.props.login(values.username, Encrypto(values.password), this.state.chooseType,this)
+  
+  
+        // window.location="/CEO"
+        // this.props.history.push("/CEO")
+      
+
+    }
+  
+  onFinishFailed = errorInfo => {
+    };
 
   loginClick = () => {
 
-    if (this.state.userId !== "" && this.state.password !== "") {
-      // this.props.login(this.state.userId, this.state.password, this.state.chooseType)
-      this.props.login(this.state.userId, Encrypto(this.state.password), this.state.chooseType)
 
-
-      // window.location="/CEO"
-      // this.props.history.push("/CEO")
-    }
-    else {
-
-      this.setState({
-        loginVisible: true
-      })
-    }
   }
   onChange3 = e => {
 
@@ -127,13 +137,38 @@ class Student extends Component {
       password: value,
     })
   }
+  confirm(that) {
+    Modal.confirm({
+      title: '提示',
+      icon: <ExclamationCircleOutlined />,
+      content: '确定要退出？',
+      onOk: () => {
+        that.props.Exit(this)
+      },
+      okText: '确认',
+      cancelText: '取消',
+    })
+  }
   UNSAFE_componentWillUpdate(newProps,newState){
     // this.setState()
+    try{
+      if(newProps.isLoginFail === true){
+        this.setState({
+          b_loading:false,
+        })
+      }
+    }
+    catch{
+    }
     if(newProps.isLogin!==this.props.isLogin){
       try{
         if(newProps.message){
-          if(newProps.isLogin === true && newProps.payload === undefined )
-          message.success(newProps.message)
+          if(newProps.isLogin === true && newProps.payload === undefined ){
+            message.success(newProps.message)
+            this.setState({
+              b_loading:false,
+            })
+          }
         }
       }
       catch{
@@ -171,6 +206,7 @@ class Student extends Component {
     if (!this.props.isLogin)
 
       return (
+        
         <Layout>
           <Sider
             style={{
@@ -206,7 +242,8 @@ class Student extends Component {
               marginLeft: 300,
             }}>
             <Header className="site-layout-background" style={{ padding: 0 }}>
-              <Button className="login" type="primary" onClick={this.showModal}>登录</Button>
+            <p className="introduce">仿真辅助系统</p>
+              <Button className="exit" type="primary" onClick={this.showModal}>登录</Button>
               <Modal
                 title="登录"
                 visible={this.state.visible}
@@ -214,21 +251,46 @@ class Student extends Component {
                 okText="登录"
                 onCancel={this.handleCancel}
                 footer={
-                  <Popover
-                    content={<a onClick={this.hide}>确定</a>}
-                    title="账号和密码不能为空"
-                    trigger="click"
-                    visible={this.state.loginVisible}
-                    disabled={true}>
+
                     <Button
                       type="primary"
-                      onClick={this.loginClick}
+                      loading={this.state.b_loading}
+                      htmlType='submit'
+                      form='basic'
                     >登录</Button>
-                  </Popover>
 
                 }
+              > <Form 
+              {...layout}
+              name="basic"
+              initialValues={{ remember: true }}
+              onFinish={this.onFinish}
+              onFinishFailed={this.onFinishFailed}
+              className="Login_Form"
+            >
+              <Form.Item
+                label="账号"
+                name="username"
+                rules={[{ required: true, message: '请输入正确的账号!',pattern: new RegExp(/^[1-9]\d*$/, "g")}] }
               >
-                <div className="login_input">
+                <Input />
+              </Form.Item>
+        
+              <Form.Item
+                label="密码"
+                name="password"
+                rules={[{ required: true, message: '密码不能为空!' }]}
+              >
+                <Input.Password />
+              </Form.Item>
+              <Radio.Group className="select_Type"
+                    options={options}
+                    onChange={this.onChange3}
+                    value={this.state.chooseType}
+                    optionType="button"
+                  />
+            </Form>
+                {/* <div className="login_input">
                   <div>
                     用户名：
       <Input
@@ -246,17 +308,14 @@ class Student extends Component {
                       onChange={this.passwordchange}
                     />
                   </div>
-                  <Radio.Group
+                  <Radio.Group className="select_Type"
                     options={options}
                     onChange={this.onChange3}
                     value={this.state.chooseType}
                     optionType="button"
                   />
                   <br />
-                  <br />
-                  <Button style={{ width:90 ,  }}>
-      </Button>
-                </div>
+                </div> */}
               </Modal>
             </Header>
             <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
@@ -313,11 +372,10 @@ class Student extends Component {
               marginLeft: 300,
             }}>
             <Header className="site-layout-background Head" style={{ padding: 0 }}>
-
-          <p className="Name">欢迎你，{localStorage.getItem("userName")}</p>
-              <Button className="login" type="primary" onClick={this.exit}>
+              <p className="introduce">仿真辅助系统</p>
+              <Button className="exit" type="primary" onClick={this.confirm.bind(this,this)}>
                 退出登陆</Button>
-
+                <p className="Name">欢迎你，{localStorage.getItem("userName")}</p>
             </Header>
             <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
               <div className="site-layout-background" style={{ padding: 24, textAlign: 'center', borderRadius: 10 }}>
@@ -331,7 +389,7 @@ class Student extends Component {
                 </Switch>  
               </div>
             </Content>
-            <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
+            <Footer style={{ textAlign: 'center' }}>版权所有 极客工作室</Footer>
           </Layout>
         </Layout>
       );
@@ -340,17 +398,23 @@ class Student extends Component {
 }
 const mapDispatchToProps = (dispatch) => {
   return {
-    login: (userId, password, type) => {
+    login: (userId, password, type,that) => {
       const action = actions.loginAction(userId, password, type)
       dispatch(action)
+      that.setState({
+        b_loading:true,
+      })
     },
     Login_Check: () => {
 
       dispatch(actions.Login_Check())
     },
-    Exit: () => {
+    Exit: (that) => {
 
       dispatch(actions.Exit())
+      that.setState({
+        b_loading:true,
+      })
     }
   }
 }

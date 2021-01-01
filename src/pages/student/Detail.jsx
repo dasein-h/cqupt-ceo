@@ -16,6 +16,7 @@ class Detail extends Component {
             currentPage:parseInt(sessionStorage.getItem("Page4"))||1,
             data : [],
             visible:false,
+            loading:true,
             fileList:[],
          }
          this.onPageChange=this.onPageChange.bind(this)
@@ -25,6 +26,21 @@ class Detail extends Component {
     UNSAFE_componentWillUpdate(newProps,newState){
       if(newProps!==this.props){
         try{
+          if(newProps.Exist===true){
+            this.setState({
+              loading:false
+            })
+          }
+          if(newProps.isShowFile===true){
+            this.setState({
+              loading:false
+            })
+          }
+          else if(newProps.isShowFile===false){
+            this.setState({
+              loading:false
+            })
+          }
           if( newProps.isDeleteFile === true )
           message.success("删除成功")
           if( newProps.message ){
@@ -41,7 +57,7 @@ class Detail extends Component {
           this.setState({
             currentPage: parseInt(sessionStorage.getItem("Page4"))||1,
             data:newdata,
-            totalNum:totalNumber
+            totalNum:totalNumber,
           })
         }
         catch{}
@@ -53,6 +69,9 @@ class Detail extends Component {
       }
       if(this.props.FileData){
         this.props.Exist()
+        this.setState({
+          loading:false
+        })
       }
     }
     shouldComponentUpdate(nextProps, nextState) {
@@ -260,7 +279,7 @@ class Detail extends Component {
           {uploading ? '上传中' : '上传文件'}
         </Button>
               </Modal>
-            <Table columns={columns} dataSource={this.state.data} pagination={pagination}/>
+            <Table columns={columns} dataSource={this.state.data} pagination={pagination} loading={this.state.loading}/>
             </div>
              )
     else return(

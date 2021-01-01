@@ -12,6 +12,7 @@ class Join extends Component {
         this.state = { 
             totalNum:0,
             currentPage:parseInt(sessionStorage.getItem("Page3"))||1,
+            loading:true,
             data : [
               ],
          }
@@ -21,6 +22,21 @@ class Join extends Component {
     UNSAFE_componentWillUpdate(newProps,newState){
       if(newProps!==this.props){
         try{
+          if(newProps.Exist===true){
+            this.setState({
+              loading:false
+            })
+          }
+          if(newProps.isShowApplication===true){
+            this.setState({
+              loading:false
+            })
+          }
+          else if(newProps.isShowApplication===false){
+            this.setState({
+              loading:false
+            })
+          }
           const {ApplicationData} = newProps
           let newdata = ApplicationData.object
           for (let item in newdata){
@@ -29,7 +45,7 @@ class Join extends Component {
           this.setState({
             currentPage: parseInt(sessionStorage.getItem("Page3"))||1,
             data:newdata,
-            totalNum:ApplicationData.totalNumber
+            totalNum:ApplicationData.totalNumber,
           })
         
         }
@@ -42,6 +58,9 @@ class Join extends Component {
       }
       if(this.props.ApplicationData){
         this.props.Exist()
+        this.setState({
+          loading:false
+        })
       }
     }
     shouldComponentUpdate(nextProps, nextState) {
@@ -104,7 +123,7 @@ class Join extends Component {
     if(localStorage.getItem("userId"))
         return ( 
             <div className="table_div">
-            <Table columns={columns} dataSource={this.state.data} pagination={pagination}/>
+            <Table columns={columns} dataSource={this.state.data} pagination={pagination} loading={this.state.loading}/>
             </div>
              )
     else return(
