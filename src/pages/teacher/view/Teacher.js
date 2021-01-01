@@ -21,7 +21,7 @@ import LoginApi from '../../../until/api/LoginApi'
 import {
     UserOutlined, VideoCameraOutlined,
     EditOutlined, OrderedListOutlined, CarryOutOutlined,
-    FolderOpenOutlined,SettingOutlined,BarsOutlined 
+    FolderOpenOutlined,SettingOutlined,BarsOutlined ,ExclamationCircleOutlined
 } from '@ant-design/icons';
 import changeNav from "../../../until/changeNav";
 
@@ -36,13 +36,15 @@ class Teacher extends Component {
             username:"",
             isModalVisible:false,
             isMask:false,
-            btntext:"退出登录"
+            btntext:"退出登录",
+            isBtnVisible:false
           }
         this.handleDisTeach = this.handleDisTeach.bind(this);
         this.handleExit = this.handleExit.bind(this);
         // this.isLogin = this.isLogin.bind(this);
         this.changeClass = this.changeClass.bind(this);
         this.handleClick = this.handleClick.bind(this);
+        this.confirm = this.confirm.bind(this);
     }
     render() {
         return (
@@ -84,7 +86,7 @@ class Teacher extends Component {
                                             <span >欢迎你，{localStorage.getItem("userName")}</span>
                                             <Button type="primary"  onClick={this.changeClass} style={{marginLeft:"10px",marginRight:"10px"}}
                                             >更改班级</Button>
-                                            <Button className="exit" type="primary" onClick = {this.handleExit}>
+                                            <Button className="exit" type="primary" onClick ={this.confirm.bind(this,this)}>
                                                 退出登陆</Button>
                                             </span>
                                             
@@ -144,7 +146,6 @@ class Teacher extends Component {
                                 handleExit = {()=>{this.handleExit()}}
                             />
                         </Modal>
-                
             </div>
         )
     }
@@ -190,11 +191,7 @@ class Teacher extends Component {
                     //退出后将localstorage清空
                     localStorage.clear();
                     this.props.history.push('/Student/AllCompanies/ChosenClasses');
-                } else if (!res.data.flag && res.data.message === "没有登录，请先登录") {
-                    message.open("登录已过期",1);
-                    localStorage.clear();
-                    this.props.history.push('/Student/AllCompanies/ChosenClasses');
-                } else {
+                }else {
                     message.open("请先登录",1);
                 }
             },
@@ -216,6 +213,18 @@ class Teacher extends Component {
             btntext:"取消选择"
         })
     }
+    confirm = (that) => {
+    Modal.confirm({
+      title: '提示',
+      icon: <ExclamationCircleOutlined />,
+      content: '确定要退出？',
+      onOk: () => {
+        that.handleExit(this)
+      },
+      okText: '确认',
+      cancelText: '取消',
+    })
+  }
     //不同按钮内容调用不同的方法
     handleClick = () => {
       if(this.state.btntext === "退出登录"){

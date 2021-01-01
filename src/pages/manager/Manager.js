@@ -9,9 +9,9 @@ import {
 import ChoseClass from './view/ChoseClass'
 import ImData from './view/ImData'
 import './style/Nav.css';
-import {  Menu,Button,message,notification,Layout } from 'antd';
+import {  Menu,Button,message,notification,Layout,Modal } from 'antd';
 import LoginApi from '../../until/api/LoginApi'
-import { UserOutlined, VideoCameraOutlined, EditOutlined, OrderedListOutlined } from '@ant-design/icons';
+import { UserOutlined, VideoCameraOutlined, EditOutlined, OrderedListOutlined,ExclamationCircleOutlined } from '@ant-design/icons';
 import changeNav from '../../until/changeNav' ;
 import '../../static/style/style.scss';
 
@@ -27,7 +27,8 @@ class Manager extends Component {
             userid:''
           }
           this.handleExit = this.handleExit.bind(this);
-          this.handleClick = this.handleClick.bind(this)
+          this.handleClick = this.handleClick.bind(this);
+          this.confirm = this.confirm.bind(this);
     }
     render() {
         return (
@@ -52,7 +53,7 @@ class Manager extends Component {
                                 <span style={{marginLeft:"10px"}}>仿真辅助系统</span>
                                 <span style={{float:"right"}}>
                                     <span style={{marginRight:"10px"}}>欢迎你，{localStorage.getItem("userName")}</span>
-                                    <Button className="exit" type="primary" onClick = {this.handleExit}>退出登陆</Button>
+                                    <Button className="exit" type="primary" onClick ={this.confirm.bind(this,this)}>退出登陆</Button>
                                     </span>
                                                 
                             </Header>
@@ -117,6 +118,18 @@ class Manager extends Component {
             }
         )
     }
+    confirm = (that) => {
+    Modal.confirm({
+      title: '提示',
+      icon: <ExclamationCircleOutlined />,
+      content: '确定要退出？',
+      onOk: () => {
+        that.handleExit(this)
+      },
+      okText: '确认',
+      cancelText: '取消',
+    })
+  }
     handleClick = () => {
         changeNav.bind(this,1,2)
         sessionStorage.removeItem("count");
