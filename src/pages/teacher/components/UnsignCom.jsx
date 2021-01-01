@@ -60,7 +60,6 @@ class UnsignCom extends React.Component {
                 onChange: (page, pageSize) => {
                     //   this.changePage(page);
                     this.state.pagination.current = page
-                    console.log(this.state.pagination.current);
                 }
             },
             columns: [
@@ -173,7 +172,6 @@ class UnsignCom extends React.Component {
                 pagination.total = pagination.total - 1;
                 data.splice(num, 1);
                 if (pagination.current == (pagination.total) / 7 + 1) {
-                    console.log("点了");
                     if (parseInt.current !== 1)
                         pagination.current -= 1;
                 }
