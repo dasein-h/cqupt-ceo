@@ -103,23 +103,6 @@ class newLists extends React.Component {
         if (res.flag === true) {
           this.changePage(this.state.pagination.current)
           message.success( '同意改名成功!');
-          // if(this.state.data.length === 1){
-          //   let pagination = {...this.state.pagination};
-          //   if(pagination.current !== 1){
-          //     pagination.current -= 1;
-          //   }
-          //   this.setState({
-          //     pagination
-          //   })
-
-          // }
-          // notification.open({
-          //   message: '提示',
-          //   placement: "bottomRight",
-          //   description:
-          //     '同意改名成功!',
-          // });
-  
         } else {
           message.error( '同意改名失败!');
         }
@@ -164,6 +147,7 @@ class newLists extends React.Component {
                 pagination
               })
             }else{
+              message.info('暂无数据!')
               pagination.total = 0;
               this.setState({
                 data: [],

@@ -15,7 +15,7 @@ class newsType extends React.Component {
     constructor(...props) {
         super(...props)
         localStorage.setItem("newsKey",JSON.stringify({key:2,route:'/Teacher/News/Type'}))
-        message.warning('暂无数据!')
+        message.info('暂无数据!')
     //     this.state = {
     //         teachclass: localStorage.getItem("teachclass"),
     //         select: "name",
