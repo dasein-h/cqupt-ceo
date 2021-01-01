@@ -1,14 +1,17 @@
-import {PAGE_SIZE} from "../views/application/consts/constants";
 import {List} from "antd";
 import React from "react";
+import defaultPagination from "../config/defaultPagination";
 
 export default props => {
+  let pagination = defaultPagination
   const {
     dataSource,
     column = 4,
     gutter = 15,
-    render
+    render,
+    loading
   } = props
+  console.log(dataSource, loading)
 
   return (
     <List
@@ -18,11 +21,8 @@ export default props => {
         gutter: gutter
       }}
       dataSource={dataSource || []}
-      loading={!dataSource}
-      pagination={{
-        hideOnSinglePage: true,
-        pageSize: PAGE_SIZE,
-      }}
+      loading={loading ? loading : !dataSource}
+      pagination={pagination}
       renderItem={item => (
         <List.Item>
           {render(item)}

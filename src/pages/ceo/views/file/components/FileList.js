@@ -1,6 +1,6 @@
-import React, {useEffect, useReducer, useState, memo} from "react";
+import React, {useEffect, useReducer, useState, memo, useCallback} from "react";
 import {downloadFile, fetchFileList, deleteFile} from "../../../../../until/api/ceo";
-import {Button, List, message, Table} from "antd";
+import {message} from "antd";
 import MyTable from "../../../components/MyTable";
 import Confirm from '../../../../ceo/components/Comfirm'
 
@@ -34,7 +34,8 @@ const FileList = props => {
     loading: false,
     list: null
   })
-  const fetchFile = async () => {
+
+  const fetchFile = useCallback(async () => {
     try {
       const res = await fetchFileList(teachclass, currentPage)
       dispatch({
@@ -44,12 +45,12 @@ const FileList = props => {
     } catch (e) {
       message.warn("获取文件失败")
     }
-  }
+  }, [teachclass, currentPage])
   useEffect(() => {
     if (teachclass) {
       fetchFile()
     }
-  }, [currentPage])
+  }, [currentPage, fetchFile, teachclass])
 
   const handleDelete = async (id) => {
     const res = await deleteFile(id)
@@ -106,29 +107,12 @@ const FileList = props => {
 
   return (
     <>
-      {/*<List*/}
-      {/*  size="small"*/}
-      {/*  style={{padding: '15px'}}*/}
-      {/*  dataSource={state.list}*/}
-      {/*  loading={state.loading}*/}
-      {/*  pagination={{*/}
-      {/*    onChange(pos) {*/}
-      {/*      setPage(pos)*/}
-      {/*    }*/}
-      {/*  }}*/}
-      {/*  renderItem={({fileName, id}, i) => {*/}
-      {/*    return (*/}
-      {/*      <li key={i} style={{padding: '15px'}}>*/}
-      {/*        <span>{fileName}</span>*/}
-      {/*        <Button type="primary" onClick={handleDownload.bind(null, id)}>下载</Button>*/}
-      {/*      </li>*/}
-      {/*    )*/}
-      {/*  }}*/}
-      {/*/>*/}
-
       <MyTable
         dataSource={state.list}
+        total={state.list?.[0]?.filePath || 0}
         columns={columns}
+        onChange={setPage}
+        currentPage={currentPage}
       />
     </>
   )

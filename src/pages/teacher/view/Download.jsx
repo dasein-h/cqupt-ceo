@@ -168,22 +168,28 @@ class Download extends Component {
         res.then(
             (result) => { 
                 let data = JSON.parse(result.data);
-                // console.log(data);
-                let newData = [];
-                for (let i in data) { 
-                    newData.push({
-                        key: i,
-                        "id":data[i].id,
-                        "stuid": data[i].studentId,
-                        "teachclass":data[i].teachclass,
-                        "filename":data[i].fileName
-                    })
-                };
-                this.setState({
-                    data: newData,
-                    loading:false
-                });
-                // console.log(this.state.loading);
+                if (data.length === undefined && page != 1) {
+                    this.onchange(page - 1);
+                }
+                else { 
+                    // console.log(data);
+                    let newData = [];
+                    for (let i in data) { 
+                        newData.push({
+                            key: i,
+                            "id":data[i].id,
+                            "stuid": data[i].studentId,
+                            "teachclass":data[i].teachclass,
+                            "filename":data[i].fileName
+                        })
+                    };
+                    this.setState({
+                        data: newData,
+                        loading:false
+                    });
+                    // console.log(this.state.loading);
+                }
+                
                 
             },
             (err) => { 
@@ -302,11 +308,12 @@ class Download extends Component {
     render() { 
         return (
             <Fragment>
-                <div style={{ display: 'flex',justifyContent:'space-between'}}>
+                <div style={{ display: 'flex',justifyContent:'space-between',marginBottom:'1.5%'}}>
                     <span className='title'>宣讲文件</span>
                     <Button
                     onClick={this.handleVot}
                     type="primary"
+                    style={{position:'relative',right:'2vw'}}
                     >
                     { this.state.voteValue}
                     </Button>

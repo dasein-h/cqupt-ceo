@@ -33,13 +33,15 @@ const routes = [
 function CEO(props) {
   const {dispatch, history} = props
 
-  let userId = localStorage.getItem('userId')
-  let userName = localStorage.getItem('userName')
-  let teachclass = localStorage.getItem('class')
-  let ceo = localStorage.getItem('ceo')
+  let userId = /*       */localStorage.getItem('userId')
+  let userName = /*     */localStorage.getItem('userName')
+  let teachclass = /*   */localStorage.getItem('class')
+  let ceo = /*          */localStorage.getItem('ceo')
+  /* 如果不是ceo进入这个页面直接跳走 */
   if (!ceo && ceo !== '1') {
-    // history.replace('/')
+    history.replace('/')
   }
+  /* 将userId挂在redux中 */
   dispatch(setUserId(userId))
 
   return (
@@ -72,7 +74,6 @@ function CEO(props) {
           <Router routes={routes} userId={userId} teachclass={teachclass}/>
         </Content>
       </Layout>
-
     </Layout>
   )
 }

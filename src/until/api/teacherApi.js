@@ -251,14 +251,43 @@ function download(id) {
     "id":id
   })
 }
+//搜索
+function search(teachclass,studentId,currentPage){
+  return Service.post('/teacher/search', {
+    teachclass,studentId,currentPage
+  })
+}
 
 // 查看是否能够生成公司等级
 function ShowComLevel(teachclass) { 
   return Service.post('/teacher/companyLevel', {
     teachclass
+  })}
+//展示修改公司类别
+function showChangeNewsType(teachclass,currentPage){
+  return Service.post('/teacher/changeType',{
+    teachclass,currentPage
+  })
+}
+// 修改公司类型
+function ChangeComType(ceo, type) { 
+  return Service.post('/teacher/updateType', {
+    ceo,type
+  })
+}
+//同意修改公司类别
+function agreeNewsType(ceo,type){
+  return Service.post('/teacher/agreeType',{
+    ceo,type
   })
 }
 
+//拒绝修改公司类别
+function rejectNewsType(ceo,id){
+  return Service.post('/teacher/refuseType',{
+    ceo,id
+  })
+}
 export{
   selectedClassTeacher,
   unSelectedClassTeacher,
@@ -292,5 +321,10 @@ export{
   ChoseCompany,
   DeleteUpload,
   download,
-  ShowComLevel
+  ShowComLevel,
+  ChangeComType,
+  search,
+  showChangeNewsType,
+  agreeNewsType,
+  rejectNewsType
 }
