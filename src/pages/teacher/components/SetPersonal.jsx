@@ -6,7 +6,6 @@ class SetPersonal extends React.Component {
     constructor(props) {
         localStorage.setItem("setKey", JSON.stringify({ key: 1, route: '/Teacher/Set/Person' }))
         super(props)
-        console.log(props);
         this.state = {
             btnLoad:false,
             title: [{ "title": "CEO打分", "name": "ceoScore", "value": "" }, { "title": "成员互评", "name": "memberScore", "value": "" }, { "title": "签到打分", "name": "signScore", "value": "" }],
@@ -59,16 +58,12 @@ class SetPersonal extends React.Component {
     }
     change = (value, index) => {
         let title = [...this.state.title]
-        console.log(title);
-        console.log(index);
-        console.log(value);
         title[index].value = value
         this.setState({
             title
         })
     }
     submit = () => {
-        console.log(this.state.memberScore);
         this.setState({
             btnLoad:true
         })

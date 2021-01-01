@@ -31,7 +31,6 @@ class SetOthers extends React.Component {
     }
     componentDidMount() {
         showConfig(this.state.teachclass).then(rs => {
-            console.log(rs);
             if (rs.data.flag === true) {
                 let res = rs.data.data
                 let title = [...this.state.title];
@@ -56,16 +55,12 @@ class SetOthers extends React.Component {
     }
     change = (value, index) => {
         let title = [...this.state.title]
-        console.log(title);
-        console.log(index);
-        console.log(value);
         title[index].value = value
         this.setState({
             title
         })
     }
     submit = () => {
-        console.log(this.state.memberScore);
         this.setState({
             btnLoad:true
         })

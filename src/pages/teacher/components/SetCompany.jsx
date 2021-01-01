@@ -64,7 +64,6 @@ class SetCompany extends React.Component {
     }
     componentDidMount() {
         showConfig(this.state.teachclass).then(rs => {
-            console.log(rs);
             if (rs.data.flag === true) {
                 let res = rs.data.data
                 let title = [...this.state.title];
@@ -76,8 +75,6 @@ class SetCompany extends React.Component {
                 title[5].value = res.revenueScore;
                 title[6].value = res.agencyScore;
                 title[7].value = res.fromCompanyScore;
-                console.log(title);
-                console.log(rs.data);
                 this.setState({
                     title: title,
                     loading: false
@@ -96,9 +93,6 @@ class SetCompany extends React.Component {
     }
     change = (value, index) => {
         let title = [...this.state.title]
-        console.log(title);
-        console.log(index);
-        console.log(value);
         title[index].value = value
         this.setState({
             title

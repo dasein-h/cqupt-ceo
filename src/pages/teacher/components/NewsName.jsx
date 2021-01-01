@@ -1,9 +1,9 @@
 import React from 'react'
 import { changeCompanyName, agreeChange, rejectChange } from '../../../until/api/teacherApi'
-import { Table, Space, Button, notification, Input, Select,message} from 'antd'
+import { Table, Space, Button, notification,message} from 'antd'
 import '../../../static/style/teacherStyle.scss'
-const { Search } = Input
-const { Option } = Select;
+// const { Search } = Input
+// const { Option } = Select;
 class newLists extends React.Component {
     constructor(...props) {
         localStorage.setItem("newsKey",JSON.stringify({key:1,route:'/Teacher/News/Name'}))
@@ -23,7 +23,6 @@ class newLists extends React.Component {
           onChange: (page, pageSize) => {
             this.changePage(page);
             this.state.pagination.current = page
-            console.log(this.state.pagination.current);
           }
         },
         columns: [
@@ -98,16 +97,12 @@ class newLists extends React.Component {
       // })
   
       //直接用 this.state.pagination.current 调用数据？
-      console.log(record);//这是这一行的数据
       // console.log(store.getState());
       agreeChange(record.id, record.error,localStorage.teachclass).then((rs) => {
         let res = rs.data;
-        console.log(res);
         if (res.flag === true) {
-          console.log(this.state.pagination.current);
           this.changePage(this.state.pagination.current)
           message.success( '同意改名成功!');
-          console.log(this.state.data);
           // if(this.state.data.length === 1){
           //   let pagination = {...this.state.pagination};
           //   if(pagination.current !== 1){
@@ -134,7 +129,6 @@ class newLists extends React.Component {
     clickReject = (text, record, index) => {
       rejectChange(record.id, record.error).then((rs) => {
         let res = rs.data;
-        console.log(res);
         if (res.flag === true) {
           message.success( '拒绝改名成功!');
         } else {
@@ -162,7 +156,7 @@ class newLists extends React.Component {
           let rs = JSON.parse(res.data);
           if (rs.length === 0) {
             let pagination = this.state.pagination;
-            if(pagination.current != 1){
+            if(pagination.current !== 1){
               pagination.current -= 1;
               pagination.total -= 1;
               this.changePage(pagination.current)
@@ -190,11 +184,9 @@ class newLists extends React.Component {
             let pagination = { ...this.state.pagination };
             pagination.total = rs[0].page
             this.setState({ data: lists, pagination: pagination });
-            console.log(this.state.data);
           }
   
         }).catch(err => {
-          console.log(err)
           this.setState({ loading: false })
           notification.warning({
             message: '警告',
@@ -205,9 +197,9 @@ class newLists extends React.Component {
         })
     }
     search = () => {
-      if (this.state.select == "id") {
+      if (this.state.select === "id") {
   
-      } else if (this.state.select == "name") {
+      } else if (this.state.select === "name") {
   
       }
       //根据value调用接口 搜索 改变data的值

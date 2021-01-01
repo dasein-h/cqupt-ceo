@@ -288,6 +288,13 @@ function rejectNewsType(ceo,id){
     ceo,id
   })
 }
+
+//导出学生信息
+function downLoadStudent(teachclass){
+  return Service.post('/upload/export',{
+    teachclass
+  })
+}
 export{
   selectedClassTeacher,
   unSelectedClassTeacher,
@@ -326,5 +333,6 @@ export{
   search,
   showChangeNewsType,
   agreeNewsType,
-  rejectNewsType
+  rejectNewsType,
+  downLoadStudent
 }

@@ -29,7 +29,6 @@ class SignedCom extends React.Component {
             this.changePage(page);
           else this.changePageSearch(this.state.value, page)
           this.state.pagination.current = page
-          console.log(this.state.pagination.current);
         }
       },
       columns: [
@@ -89,7 +88,7 @@ class SignedCom extends React.Component {
             value={this.state.value}
           ></Search>
         </div>
-        <Table
+        <Table style={{minHeight:'300px'}}
           pagination={this.state.pagination}
           columns={this.state.columns}
           loading={this.state.loading}
@@ -127,7 +126,6 @@ class SignedCom extends React.Component {
         if (rs.length !== 0) {
           let pagination = { ...this.state.pagination };
           pagination.total = rs[0].page
-          console.log(this.state.pagination.total);
           this.setState({ data: lists, pagination: pagination });
         }
       }else{
@@ -144,6 +142,9 @@ class SignedCom extends React.Component {
     })
   }
   changePageSearch = (value, page) => {
+    this.setState({
+      loading:true
+    })
     search(this.state.teachclass, value, page).then((res) => {
       let lists = [];
       this.setState({ loading: false, searchOrNot: true });
@@ -180,8 +181,6 @@ class SignedCom extends React.Component {
   }
   search = () => {
     if (this.state.select === "id") {
-      console.log('id');
-      console.log(this.state.value);
       this.changePageSearch(this.state.value, "1")
     } else if (this.state.select == "name") {
       // console.log('name');
@@ -220,7 +219,6 @@ class SignedCom extends React.Component {
   dropClass = (record, index) => {
     setNosign(this.state.teachclass, record.id, 10, 2).then(rs => {
       let res = rs.data
-      console.log(rs);
       if (res.flag == true) {
         let data = this.state.data;
         data[index].agree.read = true;
