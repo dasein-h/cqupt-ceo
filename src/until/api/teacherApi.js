@@ -295,6 +295,13 @@ function downLoadStudent(teachclass){
     teachclass
   })
 }
+
+// 展示所有所有没有公司得学生
+function ShowNoComStu(teachclass) { 
+  return Service.post('/student/showNoCompanyStu', {
+    teachclass
+  })
+}
 export{
   selectedClassTeacher,
   unSelectedClassTeacher,
@@ -334,5 +341,6 @@ export{
   showChangeNewsType,
   agreeNewsType,
   rejectNewsType,
-  downLoadStudent
+  downLoadStudent,
+  ShowNoComStu
 }

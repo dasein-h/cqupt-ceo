@@ -2,10 +2,11 @@ import React, { Component, Fragment } from 'react'
 import {
   Table, Button, message,Modal,InputNumber,Radio,Tag
 } from 'antd';
-import { DownloadOutlined } from '@ant-design/icons';
+
 import '../../teacher/style/ComInfo.css';
 import { showAll } from '../../../until/api/teacherApi';
-import baseUrl from '../../../until/BaseUrl';
+import { ShowNoComStu } from '../../../until/api/teacherApi';
+
 
 class ChoseStudent extends Component { 
     constructor(props) { 
@@ -26,7 +27,7 @@ class ChoseStudent extends Component {
                 total:20,
                 pageSize: 7,
                 current:1,
-                onChange: this.onchange,
+                // onChange: this.onchange,
                 showSizeChanger:false
             },
             loading: false,
@@ -34,110 +35,113 @@ class ChoseStudent extends Component {
         }
     }
 
-    onchange = (page) => { 
-        // console.log(e);
-        console.log(page);
-        let pa = this.state.pagination;
-        pa.current = page;
-        this.setState({
-            pagination:pa
-        })
-        // console.log(this.state.pagination);
-        this.setState({
-            loading:true
-        })
-        // console.log(localStorage.teachclass);
-        let res = showAll(localStorage.teachclass, page);
-        res.then(
-            (result) => { 
-                let data = JSON.parse(result.data);
-                if (data === undefined) { 
-                    this.setState({
-                        pagination: {
-                            total: 0,
-                            onChange: this.onchange,
-                            pageSize: 7,
-                            hideOnSinglePage: true,
-                            current: page,
-                            showSizeChanger:false
-                        }
-                    })
-                }
-                else if (data[0].page <= 7) {
+    // onchange = (page) => { 
+    //     // console.log(e);
+    //     console.log(page);
+    //     let pa = this.state.pagination;
+    //     pa.current = page;
+    //     this.setState({
+    //         pagination:pa
+    //     })
+    //     // console.log(this.state.pagination);
+    //     this.setState({
+    //         loading:true
+    //     })
+    //     // console.log(localStorage.teachclass);
+    //     let res = showAll(localStorage.teachclass, page);
+    //     res.then(
+    //         (result) => { 
+    //             let data = JSON.parse(result.data);
+    //             if (data === undefined) { 
+    //                 this.setState({
+    //                     pagination: {
+    //                         total: 0,
+    //                         onChange: this.onchange,
+    //                         pageSize: 7,
+    //                         hideOnSinglePage: true,
+    //                         current: page,
+    //                         showSizeChanger:false
+    //                     }
+    //                 })
+    //             }
+    //             else if (data[0].page <= 7) {
                     
-                    this.setState({
-                        pagination: {
-                            total: data[0].page,
-                            onChange: this.onchange,
-                            pageSize: 7,
-                            hideOnSinglePage: true,
-                            current: page,
-                            showSizeChanger:false
-                        }
-                    })
-                }
-                else { 
-                    this.setState({
-                        pagination: {
-                            total: data[0].page,
-                            onChange: this.onchange,
-                            pageSize: 7,
-                            hideOnSinglePage: false,
-                            current: page,
-                            showSizeChanger:false
-                        }
-                    })
-                }
+    //                 this.setState({
+    //                     pagination: {
+    //                         total: data[0].page,
+    //                         onChange: this.onchange,
+    //                         pageSize: 7,
+    //                         hideOnSinglePage: true,
+    //                         current: page,
+    //                         showSizeChanger:false
+    //                     }
+    //                 })
+    //             }
+    //             else { 
+    //                 this.setState({
+    //                     pagination: {
+    //                         total: data[0].page,
+    //                         onChange: this.onchange,
+    //                         pageSize: 7,
+    //                         hideOnSinglePage: false,
+    //                         current: page,
+    //                         showSizeChanger:false
+    //                     }
+    //                 })
+    //             }
 
-                let newData = [];
-                for (let i in data) { 
-                    newData.push({
-                        key: data[i].studentId,
-                        "sno": data[i].studentId,
-                        "sname":data[i].userName
-                    })
-                };
-                this.setState({
-                    data: newData,
-                    loading:false
-                });
-            },
-            (err) => { 
-                console.log(err);
-            }
-        )
-      }
+    //             let newData = [];
+    //             for (let i in data) { 
+    //                 newData.push({
+    //                     key: data[i].studentId,
+    //                     "sno": data[i].studentId,
+    //                     "sname":data[i].userName
+    //                 })
+    //             };
+    //             this.setState({
+    //                 data: newData,
+    //                 loading:false
+    //             });
+    //         },
+    //         (err) => { 
+    //             console.log(err);
+    //         }
+    //     )
+    //   }
 
     componentDidMount() { 
         this.props.onRef(this);
         this.setState({ loading: true });
-        let res = showAll(localStorage.teachclass, 1);
+        let res = ShowNoComStu(localStorage.teachclass);
+        // let res = showAll(localStorage.teachclass, 1);
         let mydata = [];
         res.then(
             (result) => { 
-                let data = JSON.parse(result.data);
-                console.log(data[0].page);
-                if (data === undefined) { 
+                console.log(result);
+                // let data = JSON.parse(result.data);
+                // console.log(data[0].page);
+                if (result === undefined) { 
                     this.setState({
                         pagination: {
                             total: 0,
-                            onChange: this.onchange,
+                            // onChange: this.onchange,
                             pageSize: 7,
                             hideOnSinglePage: true,
-                            current: 1,
+                            // current: 1,
                             showSizeChanger:false
                         }
                     })
                 }
-                else if (data[0].page <= 7) {
+                // data[0].page <= 7
+                else if (result.data.data.length<=7) {
                     
                     this.setState({
                         pagination: {
-                            total: data[0].page,
-                            onChange: this.onchange,
+                            total: result.data.data.length,
+                            // onChange: this.onchange,
                             pageSize: 7,
                             hideOnSinglePage: true,
-                            current: 1,
+                            // current: 1,
                             showSizeChanger:false
                         }
                     })
@@ -145,11 +149,11 @@ class ChoseStudent extends Component {
                 else { 
                     this.setState({
                         pagination: {
-                            total: data[0].page,
-                            onChange: this.onchange,
+                            total: result.data.data.length,
+                            // onChange: this.onchange,
                             pageSize: 7,
                             hideOnSinglePage: false,
-                            current: 1,
+                            // current: 1,
                             showSizeChanger:false
                         }
                     })
@@ -157,11 +161,11 @@ class ChoseStudent extends Component {
                 }
 
                 let newData = [];
-                for (let i in data) { 
+                for (let i in result.data.data) { 
                     newData.push({
-                        key: data[i].studentId,
-                        "sno": data[i].studentId,
-                        "sname":data[i].userName
+                        key: result.data.data[i].userId,
+                        "sno": result.data.data[i].userId,
+                        "sname":result.data.data[i].userName
                     })
                 };
                 this.setState({
