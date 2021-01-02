@@ -53,9 +53,8 @@ class SignedCom extends React.Component {
         {
           title: '操作',
           dataIndex: 'agree',
+          align:'center',
           render: (text, record, index) => {
-
-
             return (
               <Space size="middle">
                 <Button size="small" disabled={record.agree.read} type="primary" ghost onClick={() => { this.beLate(record, index) }}>{record.agree.late}</Button>
@@ -105,6 +104,9 @@ class SignedCom extends React.Component {
 
   }
   changePage = (page) => {
+    this.setState({
+      loading:true
+    })
     showAll(this.state.teachclass, page).then((res) => {
       let lists = [];
       this.setState({ loading: false, searchOrNot: false });
@@ -142,8 +144,11 @@ class SignedCom extends React.Component {
     })
   }
   changePageSearch = (value, page) => {
+    let paginationA = this.state.pagination;
+    paginationA.current = 1;
     this.setState({
-      loading:true
+      loading:true,
+      pagination:paginationA
     })
     search(this.state.teachclass, value, page).then((res) => {
       let lists = [];

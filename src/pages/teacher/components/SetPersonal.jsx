@@ -25,7 +25,7 @@ class SetPersonal extends React.Component {
                 <div className="setChild">
                     {list}
                     <div className="bottom">
-                        <Button loading={this.state.btnLoad} className="submit" onClick={() => this.submit()}>修改</Button>
+                        <Button ghost type="primary" loading={this.state.btnLoad} className="submit" onClick={() => this.submit()}>修改</Button>
                         <div className="notice">注意:每一列占比和要为1!</div>
                     </div>
                 </div>

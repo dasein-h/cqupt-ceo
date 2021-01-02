@@ -20,16 +20,16 @@ class UnsignCom extends React.Component {
                 total: "",
                 hideOnSinglePage: true,
                 onChange: (page, pageSize) => {
-                    //   this.changePage(page);
+                    this.changePage(page);
                     this.state.pagination.current = page
                 }
             },
             columns: [
-                // {
-                //     title: '名字',
-                //     dataIndex: 'name',
+                {
+                    title: '名字',
+                    dataIndex: 'name',
 
-                // },
+                },
                 {
                     title: '学号',
                     dataIndex: 'id',
@@ -46,6 +46,7 @@ class UnsignCom extends React.Component {
                 {
                     title: '操作',
                     dataIndex: 'agree',
+                    align: 'center',
                     render: (text, record, index) => {
                         return (
                             <Space>
@@ -59,11 +60,12 @@ class UnsignCom extends React.Component {
         }
     }
     componentDidMount() {
-        this.changePage();
+        this.changePage("1");
     }
     changePage = (page) => {
         let lists = [];
-        noSign(this.state.teachclass).then((res) => {
+        noSign(this.state.teachclass, page).then((res) => {
+            console.log(res);
             this.setState({ loading: false });
             if (res.data.flag === false) {
                 this.setState({
@@ -71,33 +73,44 @@ class UnsignCom extends React.Component {
                 })
                 message.info('没有缺勤学生!')
             } else {
-                let rs = res.data.data;
-                for (let i = 0; i < rs.length; i++) {
-                    let sign;
-                    let setsign;
-                    if (rs[i].sign === 1) {
-                        sign = "迟到"
-                        setsign = "旷课"
-                    } else if (rs[i].sign === 2) {
-                        sign = "旷课"
-                        setsign = "迟到"
-                    }
-                    lists.push({
-                        "id": rs[i].studentId,
-                        "time": rs[i].addtime,
-                        "index": i,
-                        "onclass": "出勤",
-                        "sign": sign,
-                        "setSign": setsign,
-                        "agree": {
-                            read: false,
+                if (res.data.data !== null) {
+                    if (res.data.data.length === 0) {
+                        let pagination = { ...this.state.pagination }
+                        pagination.current -= 1;
+                        this.setState({
+                            pagination
+                        })
+                        this.changePage(this.state.pagination.current)
+                    } else {
+                        let rs = res.data.data;
+                        for (let i = 0; i < rs.length; i++) {
+                            let sign;
+                            let setsign;
+                            if (rs[i].sign === 1) {
+                                sign = "迟到"
+                                setsign = "旷课"
+                            } else if (rs[i].sign === 2) {
+                                sign = "旷课"
+                                setsign = "迟到"
+                            }
+                            lists.push({
+                                'name':rs[i].userName,
+                                "id": rs[i].userId,
+                                "time": rs[i].addtime,
+                                "index": i,
+                                "onclass": "出勤",
+                                "sign": sign,
+                                "setSign": setsign,
+                                "agree": {
+                                    read: false,
+                                }
+                            })
                         }
-                    })
-                }
-                let pagination = { ...this.state.pagination };
-                pagination.total = rs.length;
-                this.setState({ data: lists, pagination: pagination });
-                //   console.log(this.state.pagination.total);
+                        let pagination = { ...this.state.pagination };
+                        pagination.total = res.data.page;
+                        this.setState({ data: lists, pagination: pagination });
+                    }
+                }//   console.log(this.state.pagination.total);
             }
         }).catch(err => {
             this.setState({ loading: false })
@@ -112,7 +125,7 @@ class UnsignCom extends React.Component {
     }
     render() {
         return (
-            <div style={{minHeight:'350px'}}>
+            <div style={{ minHeight: '350px' }}>
                 <Table
                     pagination={this.state.pagination}
                     loading={this.state.loading}
@@ -124,23 +137,25 @@ class UnsignCom extends React.Component {
         )
     }
     setOn = (record, index) => {
-        let num = (this.state.pagination.current - 1) * (this.state.pagination.pageSize) + index;
-        let info = this.state.data[num]
-        setNosign(this.state.teachclass, info.id, 1, 0, info.time).then(rs => {
+        // let num = (this.state.pagination.current - 1) * (this.state.pagination.pageSize) + index;
+        // let info = this.state.data[num]
+        setNosign(this.state.teachclass, record.id, 1, 0, record.time).then(rs => {
             if (rs.data.flag === true) {
+               
+                this.changePage(this.state.pagination.current);
                 message.success('设置成功');
-                let data = [...this.state.data];
-                let pagination = { ...this.state.pagination };
-                pagination.total = pagination.total - 1;
-                data.splice(num, 1);
-                if (pagination.current === (pagination.total) / 7 + 1) {
-                    if (parseInt.current !== 1)
-                        pagination.current -= 1;
-                }
-                this.setState({
-                    data: data,
-                    pagination
-                })
+                // let data = [...this.state.data];
+                // let pagination = { ...this.state.pagination };
+                // pagination.total = pagination.total - 1;
+                // data.splice(num, 1);
+                // if (pagination.current === (pagination.total) / 7 + 1) {
+                //     if (parseInt.current !== 1)
+                //         pagination.current -= 1;
+                // }
+                // this.setState({
+                //     data: data,
+                //     pagination
+                // })
 
             } else {
                 message.error('设置失败')
@@ -148,27 +163,26 @@ class UnsignCom extends React.Component {
         })
     }
     setOther = (record, index) => {
-        let num = (this.state.pagination.current - 1) * (this.state.pagination.pageSize) + index;
-        let info = this.state.data[num]
         let type;
         if (record.sign === "迟到") {
             type = 2;
         } else if (record.sign === "旷课") {
             type = 1;
         }
-        setNosign(this.state.teachclass, info.id, 1, type, info.time).then(rs => {
+        setNosign(this.state.teachclass, record.id, 1, type, record.time).then(rs => {
             if (rs.data.flag === true) {
-                let data = this.state.data;
-                let setType;
-                if (data[num].setSign === "迟到") {
-                    setType = "旷课"
-                } else {
-                    setType = "迟到"
-                }
-                data[num].sign = data[num].setSign;
-                data[num].setSign = setType;
-                this.setState({ data })
-                message.success('设置成功')
+                this.changePage(this.state.pagination.current);
+                // let data = this.state.data;
+                // let setType;
+                // if (data[num].setSign === "迟到") {
+                //     setType = "旷课"
+                // } else {
+                //     setType = "迟到"
+                // }
+                // data[num].sign = data[num].setSign;
+                // data[num].setSign = setType;
+                // this.setState({ data })
+                // message.success('设置成功')
             } else {
                 message.error('设置失败!')
             }

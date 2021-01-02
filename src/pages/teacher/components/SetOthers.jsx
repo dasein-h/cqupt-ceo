@@ -24,7 +24,7 @@ class SetOthers extends React.Component {
             <Spin spinning={this.state.loading}>
                 <div className="setChild">
                     {list}
-                    <Button loading={this.state.btnLoad} className="submit" onClick={() => this.submit()}>修改</Button>
+                    <Button ghost type="primary"  loading={this.state.btnLoad} className="submit" onClick={() => this.submit()}>修改</Button>
                 </div>
             </Spin>
         )

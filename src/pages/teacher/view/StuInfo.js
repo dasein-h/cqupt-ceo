@@ -96,6 +96,7 @@ class StuInfo extends Component {
         </div>
         <div>
           <Table
+          style={{minHeight:'350px'}}
           columns={columns}
           rowKey={record => record.id}
           dataSource={this.state.data}
