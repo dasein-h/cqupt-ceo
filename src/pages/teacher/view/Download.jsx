@@ -28,23 +28,36 @@ class DelPop extends React.Component {
         const key = this.props.record.key;
         const id = this.props.record.id;
         const page = this.props.parent.state.pagination.current;
-        // console.log(this.props.record);
-        // console.log(id);
+        
         let res = DeleteUpload(id);
         this.setState({loading:true})
         res.then(
           (result) => { 
-            // console.log(result);
-            // console.log(result.data.flag);
-            // this.props.parent.setState({
-            //       data: dataSource.filter((item) => item.key !== key)
-            // })
+            
             if (result.data.flag == true) { 
                 message.success(result.data.message);
                 this.setState({ loading: false })
                 this.setState({ visible: false });
-                // console.log(page);
-                this.props.parent.onchange(page);
+                let remain = (this.props.parent.state.pagination.total - 1) % this.props.parent.state.pagination.pageSize;
+                console.log(remain);
+                if (remain == 0) {
+                    let page = this.props.parent.state.pagination.current;
+                    console.log(page);
+                    if (page == 0) {
+                        this.props.parent.onchange(page);
+                    }
+                    else { 
+                        this.props.parent.onchange(page - 1);
+                    }
+                    
+                    // this.props.parent.state.pagination.onchange(page - 1);
+                    // this.props.parent.onchange(page - 1);
+                }
+                else { 
+                    let page = this.props.parent.state.pagination.current;
+                    this.props.parent.onchange(page);
+                }
+               
                 
                 }
             else {
@@ -55,7 +68,7 @@ class DelPop extends React.Component {
             
           },
           (err) => { 
-            // console.log(err);
+            
             message.warning('删除失败');
             this.setState({ loading: false });
             this.setState({ visible: false });
@@ -101,7 +114,7 @@ class DelPop extends React.Component {
 class Download extends Component { 
     constructor(props) { 
         super(props);
-        // this.onchange = this.onchange.bind(this);
+        this.onchange = this.onchange.bind(this);
         this.state = {
             columns: [
                   {
@@ -142,10 +155,13 @@ class Download extends Component {
             voteValue: '开启宣讲投票',
             isvot:'',
             loading: false,
+            
             pagination: {
+                total:7,
                 onChange: this.onchange,
                 pageSize: 7,
-                hideOnSinglePage:false
+                hideOnSinglePage: false,
+                current:1
             }
             
         }
@@ -158,7 +174,12 @@ class Download extends Component {
     }
 
     onchange=(page)=> { 
-        // console.log(page);
+        console.log(page);
+        let pa = this.state.pagination;
+        pa.current = page;
+        this.setState({
+            pagination:pa
+        })
         // console.log(this.state.pagination);
         this.setState({
             loading:true
@@ -168,11 +189,44 @@ class Download extends Component {
         res.then(
             (result) => { 
                 let data = JSON.parse(result.data);
-                if (data.length === undefined && page != 1) {
-                    this.onchange(page - 1);
+                console.log(data);
+                if (data === undefined) { 
+                    this.setState({
+                        pagination: {
+                            total: 0,
+                            onChange: this.onchange,
+                            pageSize: 7,
+                            hideOnSinglePage: true,
+                            current:page
+                        }
+                    })
+                }
+                else if (data[0].filePath <= 7) {
+                    
+                    this.setState({
+                        pagination: {
+                            total: data[0].filePath,
+                            onChange: this.onchange,
+                            pageSize: 7,
+                            hideOnSinglePage: true,
+                            current:page
+                        }
+                    })
                 }
                 else { 
-                    // console.log(data);
+                    this.setState({
+                        pagination: {
+                            total: data[0].filePath,
+                            onChange: this.onchange,
+                            pageSize: 7,
+                            hideOnSinglePage: false,
+                            current:page
+                        }
+                    })
+                }
+
+
+                
                     let newData = [];
                     for (let i in data) { 
                         newData.push({
@@ -187,8 +241,9 @@ class Download extends Component {
                         data: newData,
                         loading:false
                     });
+                
                     // console.log(this.state.loading);
-                }
+                
                 
                 
             },
@@ -206,16 +261,42 @@ class Download extends Component {
         res.then(
             (result) => { 
                 let data = JSON.parse(result.data);
-                if (data.length <= 7) { 
+                console.log(data);
+                if (data === undefined) { 
                     this.setState({
                         pagination: {
+                            total: 0,
                             onChange: this.onchange,
                             pageSize: 7,
-                            hideOnSinglePage:true
+                            hideOnSinglePage: true,
+                            current:1
                         }
                     })
                 }
-                // console.log(data);
+                else if (data[0].filePath <= 7) {
+                    
+                    this.setState({
+                        pagination: {
+                            total: data[0].filePath,
+                            onChange: this.onchange,
+                            pageSize: 7,
+                            hideOnSinglePage: true,
+                            current:1
+                        }
+                    })
+                }
+                else { 
+                    this.setState({
+                        pagination: {
+                            total: data[0].filePath,
+                            onChange: this.onchange,
+                            pageSize: 7,
+                            hideOnSinglePage: false,
+                            current:1
+                        }
+                    })
+                }
+                
                 let newData = [];
                 for (let i in data) { 
                     newData.push({
@@ -230,7 +311,7 @@ class Download extends Component {
                     data: newData,
                     loading:false
                 });
-                // console.log(this.state.loading);
+                
                 
             },
             (err) => { 
@@ -307,7 +388,7 @@ class Download extends Component {
     }
     render() { 
         return (
-            <Fragment>
+            <Fragment >
                 <div style={{ display: 'flex',justifyContent:'space-between',marginBottom:'1.5%'}}>
                     <span className='title'>宣讲文件</span>
                     <Button
@@ -320,6 +401,7 @@ class Download extends Component {
                 </div>
                 
                 <Table
+                    style={{height:'90vh'}}
                     dataSource={this.state.data}
                     columns={this.state.columns}
                     loading={this.state.loading}

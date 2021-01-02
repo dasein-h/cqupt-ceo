@@ -6,6 +6,7 @@ import { DownloadOutlined } from '@ant-design/icons';
 import '../../teacher/style/ComInfo.css';
 import { ShowComInfo, putScore,deleteCompany,ShowComMember,ChoseCompany,ShowComLevel,ChangeComType } from '../../../until/api/teacherApi';
 import baseUrl from '../../../until/BaseUrl';
+import ChoseStudent from '../components/ChoseStudent';
 // 父组件
 class ComInfo extends Component { 
   constructor(props) { 
@@ -24,13 +25,14 @@ class ComInfo extends Component {
             title: '公司类型',
             dataIndex: 'type',
             key: 'type',
+            width:'20%',
             render: (text,record) => {
              
               return (
                 <Fragment>
                   <table>
                     <tr>
-                      <td>
+                      <td style={{width:'50%'}}>
                         <span>{ text}</span>
                       </td>
                       <td style={{textAlign:'center'}}>
@@ -88,7 +90,7 @@ class ComInfo extends Component {
                 <Fragment>
                   <table>
                     <tr>
-                      <td>
+                      <td style={{width:'50%'}}>
                         <span className='seeScore'>{ text}</span>
                       </td>
                       <td style={{textAlign:'center'}}>
@@ -159,11 +161,7 @@ class ComInfo extends Component {
       
 
   }
-  getChildrenData = (result,msg) => { 
-    this.setState({
-        data:msg
-    })
-}
+
   onchange = (e) => { 
     console.log(e);
     let newdata = this.state.pagination;
@@ -447,9 +445,9 @@ class ComInfo extends Component {
           }
           else { 
             let newData = [];
-            for (let j = 0; j < result.data.data["totalNumber"];j++) { 
-              newData.push(false);
-            }
+            // for (let j = 0; j < result.data.data["totalNumber"];j++) { 
+            //   newData.push(false);
+            // }
             for (let i in result.data.data["object"]) { 
               mydata.push({
                 key:i,
@@ -541,7 +539,7 @@ class ComInfo extends Component {
             <div>
               
               <Table
-                    
+                style={{height:'100vh'}} 
                 className="components-table-demo-nested"
                 columns={this.state.columns}
                 dataSource={this.state.data}
@@ -779,19 +777,31 @@ class AddStudent extends React.Component {
 
   constructor(props) {
     super(props);
-    this.textInput = React.createRef();
-    this.focusTextInput = this.focusTextInput.bind(this);
-    this.handleInput = this.handleInput.bind(this);
+    this.onRef = this.onRef.bind(this);
+
+    this.getChildrenData = this.getChildrenData.bind(this);
     this.state = {
-      // inputValue: this.props.txt,
+      
       record:this.props.record,
-      inputValue: '',
+      inputValue: '11111111',
       loading: false,
       visible: false,
     }
   }
 
+  onRef = (ref) => { 
+    this.child = ref;
+  }
 
+
+  getChildrenData = (result, msg) => { 
+
+    let newState = this.state;
+    newState.inputValue = msg;
+
+    this.setState({inputValue:msg})
+
+  }
   showModal = () => {
     this.setState({
       visible: true,
@@ -799,11 +809,17 @@ class AddStudent extends React.Component {
   };
 
   handleOk = () => {
-    this.setState({ loading: true });
+    // this.ChoseStudent.toParent();
+    this.child.toParent();
 
+    this.setState({ loading: true });
+    // this.getChildrenData();
     let ceo = this.state.record.ceoID;
     let companyName = this.state.record.comName;
-    let studentId = this.textInput.current.value;
+    
+    console.log(this.state);
+    let studentId = this.state.inputValue;
+    console.log(studentId);
     console.log(ceo);
     let res = ChoseCompany(ceo, studentId,companyName);
     res.then(
@@ -836,33 +852,6 @@ class AddStudent extends React.Component {
   handleCancel = () => {
     this.setState({ visible: false });
   };
-
-  focusTextInput() {
-    let ceo=this.state.record.ceoID;
-    let scoreTeacher = this.textInput.current.value;
-    console.log(ceo);
-    let res = putScore(ceo, scoreTeacher);
-    res.then(
-      (result) => { 
-        console.log(result);
-        message.success('修改成功！');
-        
-        
-      },
-      (err) => { 
-        console.log(err);
-        message.warning("请求超时或服务器异常，请检查网络或联系管理员!");
-        }
-      )
-    
-  }
-
-  handleInput(e) { 
-    let value = e.target.value;
-    this.setState({
-      inputValue: value,
-    })
-  }
   render() {
     const { visible, loading } = this.state;
     return (
@@ -872,6 +861,7 @@ class AddStudent extends React.Component {
         </Button> */}
         <a onClick={this.showModal}>添加</a>
         <Modal
+          style={{width:'40vw'}}
           visible={visible}
           title="添加新的学生信息"
           onOk={this.handleOk}
@@ -886,7 +876,7 @@ class AddStudent extends React.Component {
             </Button>,
           ]}
         >
-            <div className="Inp-Sco-div">
+            {/* <div className="Inp-Sco-div">
                 <input
                       className='InpSco'
                       type="text"
@@ -895,7 +885,8 @@ class AddStudent extends React.Component {
                       onChange={this.handleInput}
                       placeholder='请输入学生学号'
                   />
-            </div>
+            </div> */}
+          <ChoseStudent parent={this} onRef={ this.onRef}/>
         </Modal>
       </>
     );
