@@ -47,20 +47,23 @@ export default (props) => {
   }
   return (
     <div style={{margin: '15px'}}>
-      <label className="upload-btn">
-        选择文件
-        {file?.name}
-        <input
-          ref={fileRef}
-          style={{
-            visibility: 'hidden',
-            width: '0'
-          }}
-          type="file"
-          onChange={handleUpload}
-        />
-      </label>
-      <Button type="primary" onClick={upload}>上传</Button>
+      <div style={{
+        height: '100%'
+      }}>
+        <label className="upload-btn">
+          {file?.name ? file?.name : '选择文件'}
+          <input
+            ref={fileRef}
+            style={{
+              visibility: 'hidden',
+              width: '0'
+            }}
+            type="file"
+            onChange={handleUpload}
+          />
+        </label>
+        <Button type="primary" onClick={upload}>上传</Button>
+      </div>
     </div>
   )
 }

@@ -216,7 +216,7 @@ class Student extends Component {
               left: 0,
             }}
             theme="light"
-            width="300"
+            className="Sider"
           >
             <div className="logo" />
             <Menu theme="light" mode="inline" defaultSelectedKeys={[sessionStorage.getItem("count0") || '1']} >
@@ -239,7 +239,7 @@ class Student extends Component {
           </Sider>
           <Layout className="site-layout"
             style={{
-              marginLeft: 300,
+              marginLeft: '20%',
             }}>
             <Header className="site-layout-background" style={{ padding: 0 }}>
             <p className="introduce">仿真辅助系统</p>
@@ -346,7 +346,7 @@ class Student extends Component {
               left: 0,
             }}
             theme="light"
-            width="300"
+            className="Sider"
           >
             <div className="logo" />
             <Menu theme="light" mode="inline" defaultSelectedKeys={[sessionStorage.getItem("count0") || '1']}>
@@ -369,7 +369,7 @@ class Student extends Component {
           </Sider>
           <Layout className="site-layout"
             style={{
-              marginLeft: 300,
+              marginLeft:'20%',
             }}>
             <Header className="site-layout-background Head" style={{ padding: 0 }}>
               <p className="introduce">仿真辅助系统</p>

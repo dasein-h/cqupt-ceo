@@ -56,9 +56,10 @@ function CEO(props) {
           height: '100vh',
           position: 'sticky',
           top: 0,
-          left: 0
+          left: 0,
+          width: '20%'
         }}
-        width={300}
+        width="20%"
       >
         <NavMenu routes={routes}/>
       </Sider>

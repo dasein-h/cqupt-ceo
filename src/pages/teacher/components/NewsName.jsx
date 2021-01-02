@@ -45,6 +45,7 @@ class newLists extends React.Component {
           {
             title: '操作',
             dataIndex: 'agree',
+            align:'center',
             render: (text, record, index) => (
               <Space size="middle">
                 <Button size="small" type="primary" ghost onClick={() => { this.clickAgree(text, record, index) }}>同意</Button>

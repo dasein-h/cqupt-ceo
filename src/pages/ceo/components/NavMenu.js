@@ -6,7 +6,7 @@ import {withRouter} from 'react-router-dom'
 const NavMenu = (props) => {
   const {routes} = props
   return (
-    <Menu mode="inline" style={{width: '300px'}} selectedKeys={props.location.pathname}>
+    <Menu mode="inline" style={{width: '100%'}} selectedKeys={props.location.pathname}>
       {
         routes.map(({path, name}) => (
           <Menu.Item key={path}>

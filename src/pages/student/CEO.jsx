@@ -137,7 +137,7 @@ class CEO extends Component {
         },
       ]
       const pagination = {
-        pageSize: 8,
+        pageSize: 7,
         total:this.state.totalNum,
         onChange:this.onPageChange,
         current:this.state.currentPage,
@@ -146,7 +146,7 @@ class CEO extends Component {
     if (localStorage.getItem("userId")){
         return ( 
             <div className="table_div">
-            <Button type="primary" className="RunCeo" onClick={this.props.RunCeo.bind(this,this)} loading={this.state.b_loading}>成为CEO</Button>
+            <Button type="primary" className="RunCeo" onClick={this.props.RunCeo.bind(this,this)} loading={this.state.b_loading}>竞选CEO</Button>
             <Table columns={columns} dataSource={this.state.data} pagination={pagination} loading={this.state.loading}/>
             </div>
              )

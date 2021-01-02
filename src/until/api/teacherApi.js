@@ -175,9 +175,9 @@ function exportExc(teachclass){
 }
 
 //展示未签到学生
-function noSign(teachclass){
+function noSign(teachclass,currentPage){
   return Service.post('/teacher/noSign',{
-    teachclass
+    teachclass,currentPage
   })
 }
 

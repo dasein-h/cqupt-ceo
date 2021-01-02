@@ -1,9 +1,9 @@
 import React, {useState, memo, useEffect} from "react";
-import {Button, Card, Input, message, Radio} from "antd";
+import {Button, Tooltip, Input, message, Radio} from "antd";
 import {changeCompanyName, createCompany as createCompanyImpl, createCompany} from '../../../../../until/api/ceo';
 import WithModal from "../../../components/WithModal";
 import {companyInfo} from "../../../../../until/api/ceo";
-import {connect} from 'react-redux'
+import {EditFilled} from '@ant-design/icons'
 
 let cancel = () => {
 }
@@ -19,32 +19,30 @@ const companyTypes = [
 ]
 
 const MyCompany = (props) => {
-  const {hasCompany, setHasCompany} = props
   const userId = localStorage.getItem('userId')
   const [info, setInfo] = useState(null)
   const [name, setName] = useState('')
 
-
-  useEffect(() => {
-      companyInfo(userId)
-        .then(
-          res => {
-            if (!res.flag) {
-              message.info(res.message || '数据库异常')
-              return
-            }
-            if (!res.data) {
-              setHasCompany(false)
-              return
-            }
-            setHasCompany(true)
-            const {typeCode} = res.data
-            localStorage.setItem('typeCode', typeCode)
-            setInfo(res.data)
+  const fetchCompanyInfo = () => {
+    companyInfo(userId)
+      .then(
+        res => {
+          if (!res.flag) {
+            message.info(res.message || '数据库异常')
+            return
           }
-        )
-    }, []
-  )
+          if (!res.data) {
+            return
+          }
+          const {typeCode} = res.data
+          localStorage.setItem('typeCode', typeCode)
+          setInfo(res.data)
+        }
+      )
+  }
+  useEffect(() => {
+    fetchCompanyInfo()
+  }, [])
   const changeName = async () => {
     if (name.length > 10) {
       message.info("公司名字最长不超过10个汉字")
@@ -59,14 +57,19 @@ const MyCompany = (props) => {
     }
     if (res.data.flag) {
       message.success('申请成功')
-
+      cancel()
+      setInfo(info => ({
+        ...info,
+        companyName: name
+      }))
     } else {
       message.info('遇到错误' + res.message || '')
     }
   }
 
   const CreateCompany = (props) => {
-    const [companyType, setCompanyType] = useState('')
+    const {reload} = props
+    const [companyType, setCompanyType] = useState('贸易公司')
     const [companyName, setCompanyName] = useState('')
     const createCompany = async (userId) => {
       if (!companyName) {
@@ -78,6 +81,7 @@ const MyCompany = (props) => {
       if (res.flag) {
         message.success('创建公司成功')
         cancel()
+        reload()
       } else {
         message.warn(res.message || '数据库异常')
       }
@@ -136,81 +140,87 @@ const MyCompany = (props) => {
     )
   }
   return (
-    <div>
-      <div className="my-company">
-        {
-          info
-            ? (
+    <div className="my-company">
+      {
+        info
+          ? (
+            <>
               <div className="flex_grid">
                 <div>
                   <div className="item">
-                    <span className="dscr">
+                      <span className="dscr">
                       公司名
-                    </span>{info.companyName}</div>
+                      </span>{info.companyName}
+                    <WithModal
+                      render={
+                        (props, _cancel) => {
+                          cancel = _cancel
+                          return (
+                            info ? <Tooltip title="申请改名">
+                              <EditFilled {...props}/>
+                            </Tooltip> : <></>
+                          )
+                        }
+                      }
+                    >
+                      <div className="flex column">
+                        <div style={{textAlign: 'center'}}>输入公司名</div>
+                        <Input
+                          style={{margin: '10px 0'}}
+                          defaultValue={info.companyName}
+                          onChange={e => setName(e.target.value)}
+                        />
+                        <Button
+                          onClick={changeName}
+                          type="primary"
+                          style={{marginLeft: '0'}}>确认</Button>
+                      </div>
+                    </WithModal>
+                  </div>
                   <div className="item">
                     <span className="dscr">创建于</span>
-                    {info.creatTime}</div>
-                  <div className="item">
-                    <span className="dscr">老师打分</span>
-                    {info.scoreTeacher}</div>
+                    {info.creatTime}
+                  </div>
                   <div className="item">
                     <span className="dscr">公司得分</span>
-                    {info.companyScore}</div>
+                    {info.companyScore}
+                  </div>
                 </div>
                 <div>
                   <div className="item">
-                    <span className="dscr">
-                      成员数
-                    </span>{info.studentNum}
+                    <span className="dscr">成员数</span>{info.studentNum}
                   </div>
                   <div className="item">
-                    <span className="dscr">
-                      机构
-                    </span>{(info.typeCode || localStorage.getItem('typeCode')) < 3 ? '普通公司' : '其他机构'}
-                  </div>
-                  <div className="item">
-                    <span className="dscr">ceo打分</span>
-                    {info.scoreCeo}</div>
-                </div>
-                <WithModal
-                  render={
-                    (props, _cancel) => {
-                      cancel = _cancel
-                      return (
-                        hasCompany ? <Button {...props} type="primary">申请改名</Button> : <></>
-                      )
+                    <span className="dscr">机构</span>
+                    {
+                      (info.typeCode || localStorage.getItem('typeCode')) < 3
+                        ? '普通公司'
+                        : '其他机构'
                     }
-                  }
-                >
-                  <div className="flex column">
-                    <div style={{textAlign: 'center'}}>输入公司名</div>
-                    <Input
-                      style={{margin: '10px 0'}}
-                      defaultValue={info.companyName}
-                      onChange={e => setName(e.target.value)}
-                    />
-                    <Button
-                      onClick={changeName}
-                      type="primary"
-                      style={{marginLeft: '0'}}>确认</Button>
                   </div>
-                </WithModal>
+                  <div className="item">
+                    <span className="dscr">老师打分</span>
+                    {info.scoreTeacher}
+                  </div>
+                </div>
+                <div>
+                  <div className="item">
+                    <span className="dscr">优秀数</span>{info.excellentNum}
+                  </div>
+                  <div className="item">
+                    <span className="dscr">良好数</span>{info.goodNum}
+                  </div>
+                  <div className="item">
+                    <span className="dscr">及格数</span>{info.mediumNum}
+                  </div>
+                </div>
               </div>
-            ) : <CreateCompany/>
-        }
-      </div>
+            </>
+          )
+          : <CreateCompany reload={fetchCompanyInfo}/>
+      }
     </div>
   )
 }
 
-export default connect(
-  state => ({hasCompany: state.hasCompany}),
-  dispatch => ({
-    setHasCompany(bool) {
-      dispatch({
-        type: 'SET_HAS_COMPANY',
-        payload: bool
-      })
-    }
-  })
-)(MyCompany)
+export default MyCompany
