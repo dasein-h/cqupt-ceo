@@ -20,6 +20,7 @@ const reducer = (state, {type, payload}) => {
       return {...state, currentPage: payload, loading: false}
     case INIT_PAGE:
       payload.object?.forEach((item, i) => item.key = i)
+      payload.object = payload.object?.filter((item) => item.state !== '已同意')
       return {
         ...state,
         total: payload.totalNumber,
@@ -44,8 +45,7 @@ function Application(props) {
     data: null,
     pageSize: 0,
   })
-
-  useEffect(() => {
+  const fetchApplication = () => {
     showApplication(0, userId).then(
       res => {
         if (!res.flag) return
@@ -55,6 +55,10 @@ function Application(props) {
         })
       }
     )
+  }
+
+  useEffect(() => {
+    fetchApplication()
   }, [userId])
 
   const handleAgree = async (studentId, companyName, idx) => {

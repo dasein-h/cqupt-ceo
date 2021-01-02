@@ -2,7 +2,6 @@ import React, {useReducer, useEffecet, memo} from 'react'
 import {PageHeader} from "antd";
 import FileList from "./components/FileList";
 import Uploader from "./components/Uploader";
-import {fetchFileList} from "../../../../until/api/ceo";
 
 const reducer = (state, action) => {
   const {type, payload} = action

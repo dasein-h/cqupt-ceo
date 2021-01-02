@@ -1,6 +1,11 @@
 const pptExt = [
   'ppt',
-  'pptx'
+  'pptx',
+  'pps',
+  'ppa',
+  'pot',
+  'ppsx',
+  'rtf'
 ]
 
 export default (filename) => {

@@ -17,7 +17,6 @@ const validateScore = score => {
   return score
 }
 const positions = [
-  'ceo',
   '副总裁',
   '总裁'
 ]
@@ -34,8 +33,9 @@ const Member = (props) => {
   }, [scoredList])
 
   const {studentId, userName, id, academy, position, personalScore} = member
-  const [posValue, setPosValue] = useState('ceo')
-  const [score, setScore] = useState(0)
+  const [posValue, setPosValue] = useState(positions[0])
+  const [scoreLevel, setScoreLevel] = useState(9)
+  const [score, setScore] = useState(scoreLevel * 10)
   const handleSetPosition = async () => {
     const res = await setPosition(ceoId, studentId, posValue)
     if (!res) {
@@ -53,7 +53,7 @@ const Member = (props) => {
     const res = await studentScore(score, studentId, ceoId)
     if (!res) return
     if (!res.flag) {
-      message.info(res.message || '网络错误')
+      message.info(res.message + '\n每个公司的优秀，良好，及格，人数是有限的' || '网络错误')
       return
     }
     message.success('评分成功')
@@ -153,12 +153,7 @@ const Member = (props) => {
             }
           }
         >
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-evenly',
-            alignItems: 'center'
-          }}>
-
+          <div>
             <div style={{
               textAlign: 'center'
             }}>
@@ -169,21 +164,30 @@ const Member = (props) => {
                 fontSize: '14px'
               }}>(70 - 100)</span>
             </div>
-            <Tooltip
-              title="上下键可以快速调整分数"
-            >
-              <InputNumber
-                defaultValue={100}
-                autoFocus
-                onChange={score => {
-                  setScore(score >> 0)
-                }}
-                value={validateScore(score)}
-                max={100}
-                min={70}
-              />
-            </Tooltip>
-            <Button type="primary" onClick={handleScore.bind(null)}>评分</Button>
+            <Radio.Group style={{
+              display: 'block',
+              margin: '10px auto 0',
+              width: 'fit-content'
+            }} value={scoreLevel} onChange={e => setScoreLevel(e.target.value)}>
+              <Radio value={9}>优秀</Radio>
+              <Radio value={8}>良好</Radio>
+              <Radio value={7}>及格</Radio>
+            </Radio.Group>
+            <InputNumber
+              defaultValue={score}
+              onChange={score => {
+                setScore(score >> 0)
+              }}
+              style={{
+                margin: '10px auto',
+                display: 'block',
+                width: '100%'
+              }}
+              value={score}
+              max={(scoreLevel + 1) * 10 - (scoreLevel === 9 ? 0 : 1)}
+              min={scoreLevel * 10}
+            />
+            <Button style={{width: '100%'}} type="primary" onClick={handleScore.bind(null)}>评分</Button>
           </div>
         </WithModal>
       </footer>

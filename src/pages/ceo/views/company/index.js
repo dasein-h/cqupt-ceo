@@ -12,6 +12,7 @@ import MyTable from "../../components/MyTable";
 import WithModal from "../../components/WithModal";
 import MyCompany from "./components/MyCompany";
 import Member from "./components/Member";
+import Confirm from "../../components/Comfirm";
 
 import './style/position.scss'
 
@@ -52,7 +53,6 @@ const reducer = (state, action) => {
         ...state,
         companies: payload.object,
         companyTotal: payload.totalNumber,
-        companyCurrentPage: payload.currentPage,
         pageSize: payload.pageSize
       }
     case 'SET_MEMBER_STATE':
@@ -60,11 +60,6 @@ const reducer = (state, action) => {
         ...state,
         members: payload.members,
         scoredList: payload.scoredList
-      }
-    case 'CHANGE_COMPANY_PAGE':
-      return {
-        ...state,
-        companyCurrentPage: payload.currentPage
       }
     case 'SET_COMPANY_NAME':
       return {
@@ -79,10 +74,8 @@ const reducer = (state, action) => {
 
 function Company(props) {
   const {userId} = props
-
   const [state, dispatch] = useReducer(reducer, {
     companies: null,
-    companyCurrentPage: 0,
     companyTotal: 0,
     members: null
   })
@@ -107,8 +100,8 @@ function Company(props) {
       }
     })
   }
-  const fetchShowAllCompany = async (userId, currentPage) => {
-    const res = await showAllCompany(userId, currentPage)
+  const fetchShowAllCompany = async (userId) => {
+    const res = await showAllCompany(userId, 0)
     if (!res.flag) return
     dispatch({
       type: 'SET_COMPANY_STATE',
@@ -132,6 +125,7 @@ function Company(props) {
     if (res.flag) {
       message.success("打分成功")
       cancel()
+      fetchShowAllCompany(userId, 0)
     } else {
       message.info(res.message || "网络异常")
     }
@@ -178,25 +172,86 @@ function Company(props) {
         *   只能互相打分
         */
         const canOperate = validateVote(localStorage.getItem('typeCode'), typeCode)
-        return (
+        return canOperate ? (
           <>
-            <Button
-              disabled={!canOperate}
-              onClick={vote.bind(null, typeCode, ceo)}>投票</Button>
+            <Confirm
+              text="每个人只能投一次票，是否确定"
+              render={(open, onOk) => {
+                onOk(vote.bind(null, typeCode, ceo))
+                return <Button onClick={open}>投票</Button>
+              }}
+            />
 
             <WithModal
               render={(props, onCancel) => {
                 cancel = onCancel
-                const canOperate = validateVote(localStorage.getItem('typeCode'), typeCode)
-                return (
+                return <Button
+                  type="primary"
+                  {...props}
+                >
+                  打分
+                </Button>
+              }}
+            >
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-evenly',
+                alignItems: 'center'
+              }}>
+                <div style={{
+                  textAlign: 'center'
+                }}>
+                  分数
+                  <br/>
+                  <span style={{
+                    color: '#a0a0a0',
+                    fontSize: '14px'
+                  }}>(0 - 100)</span>
+                </div>
+                <Tooltip
+                  title="上下键可以快速调整分数"
+                >
+                  <InputNumber
+                    defaultValue={100}
+                    autoFocus
+                    onChange={score => {
+                      setScore(score >> 0)
+                    }}
+                    max={100}
+                    min={0}
+                  />
+                </Tooltip>
+                <Confirm
+                  text="每个人只能打一次分，是否确定"
+                  render={(open, onOk) => {
+                    onOk(handleScore.bind(null, ceo))
+                    return <Button type="primary" onClick={open}>评分</Button>
+                  }}
+                />
+              </div>
+            </WithModal>
+          </>
+        ) : (
+          <>
+            <Tooltip title="只能对其它类型公司进行操作">
+              <Button
+                disabled={true}
+                onClick={vote.bind(null, typeCode, ceo)}>投票
+              </Button>
+            </Tooltip>
+
+            <WithModal
+              render={(props, onCancel) => {
+                cancel = onCancel
+                return <Tooltip title="只能对其它类型公司进行操作">
                   <Button
+                    disabled={true}
                     type="primary"
-                    disabled={!canOperate}
                     {...props}
                   >
                     打分
                   </Button>
-                )
+                </Tooltip>
               }}
             >
               <div style={{
@@ -235,18 +290,17 @@ function Company(props) {
       }
     }
   ]
-
+  companyColumns.forEach(item => item.align = 'center')
   useEffect(() => {
     fetchGetMember(userId)
-    fetchShowAllCompany(userId, 0)
+    fetchShowAllCompany(userId, 1)
   }, [])
-
   return (
     <div>
       <PageHeader title="我的公司"/>
       <Card
         hoverable={true}
-        style={{margin: '15px'}}>
+        style={{margin: '15px', width: '500px'}}>
         <MyCompany/>
       </Card>
 
@@ -269,7 +323,6 @@ function Company(props) {
         columns={companyColumns}
         dataSource={state.companies}
       />
-
     </div>
   )
 }
