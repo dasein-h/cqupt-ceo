@@ -4,7 +4,7 @@ import {
 } from 'antd';
 
 import '../../teacher/style/ComInfo.css';
-import { showAll } from '../../../until/api/teacherApi';
+// import { showAll } from '../../../until/api/teacherApi';
 import { ShowNoComStu } from '../../../until/api/teacherApi';
 
 
