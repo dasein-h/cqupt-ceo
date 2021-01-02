@@ -35,6 +35,12 @@ body {
 .radius_menu{
   border-radius:10px;
 }
+.Sider{
+  min-width:170px !important;
+  max-width:20% !important;
+  width:20% !important;
+  z-index:1;
+}
 .login{
   margin-left:20px;
 }
@@ -69,6 +75,7 @@ Modal{
 }
 Content{
   height:870px;
+  z-index:-1;
 }
 .Name{
   float:right;
