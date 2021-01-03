@@ -76,7 +76,10 @@ class UnsignCom extends React.Component {
                 if (res.data.data !== null) {
                     if (res.data.data.length === 0) {
                         let pagination = { ...this.state.pagination }
-                        pagination.current -= 1;
+                        if(pagination.current!=1){
+                            pagination.current -= 1;
+                        }
+                      
                         this.setState({
                             pagination
                         })
