@@ -31,13 +31,20 @@ class CEO extends Component {
               loading:false
             })
           }
-          if( newProps.isVoteForCeo === true )
-          message.success("投票成功")
+          if( newProps.isVoteForCeo === true ){
+            message.success("投票成功")
+            this.props.ShowCeo(parseInt(sessionStorage.getItem("Page2"))||1,localStorage.getItem("userId"))
+            this.setState({
+              loading:true
+            })
+          }
           if( newProps.message ){
             if( newProps.isRunCeo === true ){
               message.success(newProps.message)
+              this.props.ShowCeo(parseInt(sessionStorage.getItem("Page2"))||1,localStorage.getItem("userId"))
               this.setState({
                 b_loading:false,
+                loading:true,
               })
             }
             else if(newProps.isVoteForCeo === false || newProps.isRunCeo === false ){
@@ -89,6 +96,7 @@ class CEO extends Component {
         // let newdata = this.state.data.object
         this.setState({
             currentPage: page,
+            loading:true,
             // data:newdata
         })
         changePage(2,page)
