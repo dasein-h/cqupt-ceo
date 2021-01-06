@@ -34,8 +34,13 @@ class ChosenClasses extends Component {
               loading:false
             })
           }
-          if(newProps.isVoteForCompany === true )
-          message.success("投票成功")
+          if(newProps.isVoteForCompany === true ){
+            this.props.getAllCompanies(localStorage.getItem("userId"))
+            this.setState({
+              loading:true,
+            })
+            message.success("投票成功")
+          }
           if(newProps.message){
             if(newProps.isVoteForCompany === false )
             message.error(newProps.message)
@@ -48,7 +53,6 @@ class ChosenClasses extends Component {
           this.setState({
             currentPage: parseInt(sessionStorage.getItem("Page1"))||1,
             data:newdata,
-            loading:false,
           })
         }
         catch{}
@@ -77,6 +81,7 @@ class ChosenClasses extends Component {
     onPageChange (page,pageSize) {
         this.setState({
             currentPage: page,
+            loading:true,
         })
 
 
