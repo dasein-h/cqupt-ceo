@@ -290,10 +290,12 @@ function rejectNewsType(ceo,id){
 }
 
 //导出学生信息
-function downLoadStudent(teachclass){
-  return Service.post('/upload/export',{
-    teachclass
-  })
+function downLoadStudent(param){
+  return Service.post('/upload/export',param,{
+   transformRequest:[],
+  responseType:'blob',
+  headers:{'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'}
+})
 }
 
 // 展示所有所有没有公司得学生

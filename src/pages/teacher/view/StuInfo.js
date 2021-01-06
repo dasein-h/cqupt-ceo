@@ -1,7 +1,7 @@
 import React, { Component} from 'react'
 import { Button,Table, notification,message } from 'antd';
 import { DownloadOutlined } from '@ant-design/icons';
-import { showAll} from '../../../until/api/teacherApi'
+import { showAll,downLoadStudent} from '../../../until/api/teacherApi'
 import '../../../static/style/teacherStyle.scss'
 import axios from 'axios'
 // const { Search } = Input
@@ -168,32 +168,23 @@ class StuInfo extends Component {
     //   btnLoad:false
     // })
     // }, 6000);
-    let param = new URLSearchParams()
-param.append('teachclass', this.state.teachclass)
-    axios({
-      url: `http://localhost:3000/api/upload/export`,
-      method: 'post',
-      data:param,
-     header: {
-       headers: { 'Content-Type': 'application/x-download' }
-     },
-     responseType: 'blob'
-     }).then((res) => {
-      const xlsx = 'application/vnd.ms-excel'
-      const blob = new Blob([res.data], { type: xlsx })
-      const a = document.createElement('a') // 转换完成，创建一个a标签用于下载
-      a.download = `学生成绩表.xlsx`
-      a.href = window.URL.createObjectURL(blob)
-      a.click()
-      a.remove()
-      this.setState({
-        btnLoad:false
-      })
-     }).catch(err => {
-       message.error('导出错误!')
-     })
-  }
-}
+    let param = new FormData();
+param.append('teachclass',this.state.teachclass)
+    downLoadStudent(param).then(res => {
+  const xlsx = 'application/vnd.ms-excel'
+  const blob = new Blob([res.data], { type: xlsx })
+  const a = document.createElement('a') // 转换完成，创建一个a标签用于下载
+  a.download = `学生成绩表.xlsx`
+  a.href = window.URL.createObjectURL(blob)
+  a.click()
+  a.remove()
+  this.setState({
+    btnLoad:false
+  })
+ }).catch(err => {
+   message.error('导出错误!')
+ })
+}}
 
 
 export default StuInfo
