@@ -53,7 +53,6 @@ class ChosenClasses extends Component {
           this.setState({
             currentPage: parseInt(sessionStorage.getItem("Page1"))||1,
             data:newdata,
-            loading:false,
           })
         }
         catch{}

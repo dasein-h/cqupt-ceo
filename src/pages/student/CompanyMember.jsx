@@ -62,9 +62,11 @@ class CompanyMember extends Component {
           if( newProps.message ){
             if( newProps.isRunScore === true ){
               message.success("打分成功")
+              this.props.ShowScore(localStorage.getItem("userId"))
               this.setState({
                 b_loading:false,
                 disabled:true,
+                loading:true,
               })
               
             }
@@ -151,6 +153,9 @@ class CompanyMember extends Component {
     onPageChange (page,pageSize) {
       if (localStorage.getItem("userId")){
         this.props.ShowCompanyMember(localStorage.getItem("userId"))
+        this.props.ShowNumber(localStorage.getItem("userId"))
+        this.props.ShowScore(localStorage.getItem("userId"))
+        this.props.ShowCompany(localStorage.getItem("userId"))
       }
         // let newdata = this.state.data.object
         this.setState({
@@ -315,7 +320,8 @@ class CompanyMember extends Component {
       if(this.state.NumberData.typeCode<3 && this.state.NumberData.level !== 0)
         return ( 
             <div className="table_div">
-              <p>公司是第{this.state.NumberData.level}等公司，优秀人数{this.state.NumberData.excellentNum}人，良好人数{this.state.NumberData.goodNum}人，合格人数{this.state.NumberData.mediumNum}</p>
+              <p>公司是第{this.state.NumberData.level}等公司，优秀人数{this.state.NumberData.excellentNum}人，良好人数{this.state.NumberData.goodNum}人，合格人数{this.state.NumberData.mediumNum}人
+              (90≤优秀≤100,80≤良好＜90,70≤合格＜80,仅允许在70到100之间打分)</p>
               <br/>
             <Table columns={columns} dataSource={this.state.data} pagination={pagination} loading={this.state.loading}/>
             </div>
@@ -323,7 +329,9 @@ class CompanyMember extends Component {
       else if(this.state.NumberData.typeCode >= 3 && this.state.NumberData.level !== 0)
          return ( 
         <div className="table_div">
-          <p>公司属于其他机构，优秀，良好，合格人数固定</p>
+          <p>公司属于其他机构，优秀，良好，合格人数固定
+          (90≤优秀≤100,80≤良好＜90,70≤合格＜80,仅允许在70到100之间打分)
+          </p>
           <br/>
         <Table columns={columns} dataSource={this.state.data} pagination={pagination} loading={this.state.loading}/>
         </div>
