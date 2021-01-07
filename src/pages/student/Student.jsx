@@ -243,6 +243,7 @@ class Student extends Component {
             }}>
             <Header className="site-layout-background" style={{ padding: 0 }}>
             <p className="introduce">仿真辅助系统</p>
+            <a href="http://172.22.4.2" rel="noopener noreferrer" target="_blank" style={{marginLeft:20}}>实验室</a>
               <Button className="exit" type="primary" onClick={this.showModal}>登录</Button>
               <Modal
                 title="登录"
@@ -373,6 +374,7 @@ class Student extends Component {
             }}>
             <Header className="site-layout-background Head" style={{ padding: 0 }}>
               <p className="introduce">仿真辅助系统</p>
+              <a href="http://172.22.4.2" rel="noopener noreferrer" target="_blank" style={{marginLeft:20}}>实验室</a>
               <Button className="exit" type="primary" onClick={this.confirm.bind(this,this)}>
                 退出登陆</Button>
                 <p className="Name">欢迎你，{localStorage.getItem("userName")}</p>
