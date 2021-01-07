@@ -7,6 +7,7 @@ import '../../teacher/style/ComInfo.css';
 import { ShowComInfo, putScore,deleteCompany,ShowComMember,ChoseCompany,ShowComLevel,ChangeComType } from '../../../until/api/teacherApi';
 import baseUrl from '../../../until/BaseUrl';
 import ChoseStudent from '../components/ChoseStudent';
+import ShowScore from '../components/ShowScore';
 // 父组件
 class ComInfo extends Component { 
   constructor(props) { 
@@ -19,11 +20,13 @@ class ComInfo extends Component {
           {
             title: '公司名称',
             dataIndex: 'comName',
-            key:'comName'
+            key: 'comName',
+            align: 'center',
           },
           {
             title: '公司类型',
             dataIndex: 'type',
+            align: 'center',
             key: 'type',
             width:'20%',
             render: (text,record) => {
@@ -51,39 +54,47 @@ class ComInfo extends Component {
           {
             title: 'CEO学号',
             dataIndex: 'ceoID',
-            key:'ceoID'
+            key: 'ceoID',
+            align: 'center',
           },
           {
             title: 'CEO姓名',
             dataIndex: 'ceoname',
-            key:'ceoname'
+            key: 'ceoname',
+            align: 'center',
           },
-          // {
-          //   title: '公司得分',
-          //   dataIndex: 'companyScore',
-          //   key:'companyScore'
-          // },
           {
             title: '票数',
             dataIndex: 'count',
-            key:'count'
+            key: 'count',
+            align: 'center',
           },
           {
             title: '等级',
             dataIndex: 'level',
-            key:'level'
+            key: 'level',
+            align: 'center',
           },
-          // {
+          {
 
-          //   title: '得分',
-          //   dataIndex: 'ShowScore',
-          //   // width: '20%'
-          // },
+            title: '得分',
+            align: 'center',
+            dataIndex: 'ShowScore',
+            render: (text, record) => { 
+              return (
+                <Fragment>
+                  <ShowScore record={ record}/>
+                </Fragment>
+              )
+            },
+            // width: '7%'
+          },
           {
             title: '老师打分',
             dataIndex: 'scoreTeacher',
             key: 'scoreTeacher',
             width: '10%',
+            align: 'center',
             render: (text,record) => {
              
               return (
@@ -111,6 +122,7 @@ class ComInfo extends Component {
             title: '添加学生',
             dataIndex: 'AddStudent',
             key: 'AddStudent',
+            align: 'center',
             // width:'20%',
             render: (text,record) => {
              
@@ -126,6 +138,7 @@ class ComInfo extends Component {
           {
             title: '操作',
             dataIndex: 'operation',
+            align: 'center',
             render: (text, record) =>
               this.state.data.length >= 1 ? (
                 <Fragment>
@@ -333,19 +346,55 @@ class ComInfo extends Component {
             newData.push(false);
           }
           for (let i in result.data.data["object"]) { 
-            mydata.push({
-              key:i,
-              // "companyID": result.data.data["object"][i]["companyID"],
-              "comName": result.data.data["object"][i]["companyName"],
-              "type": result.data.data["object"][i]["type"],
-              "ceoID":result.data.data["object"][i]["ceo"],
-              "ceoname":result.data.data["object"][i]["ceoName"],
-              "companyScore":result.data.data["object"][i]["companyScore"],
-              "count":result.data.data["object"][i]["count"],
-              "level": result.data.data["object"][i]["level"],
-              "ShowScore":result.data.data["object"][i]["scoreTeacher"],
-              "scoreTeacher":result.data.data["object"][i]["scoreTeacher"],
-            })
+            if (result.data.data["object"][i]["typeCode"] < 3) {
+              mydata.push({
+                key: i,
+                // "companyID": result.data.data["object"][i]["companyID"],
+                "comName": result.data.data["object"][i]["companyName"],
+                "type": result.data.data["object"][i]["type"],
+                "ceoID": result.data.data["object"][i]["ceo"],
+                
+                "ceoname": result.data.data["object"][i]["ceoName"],
+                // "companyScore":result.data.data["object"][i]["companyScore"],
+                "count": result.data.data["object"][i]["count"],
+                "level": result.data.data["object"][i]["level"],
+                // "ShowScore":result.data.data["object"][i]["scoreTeacher"],
+                "scoreTeacher": result.data.data["object"][i]["scoreTeacher"],
+                "typeCode": result.data.data["object"][i]["typeCode"],
+                "scoreAccount": result.data.data["object"][i]["scoreAccount"],
+                "scoreBank": result.data.data["object"][i]["scoreBank"],
+                "scoreCeo": result.data.data["object"][i]["scoreCeo"],
+                "scoreNews": result.data.data["object"][i]["scoreNews"],
+                "scoreRevenue": result.data.data["object"][i]["scoreRevenue"],
+                "scoreTeacher": result.data.data["object"][i]["scoreTeacher"],
+                "scoreTrade": result.data.data["object"][i]["scoreTrade"],
+              })
+            }
+
+            else { 
+              mydata.push({
+                key: i,
+                // "companyID": result.data.data["object"][i]["companyID"],
+                "comName": result.data.data["object"][i]["companyName"],
+                "type": result.data.data["object"][i]["type"],
+                "ceoID": result.data.data["object"][i]["ceo"],
+                
+                "ceoname": result.data.data["object"][i]["ceoName"],
+                // "companyScore":result.data.data["object"][i]["companyScore"],
+                "count": result.data.data["object"][i]["count"],
+                "level": result.data.data["object"][i]["level"],
+                // "ShowScore":result.data.data["object"][i]["scoreTeacher"],
+                "scoreTeacher": result.data.data["object"][i]["scoreTeacher"],
+                "typeCode": result.data.data["object"][i]["typeCode"],
+                // "scoreAccount": result.data.data["object"][i]["scoreAccount"],
+                // "scoreBank": result.data.data["object"][i]["scoreBank"],
+                // "scoreCeo": result.data.data["object"][i]["scoreCeo"],
+                // "scoreNews": result.data.data["object"][i]["scoreNews"],
+                // "scoreRevenue": result.data.data["object"][i]["scoreRevenue"],
+                "scoreTeacher": result.data.data["object"][i]["scoreTeacher"],
+                // "scoreTrade": result.data.data["object"][i]["scoreTrade"],
+              })
+            }
 
 
           }
@@ -434,7 +483,7 @@ class ComInfo extends Component {
       let mydata=[];
       res.then(
         (result) => { 
-          // console.log(result);
+          console.log(result);
           if (result.data.data == undefined) {
             this.setState({
               data: [],
@@ -449,20 +498,51 @@ class ComInfo extends Component {
             //   newData.push(false);
             // }
             for (let i in result.data.data["object"]) { 
-              mydata.push({
-                key:i,
-                // "companyID": result.data.data["object"][i]["companyID"],
-                "comName": result.data.data["object"][i]["companyName"],
-                "type": result.data.data["object"][i]["type"],
-                "ceoID": result.data.data["object"][i]["ceo"],
-                
-                "ceoname":result.data.data["object"][i]["ceoName"],
-                // "companyScore":result.data.data["object"][i]["companyScore"],
-                "count":result.data.data["object"][i]["count"],
-                "level": result.data.data["object"][i]["level"],
-                "ShowScore":result.data.data["object"][i]["scoreTeacher"],
-                "scoreTeacher":result.data.data["object"][i]["scoreTeacher"],
-              })
+
+              if (result.data.data["object"][i]["typeCode"] < 3) {
+                mydata.push({
+                  key: i,
+                  // "companyID": result.data.data["object"][i]["companyID"],
+                  "comName": result.data.data["object"][i]["companyName"],
+                  "type": result.data.data["object"][i]["type"],
+                  "ceoID": result.data.data["object"][i]["ceo"],
+                  
+                  "ceoname": result.data.data["object"][i]["ceoName"],
+                  // "companyScore":result.data.data["object"][i]["companyScore"],
+                  "count": result.data.data["object"][i]["count"],
+                  "level": result.data.data["object"][i]["level"],
+                  // "ShowScore":result.data.data["object"][i]["scoreTeacher"],
+                  "scoreTeacher": result.data.data["object"][i]["scoreTeacher"],
+                  "typeCode": result.data.data["object"][i]["typeCode"],
+                  "scoreAccount": result.data.data["object"][i]["scoreAccount"],
+                  "scoreBank": result.data.data["object"][i]["scoreBank"],
+                  "scoreCeo": result.data.data["object"][i]["scoreCeo"],
+                  "scoreNews": result.data.data["object"][i]["scoreNews"],
+                  "scoreRevenue": result.data.data["object"][i]["scoreRevenue"],
+                  "scoreTeacher": result.data.data["object"][i]["scoreTeacher"],
+                  "scoreTrade": result.data.data["object"][i]["scoreTrade"],
+                })
+              }
+
+              else { 
+                mydata.push({
+                  key: i,
+                  // "companyID": result.data.data["object"][i]["companyID"],
+                  "comName": result.data.data["object"][i]["companyName"],
+                  "type": result.data.data["object"][i]["type"],
+                  "ceoID": result.data.data["object"][i]["ceo"],
+                  
+                  "ceoname": result.data.data["object"][i]["ceoName"],
+                  "count": result.data.data["object"][i]["count"],
+                  "level": result.data.data["object"][i]["level"],
+                  "scoreTeacher": result.data.data["object"][i]["scoreTeacher"],
+                  "typeCode": result.data.data["object"][i]["typeCode"],
+                  "companyScore": result.data.data["object"][i]["companyScore"],
+                  "fromCompanyScore": result.data.data["object"][i]["fromCompanyScore"],
+                  "scoreTeacher": result.data.data["object"][i]["scoreTeacher"],
+                })
+              }
+              
   
   
             }

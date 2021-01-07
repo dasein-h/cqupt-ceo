@@ -41,8 +41,13 @@ class Detail extends Component {
               loading:false
             })
           }
-          if( newProps.isDeleteFile === true )
-          message.success("删除成功")
+          if( newProps.isDeleteFile === true ){
+            message.success("删除成功")
+            this.props.ShowFile(localStorage.getItem("class"),parseInt(sessionStorage.getItem("Page4"))||1)
+            this.setState({
+              loading:true
+            })
+          }
           if( newProps.message ){
             if( newProps.isDeleteFile === false ){
               message.error(newProps.message)
@@ -122,14 +127,17 @@ class Detail extends Component {
 				if(ajax.readyState == 4){
 					if(ajax.status == 200 && JSON.parse(ajax.response).flag){
             message.success("上传成功")
+            that.props.ShowFile(localStorage.getItem("class"),parseInt(sessionStorage.getItem("Page4"))||1)
             that.setState({
               uploading: false,
+              loading:true,
             })
-
-            that.props.ShowFile(localStorage.getItem("class"),parseInt(sessionStorage.getItem("Page4"))||1)
           }
           else{
-            message.error("上传失败，文件可能为空")
+            if(JSON.parse(ajax.response).message)
+            message.error(JSON.parse(ajax.response).message)
+            else
+            message.error("上传失败")
             //后端返回提示信息后再修改
             that.setState({
               uploading: false,
@@ -253,7 +261,7 @@ class Detail extends Component {
     if(localStorage.getItem("class"))
         return (
             <div className="table_div">
-              {/* <Button className="RunCeo" type="primary" onClick={this.showModal}>上传</Button> */}
+              <Button className="RunCeo" type="primary" onClick={this.showModal}>上传</Button>
               {/* 如果需要再开启 */}
               <Modal
                 title="上传文件"

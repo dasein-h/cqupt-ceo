@@ -77,6 +77,7 @@ class Join extends Component {
         // let newdata = this.state.data.object
         this.setState({
             currentPage: page,
+            loading:true,
             // data:newdata
         })
         changePage(3,page)
