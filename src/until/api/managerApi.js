@@ -25,7 +25,7 @@ const ManagerApi = {
     searchTeacher: (value,currentPage) => {
       return Service.post('/teacher/searchTeacher', {
         value,
-      currentPage
+        currentPage
     })
   }
     
