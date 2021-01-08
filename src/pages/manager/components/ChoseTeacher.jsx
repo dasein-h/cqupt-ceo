@@ -1,7 +1,9 @@
 import React, { Component, Fragment } from 'react'
-import { Table, Button, Space,notification} from 'antd'
+import { Table, Button, Space,notification,Input} from 'antd'
 import ManagerApi from '../../../until/api/managerApi'
 import {Link} from "react-router-dom";
+
+const { Search } = Input;
 
 class ChoseTeacher extends Component{
     constructor(props){
@@ -48,23 +50,32 @@ class ChoseTeacher extends Component{
                 total:'',
                 hideOnSinglePage: true,
                 onChange: (page, pageSize) => {
-                console.log(this.changePage);
-                this.changePage(page);
-                this.state.pagination.current = page
-            }
+                    console.log(this.changePage);
+                    this.changePage(page);
+                    this.state.pagination.current = page
+                }
             }
         }
         this.handleClick = this.handleClick.bind(this);
         this.changePage = this.changePage.bind(this);
+        this.onSearch = this.onSearch.bind(this);
     }
     render() {
         return(
             <Fragment>
                 <span className="Nav-top">选择老师</span>
+                <Search
+                    placeholder="请输入老师名字"
+                    enterButton
+                    size="middle"
+                    style={{width:"210px",float:"right"}}
+                    maxLength = {6}               
+                    onSearch={(value) => {this.onSearch(value)}}                    
+                />                                                           
                 <Table 
                     dataSource={this.state.dataSource} 
                     columns={this.state.columns}  
-                    style = {{marginTop:'10px'}}
+                    style = {{marginTop:'10px',minHeight:"370px"}}
                     pagination={this.state.pagination}
                     rowKey={record => record.userId}
                     loading={this.state.loading}
@@ -114,6 +125,45 @@ class ChoseTeacher extends Component{
                     description:
                     '请求超时或服务器异常,请检查网络或联系管理员!',
                 });
+            }
+        )
+    }
+
+    onSearch = (value) => {
+        console.log(value);
+        if(value === ""){
+            this.changePage(1);
+        }else{
+            this.changeSeacherPage(value,1);
+        }
+    }
+
+    changeSeacherPage = (value,currentPage) => {
+        this.setState({
+            loading:true
+        })
+        ManagerApi.searchTeacher(value,currentPage).then(
+            (res) => {
+                if(res.request.status === 200 && res.request.readyState === 4){
+                    console.log(res);
+                    let pagination = {...this.state.pagination};
+                    pagination.total = res.data.page; 
+                    if(currentPage === 1){
+                        pagination.current = 1;
+                    }
+                    pagination.onChange = (page, pageSize) => {
+                        this.changeSeacherPage(value,page);
+                        this.state.pagination.current = page
+                    }
+                    this.setState({
+                        loading:false,
+                        dataSource:res.data.data,
+                        pagination
+                    })
+                }
+                
+            },(err) => {
+                console.log(err);
             }
         )
     }

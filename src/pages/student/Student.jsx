@@ -326,7 +326,7 @@ class Student extends Component {
                   <Route path="/Student/Detail" component={Detail} />
                   <Route path="/Student/MyCompany" component={MyCompany} />
                   <Route path="/Student/CEO" component={CEO} />
-                  <Route path="/Student/CompanyMember" component={CompanyMember} />
+                  <Route path="/Student/CompanyMember" component={CompanyMember} />。
                   <Redirect to="/Student/AllCompanies" />
                 </Switch>
               </div>

@@ -51,6 +51,7 @@ class Manager extends Component {
                         <Layout>
                             <Header className="site-layout-background" style={{ padding: 0 }}>
                                 <span style={{marginLeft:"10px"}}>仿真辅助系统</span>
+                                <a href="http://172.22.4.2" rel="noopener noreferrer" target="_blank" style={{marginLeft:20}}>实验室</a>
                                 <span style={{float:"right"}}>
                                     <span style={{marginRight:"10px"}}>欢迎你，{localStorage.getItem("userName")}</span>
                                     <Button className="exit" type="primary" onClick ={this.confirm.bind(this,this)}>退出登陆</Button>

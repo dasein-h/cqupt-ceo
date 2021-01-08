@@ -96,7 +96,8 @@ class VotSit extends Component {
                   pagination={this.state.pagination}
                   loading={this.state.loading}
                   rowKey={record => record.id}
-                />;
+                  style={{minHeight:"370px"}}
+                />
             </div>
         );
     }

@@ -82,6 +82,7 @@ class Teacher extends Component {
                                     <Layout>
                                         <Header className="site-layout-background" style={{ padding: 0 }}>
                                             <span style={{marginLeft:"10px"}}>仿真辅助系统</span>
+                                            <a href="http://172.22.4.2" rel="noopener noreferrer" target="_blank" style={{marginLeft:20}}>实验室</a>
                                             <span style={{float:"right"}}>
                                             <span >欢迎你，{localStorage.getItem("userName")}</span>
                                             <Button type="primary"  onClick={this.changeClass} style={{marginLeft:"10px",marginRight:"10px"}}
