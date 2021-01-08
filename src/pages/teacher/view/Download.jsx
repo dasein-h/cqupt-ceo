@@ -39,10 +39,10 @@ class DelPop extends React.Component {
                 this.setState({ loading: false })
                 this.setState({ visible: false });
                 let remain = (this.props.parent.state.pagination.total - 1) % this.props.parent.state.pagination.pageSize;
-                console.log(remain);
+                // console.log(remain);
                 if (remain == 0) {
                     let page = this.props.parent.state.pagination.current;
-                    console.log(page);
+                    // console.log(page);
                     if (page == 0) {
                         this.props.parent.onchange(page);
                     }
@@ -50,8 +50,7 @@ class DelPop extends React.Component {
                         this.props.parent.onchange(page - 1);
                     }
                     
-                    // this.props.parent.state.pagination.onchange(page - 1);
-                    // this.props.parent.onchange(page - 1);
+
                 }
                 else { 
                     let page = this.props.parent.state.pagination.current;
@@ -133,7 +132,8 @@ class Download extends Component {
                     dataIndex: 'filename',
                     key: 'filename',
                       render: (text, record) => { 
-                          let url = baseUrl + "/upload/download?id=" + record.id;
+                          let userId = localStorage.userId;
+                          let url = baseUrl + "/upload/download?id=" + record.id+"&userId="+userId;
                           return (
                               <a href={url}>{ text}</a>
                         )
@@ -174,7 +174,7 @@ class Download extends Component {
     }
 
     onchange=(page)=> { 
-        console.log(page);
+        // console.log(page);
         let pa = this.state.pagination;
         pa.current = page;
         this.setState({
@@ -189,7 +189,7 @@ class Download extends Component {
         res.then(
             (result) => { 
                 let data = JSON.parse(result.data);
-                console.log(data);
+                // console.log(data);
                 if (data === undefined) { 
                     this.setState({
                         pagination: {
@@ -249,7 +249,7 @@ class Download extends Component {
             },
             (err) => { 
                 message.warning('跳转失败');
-                console.log(err);
+                // console.log(err);
             }
         )
     }
@@ -261,7 +261,7 @@ class Download extends Component {
         res.then(
             (result) => { 
                 let data = JSON.parse(result.data);
-                console.log(data);
+                // console.log(data);
                 if (data === undefined) { 
                     this.setState({
                         pagination: {
@@ -315,14 +315,14 @@ class Download extends Component {
                 
             },
             (err) => { 
-                console.log(err);
+                // console.log(err);
             }
         )
 
         res = isRunSpeakVot(localStorage.teachclass,localStorage.userId);
         res.then(
             (result) => { 
-                console.log(result);
+                // console.log(result);
                 if (result.data.flag == true) {
                     this.setState({
                         voteValue: '关闭宣讲投票'

@@ -28,15 +28,15 @@ class ImData extends Component {
       contentType:false
     }).then(
       (result) => {
-        console.log(result);
+        // console.log(result);
 
         if (result.data.flag == true) {
-          console.log('上传成功！');
+          // console.log('上传成功！');
           message.success("上传成功");
           status = true;
         }
         else if (result.data.flag == false) {
-          console.log('上传失败');
+          // console.log('上传失败');
           message.error('上传失败！');
         }
       }
@@ -66,7 +66,7 @@ class ImData extends Component {
     
 
   handleStatusClass = (status) => { 
-    console.log(status);
+    // console.log(status);
     if (status == true) { 
       this.setState({
         uploadingClass: false,
