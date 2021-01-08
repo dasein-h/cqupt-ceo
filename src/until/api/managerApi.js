@@ -27,7 +27,8 @@ const ManagerApi = {
         value,
       currentPage
     })
-    }
+  }
+    
 }
 
 
