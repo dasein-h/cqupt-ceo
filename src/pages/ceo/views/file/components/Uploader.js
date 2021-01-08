@@ -1,11 +1,11 @@
-import React, {useState, useEffect, useRef} from 'react'
+import React, {useState, useRef} from 'react'
 import {Button, message, Upload} from 'antd'
 import {uploadPPT} from "../../../../../until/api/ceo";
 import isPPT from "../../../../../until/api/isPPT";
 import {UploadOutlined} from '@ant-design/icons';
 
 export default (props) => {
-  let {userId, teachclass} = props
+  let {userId, teachclass, reload} = props
   const fileRef = useRef(null)
   const [file, setFile] = useState(null)
   const handleUpload = async () => {
@@ -40,7 +40,7 @@ export default (props) => {
     }
     if (res.flag) {
       message.success('上传成功')
-      window.location.reload()
+      reload()
     } else {
       message.warn(res.message || "数据库异常")
     }
