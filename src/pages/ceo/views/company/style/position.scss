@@ -31,14 +31,25 @@ ul {
 .my-company {
   font-size: 16px;
 }
+
 .upload-btn {
   line-height: 1.5715;
   padding: 4px 15px;
   box-sizing: border-box;
-  display: inline-block;
+  display: block;
+  margin: 0 auto 10px;
   height: 100%;
-  background: #fff;
+  box-shadow: 0 0 5px #d4d4d4;
+
+  &:hover {
+    box-shadow: 0 0 10px #d4d4d4;
+  }
+
+  &:focus {
+    border: 2px solid #00ffff;
+  }
 }
+
 .flex_grid {
   display: flex;
   justify-content: space-between;
@@ -66,4 +77,9 @@ ul {
 
 .row {
   margin: 5px 0;
+}
+
+.score-limit {
+  color: #9a9a9a;
+  font-size: 14px;
 }

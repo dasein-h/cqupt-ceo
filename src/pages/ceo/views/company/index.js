@@ -1,6 +1,6 @@
-import React, {useState, useEffect, useReducer, memo} from 'react'
+import React, { useState, useEffect, useReducer, memo } from 'react'
 import Lists from '../../components/Lists'
-import {Card, PageHeader, Button, message, InputNumber, Tooltip} from "antd";
+import { Card, PageHeader, Button, message, InputNumber, Tooltip, Modal } from "antd";
 import {
   getMember,
   showAllCompany,
@@ -15,6 +15,10 @@ import Member from "./components/Member";
 import Confirm from "../../components/Comfirm";
 
 import './style/position.scss'
+
+const { confirm } = Modal
+
+const errorMsg = '只能对其它类型公司进行操作'
 
 const positions = [
   'ceo',
@@ -39,14 +43,17 @@ let cancel = () => {
 }
 
 const validateVote = (myType, target) => {
-  myType = myType << 0
-  target = target << 0
-  if (!myType) return true
+  if (!myType) {
+    return false
+  }
+  // 转数字
+  myType = parseInt(myType)
+  target = parseInt(target)
   return (myType < 3 && target >= 3) || (myType >= 3 && target < 3)
 }
 
 const reducer = (state, action) => {
-  const {payload, type} = action
+  const { payload, type } = action
   switch (type) {
     case 'SET_COMPANY_STATE':
       return {
@@ -68,18 +75,40 @@ const reducer = (state, action) => {
       }
     default:
       alert('违规操作!')
-      return {...state}
+      return { ...state }
   }
 }
 
 function Company(props) {
-  const {userId} = props
+  const { userId } = props
   const [state, dispatch] = useReducer(reducer, {
     companies: null,
     companyTotal: 0,
     members: null
   })
-  const [score, setScore] = useState(0)
+  const [score, setScore] = useState(100)
+
+  const handleScore = async (studentId) => {
+    const res = await companyScore(userId, score, studentId)
+    if (!res) return
+    if (res.flag) {
+      message.success("打分成功")
+      cancel()
+      fetchShowAllCompany(userId, 0)
+    } else {
+      message.info(res.message || "网络异常")
+    }
+  }
+  const showConfirm = () => {
+    confirm({
+      title: '打分不能撤销，是否确定？',
+      okText: '确定',
+      cancelText: '取消',
+      onOk() {
+        handleScore.call(null, userId)
+      }
+    })
+  }
   const fetchGetMember = async () => {
     const scored = await showScored(userId)
     const scoredList = scored.data
@@ -119,17 +148,7 @@ function Company(props) {
       message.info(res.message || "网络异常")
     }
   }
-  const handleScore = async (studentId) => {
-    const res = await companyScore(userId, score, studentId)
-    if (!res) return
-    if (res.flag) {
-      message.success("打分成功")
-      cancel()
-      fetchShowAllCompany(userId, 0)
-    } else {
-      message.info(res.message || "网络异常")
-    }
-  }
+
   const companyColumns = [
     {
       title: '公司名',
@@ -140,14 +159,14 @@ function Company(props) {
     }, {
       title: "机构类型",
       dataIndex: 'typeCode',
-      render(text, {typeCode}) {
+      render(text, { typeCode }) {
         return (typeCode < 3 ? <div>普通公司</div> : <div>其他机构</div>)
       }
     }, {
       title: '分数',
       dataIndex: 'companyScore',
-      render(_, {companyScore}) {
-        return <span>{companyScore || '未评分'}</span>
+      render(_, { companyScore }) {
+        return <span>{companyScore || '暂无'}</span>
       }
     }, {
       title: 'ceo',
@@ -155,8 +174,7 @@ function Company(props) {
     }, {
       title: 'ceo学号',
       dataIndex: 'ceo'
-    },
-    {
+    }, {
       title: '班级号',
       dataIndex: 'teachclass'
     }, {
@@ -164,7 +182,7 @@ function Company(props) {
       dataIndex: 'creatTime'
     }, {
       title: '操作',
-      render(text, {ceo, typeCode}) {
+      render(text, { ceo, typeCode }) {
         /*
         *   检查是不是可以操作的公司类型
         *   0-2普通公司
@@ -202,7 +220,7 @@ function Company(props) {
                   textAlign: 'center'
                 }}>
                   分数
-                  <br/>
+                  <br />
                   <span style={{
                     color: '#a0a0a0',
                     fontSize: '14px'
@@ -214,79 +232,66 @@ function Company(props) {
                   <InputNumber
                     defaultValue={100}
                     autoFocus
-                    onChange={score => {
-                      setScore(score >> 0)
-                    }}
+                    onChange={
+                      val => {
+                        console.log(Math.max(0, Math.min(100, val)));
+                        setScore(Math.max(0, Math.min(100, val)))
+                      }
+                    }
                     max={100}
                     min={0}
                   />
                 </Tooltip>
-                <Confirm
-                  text="每个人只能打一次分，是否确定"
-                  render={(open, onOk) => {
-                    onOk(handleScore.bind(null, ceo))
-                    return <Button type="primary" onClick={open}>评分</Button>
-                  }}
-                />
+
+                <Button type="primary" onClick={showConfirm}>打分</Button>
               </div>
             </WithModal>
           </>
         ) : (
-          <>
-            <Tooltip title="只能对其它类型公司进行操作">
-              <Button
-                disabled={true}
-                onClick={vote.bind(null, typeCode, ceo)}>投票
-              </Button>
-            </Tooltip>
+            <>
+              <Tooltip title={errorMsg}>
+                <Button
+                  disabled={true}
+                  onClick={vote.bind(null, typeCode, ceo)}>
+                  投票
+                </Button>
+              </Tooltip>
 
-            <WithModal
-              render={(props, onCancel) => {
-                cancel = onCancel
-                return <Tooltip title="只能对其它类型公司进行操作">
-                  <Button
-                    disabled={true}
-                    type="primary"
-                    {...props}
-                  >
-                    打分
-                  </Button>
-                </Tooltip>
-              }}
-            >
-              <div style={{
-                display: 'flex',
-                justifyContent: 'space-evenly',
-                alignItems: 'center'
-              }}>
+              <WithModal
+                render={
+                  (props, onCancel) => {
+                    cancel = onCancel
+                    return <Tooltip title={errorMsg}>
+                      <Button
+                        disabled={true}
+                        type="primary"
+                        {...props}
+                      >
+                        打分
+                      </Button>
+                    </Tooltip>
+                  }
+                }
+              >
                 <div style={{
-                  textAlign: 'center'
+                  display: 'flex',
+                  justifyContent: 'space-evenly',
+                  alignItems: 'center'
                 }}>
-                  分数
-                  <br/>
-                  <span style={{
-                    color: '#a0a0a0',
-                    fontSize: '14px'
-                  }}>(0 - 100)</span>
+                  <div style={{
+                    textAlign: 'center'
+                  }}>
+                    分数
+                  <br />
+                    <span style={{
+                      color: '#a0a0a0',
+                      fontSize: '14px'
+                    }}>(0 - 100)</span>
+                  </div>
                 </div>
-                <Tooltip
-                  title="上下键可以快速调整分数"
-                >
-                  <InputNumber
-                    defaultValue={100}
-                    autoFocus
-                    onChange={score => {
-                      setScore(score >> 0)
-                    }}
-                    max={100}
-                    min={0}
-                  />
-                </Tooltip>
-                <Button type="primary" onClick={handleScore.bind(null, ceo)}>评分</Button>
-              </div>
-            </WithModal>
-          </>
-        )
+              </WithModal>
+            </>
+          )
       }
     }
   ]
@@ -297,14 +302,14 @@ function Company(props) {
   }, [])
   return (
     <div>
-      <PageHeader title="我的公司"/>
+      <PageHeader title="我的公司" />
       <Card
         hoverable={true}
-        style={{margin: '15px', width: '500px'}}>
-        <MyCompany/>
+        style={{ margin: '15px', width: '500px' }}>
+        <MyCompany />
       </Card>
 
-      <PageHeader title="成员"/>
+      <PageHeader title="成员" />
       <Lists
         column={3}
         dataSource={state.members}
@@ -318,7 +323,7 @@ function Company(props) {
         )}
       />
 
-      <PageHeader title="所有公司"/>
+      <PageHeader title="所有公司" />
       <MyTable
         columns={companyColumns}
         dataSource={state.companies}

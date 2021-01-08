@@ -11,7 +11,6 @@ export default props => {
     render,
     loading
   } = props
-  console.log(dataSource, loading)
 
   return (
     <List
