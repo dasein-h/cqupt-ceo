@@ -116,9 +116,9 @@ function agreeChange(ceo,companyName,teachclass) {
 }
 
 /*拒绝修改公司名*/
-function rejectChange(ceo,companyName) {
+function rejectChange(ceo,companyName,teachclass) {
   return Service.post('/teacher/refuse', {
-      ceo,companyName
+      ceo,companyName,teachclass
   })
 }
 /*删除公司*/
