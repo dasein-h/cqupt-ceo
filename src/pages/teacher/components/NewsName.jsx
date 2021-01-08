@@ -111,15 +111,16 @@ class newLists extends React.Component {
   
     }
     clickReject = (text, record, index) => {
-      rejectChange(record.id, record.error).then((rs) => {
+      rejectChange(record.id, record.error,this.state.teachclass).then((rs) => {
         let res = rs.data;
         if (res.flag === true) {
+          this.changePage(this.state.pagination.current)
           message.success( '拒绝改名成功!');
         } else {
-          message.error( '同意改名失败!');
+          message.error( '拒绝改名失败!');
         }
       })
-      this.changePage(this.state.pagination.current)
+      
     }
     componentDidMount() {
       this.changePage(1)

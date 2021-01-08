@@ -162,12 +162,6 @@ class StuInfo extends Component {
     this.setState({
       btnLoad:true
     })
-    // window.location.href = "http://localhost:3000/api/upload/export?teachclass="+this.state.teachclass;
-    // setTimeout(() => {
-    //   this.setState({
-    //   btnLoad:false
-    // })
-    // }, 6000);
     let param = new FormData();
 param.append('teachclass',this.state.teachclass)
     downLoadStudent(param).then(res => {

@@ -58,10 +58,6 @@ const MyCompany = (props) => {
     if (res.data.flag) {
       message.success('申请成功')
       cancel()
-      setInfo(info => ({
-        ...info,
-        companyName: name
-      }))
     } else {
       message.info('遇到错误' + res.message || '')
     }

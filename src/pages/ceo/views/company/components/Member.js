@@ -169,9 +169,9 @@ const Member = (props) => {
               margin: '10px auto 0',
               width: 'fit-content'
             }} value={scoreLevel} onChange={e => setScoreLevel(e.target.value)}>
-              <Radio value={9}>优秀</Radio>
-              <Radio value={8}>良好</Radio>
-              <Radio value={7}>及格</Radio>
+              <Radio value={9}>优秀 <span className="score-limit">(90-100)</span></Radio>
+              <Radio value={8}>良好 <span className="score-limit">(80-89)</span></Radio>
+              <Radio value={7}>及格 <span className="score-limit">(70-79)</span></Radio>
             </Radio.Group>
             <InputNumber
               defaultValue={score}

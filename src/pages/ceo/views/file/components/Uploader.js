@@ -1,16 +1,16 @@
-import React, {useState, useRef} from 'react'
-import {Button, message, Upload} from 'antd'
-import {uploadPPT} from "../../../../../until/api/ceo";
+import React, { useState, useRef } from 'react'
+import { Button, message, Upload } from 'antd'
+import { uploadPPT } from "../../../../../until/api/ceo";
 import isPPT from "../../../../../until/api/isPPT";
-import {UploadOutlined} from '@ant-design/icons';
+import { UploadOutlined } from '@ant-design/icons';
+import WithModal from '../../../components/WithModal'
 
 export default (props) => {
-  let {userId, teachclass, reload} = props
+  let { userId, teachclass, reload } = props
   const fileRef = useRef(null)
   const [file, setFile] = useState(null)
   const handleUpload = async () => {
     let file
-    console.log(fileRef.current.files[0])
     if (!(file = fileRef.current?.files?.[0])) {
       message.info("请选择文件")
       return
@@ -46,23 +46,34 @@ export default (props) => {
     }
   }
   return (
-    <div style={{margin: '15px'}}>
+    <div style={{ margin: '15px' }}>
       <div style={{
         height: '100%'
       }}>
-        <label className="upload-btn">
-          {file?.name ? file?.name : '选择文件'}
-          <input
-            ref={fileRef}
-            style={{
-              visibility: 'hidden',
-              width: '0'
-            }}
-            type="file"
-            onChange={handleUpload}
-          />
-        </label>
-        <Button type="primary" onClick={upload}>上传</Button>
+        <WithModal
+          render={
+            (props) => {
+              return <Button {...props} icon={<UploadOutlined />}>上传文件</Button>
+            }
+          }
+        >
+          <label className="upload-btn">
+            {file?.name ? file?.name : '选择文件'}
+            <input
+              ref={fileRef}
+              style={{
+                visibility: 'hidden',
+                width: '0'
+              }}
+              type="file"
+              onChange={handleUpload}
+            />
+          </label>
+          <Button style={{
+            margin: '0 auto',
+            display: 'block'
+          }} type="primary" onClick={upload}>上传</Button>
+        </WithModal>
       </div>
     </div>
   )

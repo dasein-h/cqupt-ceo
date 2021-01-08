@@ -4,26 +4,6 @@ import {message} from "antd";
 import MyTable from "../../../components/MyTable";
 import Confirm from '../../../../ceo/components/Comfirm'
 
-const fileReducer = (state, {type, payload}) => {
-  switch (type) {
-    case 'INIT_FILE':
-      return {...state, loading: true}
-    case 'FETCH_OK':
-      const list = payload
-      list.forEach((item, i) => item.key = i)
-      return {...state, loading: false, list}
-    case 'FETCH_FAIL':
-      return {...state, loading: false}
-    case 'DELETE_AT':
-      const newList = state.list.splice()
-      newList.filter(item => (
-        item.id !== payload
-      ))
-      return {...state, list: newList}
-    default:
-      return state
-  }
-}
 /*可下载列表*/
 const FileList = props => {
   const { userId, currentPage, state, fetchFile, setPage, handleDelete} = props

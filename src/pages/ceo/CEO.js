@@ -38,7 +38,7 @@ function CEO(props) {
   let teachclass = /*   */localStorage.getItem('class')
   let ceo = /*          */localStorage.getItem('ceo')
   /* 如果不是ceo进入这个页面直接跳走 */
-  if (!ceo && ceo !== '1') {
+  if (!ceo || ceo !== '1') {
     history.replace('/')
   }
   /* 将userId挂在redux中 */
