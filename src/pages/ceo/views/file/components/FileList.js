@@ -26,45 +26,11 @@ const fileReducer = (state, {type, payload}) => {
 }
 /*可下载列表*/
 const FileList = props => {
-  const {userId, teachclass} = props
+  const { userId, currentPage, state, fetchFile, setPage, handleDelete} = props
 
-  const [currentPage, setPage] = useState(1)
-
-  const [state, dispatch] = useReducer(fileReducer, {
-    loading: false,
-    list: null
-  })
-
-  const fetchFile = useCallback(async () => {
-    try {
-      const res = await fetchFileList(teachclass, currentPage)
-      dispatch({
-        type: 'FETCH_OK',
-        payload: res
-      })
-    } catch (e) {
-      message.warn("获取文件失败")
-    }
-  }, [teachclass, currentPage])
   useEffect(() => {
-    if (teachclass) {
-      fetchFile()
-    }
-  }, [currentPage, fetchFile, teachclass])
-
-  const handleDelete = async (id) => {
-    const res = await deleteFile(id)
-    if (!res) {
-      return
-    }
-    if (res.flag) {
-      message.success("删除成功")
-      dispatch({
-        type: 'DELETE_AT',
-        payload: id
-      })
-    }
-  }
+    fetchFile()
+  }, [currentPage])
 
   const columns = [
     {
@@ -108,7 +74,7 @@ const FileList = props => {
   return (
     <>
       <MyTable
-        dataSource={state.list}
+        dataSource={state?.list}
         total={state.list?.[0]?.filePath || 0}
         columns={columns}
         onChange={setPage}
