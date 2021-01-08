@@ -20,13 +20,6 @@ const ManagerApi = {
         list
       }
       return Service.post('/admin/addclass', queryData)
-    },
-    //查询老师名字
-    searchTeacher: (studentId,currentPage) => {
-      return Service.post('/teacher/searchTeacher', {
-        studentId,
-        currentPage
-    })
     }
 }
 
