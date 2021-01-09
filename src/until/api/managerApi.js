@@ -22,15 +22,15 @@ const ManagerApi = {
       return Service.post('/admin/addclass', queryData)
     },
 
-    searchTeacher: (value,currentPage) => {
+    searchTeacher: (studentId,currentPage) => {
       return Service.post('/teacher/searchTeacher', {
-        value,
+        studentId,
         currentPage
     })
   },
-  searchTeacher: (value,currentPage) => {
+  searchTeacher: (studentId,currentPage) => {
     return Service.post('/teacher/searchTeacher', {
-      value,
+      studentId,
     currentPage
   })
   }
