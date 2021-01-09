@@ -27,6 +27,12 @@ const ManagerApi = {
         value,
         currentPage
     })
+  },
+  searchTeacher: (value,currentPage) => {
+    return Service.post('/teacher/searchTeacher', {
+      value,
+    currentPage
+  })
   }
     
 }
