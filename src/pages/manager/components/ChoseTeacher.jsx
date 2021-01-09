@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import { Table, Button, Space,notification,Input} from 'antd'
-import ManagerApi from '../../../until/api/ManagerApi'
+import ManagerApi from '../../../until/api/managerApi'
 import {Link} from "react-router-dom";
 
 const { Search } = Input;
