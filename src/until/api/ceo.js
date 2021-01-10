@@ -8,7 +8,6 @@ const inst = Axios.create({
   baseURL: 'http://localhost:3000/api',
   headers: {
     'Content-Type': 'multipart/form-data',
-    'token': sessionStorage.getItem('tk')
   }
 })
 
@@ -158,7 +157,11 @@ async function companyInfo(studentId) {
 }
 
 async function uploadPPT(fd) {
-  const res = await inst.post(`/upload/up`, fd).catch(e => {
+  const res = await inst.post(`/upload/up`, fd, {
+    headers: {
+      'token': sessionStorage.getItem("tk")
+    }
+  }).catch(e => {
     message.info('网络异常')
   })
 

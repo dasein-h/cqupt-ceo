@@ -99,13 +99,23 @@ function Company(props) {
       message.info(res.message || "网络异常")
     }
   }
-  const showConfirm = () => {
+  const showConfirm = (id) => {
     confirm({
       title: '打分不能撤销，是否确定？',
       okText: '确定',
       cancelText: '取消',
       onOk() {
-        handleScore.call(null, userId)
+        handleScore.call(null, id)
+      }
+    })
+  }
+  const voteConfirm = (targetTypeCode, ceo) => {
+    confirm({
+      title: '每个人只能投一次票，是否确定？',
+      okText: '确定',
+      cancelText: '取消',
+      onOk() {
+        vote.call(null, targetTypeCode, ceo)
       }
     })
   }
@@ -148,6 +158,7 @@ function Company(props) {
       message.info(res.message || "网络异常")
     }
   }
+  
 
   const companyColumns = [
     {
@@ -192,14 +203,7 @@ function Company(props) {
         const canOperate = validateVote(sessionStorage.getItem('typeCode'), typeCode)
         return canOperate ? (
           <>
-            <Confirm
-              text="每个人只能投一次票，是否确定"
-              render={(open, onOk) => {
-                onOk(vote.bind(null, typeCode, ceo))
-                return <Button onClick={open}>投票</Button>
-              }}
-            />
-
+            <Button onClick={voteConfirm.bind(null, typeCode, ceo)}>投票</Button>
             <WithModal
               render={(props, onCancel) => {
                 cancel = onCancel
@@ -242,7 +246,7 @@ function Company(props) {
                   />
                 </Tooltip>
 
-                <Button type="primary" onClick={showConfirm}>打分</Button>
+                <Button type="primary" onClick={showConfirm.bind(null, ceo)}>打分</Button>
               </div>
             </WithModal>
           </>
