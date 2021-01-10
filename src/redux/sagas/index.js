@@ -25,7 +25,7 @@ export default function* defSaga() {
       sessionStorage.setItem("ceo",res.data.error)
       sessionStorage.setItem("class",res.data.teachclass)
       if(sessionStorage.getItem("type")==="student" && sessionStorage.getItem("ceo") !== '1'){
-        document.execCommand('Refresh')
+        window.location.reload()
       }
       yield put(actions.Login_Success(res.data.message, res.data))
     } 
@@ -51,7 +51,7 @@ export default function* defSaga() {
     {
       yield put(actions.Exit_OK())
       sessionStorage.clear()
-      document.execCommand('Refresh')
+      window.location.reload()
     } else {
       message.error('退出失败')
       yield put(actions.Exit_NO())
