@@ -190,10 +190,10 @@ class Download extends Component {
         let res = showFile(sessionStorage.teachclass,page);
         res.then(
             (result) => { 
-                console.log(result);
+                // console.log(result);
                 // let data = result.data;
                 let data = JSON.parse(result.data);
-                console.log(data);
+                // console.log(data);
                 if (data == '' || data.length==0 ||data===undefined || data==null)  { 
                     this.setState({
                         pagination: {

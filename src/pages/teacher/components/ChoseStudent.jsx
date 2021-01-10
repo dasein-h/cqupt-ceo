@@ -35,79 +35,6 @@ class ChoseStudent extends Component {
         }
     }
 
-    // onchange = (page) => { 
-    //     // console.log(e);
-    //     console.log(page);
-    //     let pa = this.state.pagination;
-    //     pa.current = page;
-    //     this.setState({
-    //         pagination:pa
-    //     })
-    //     // console.log(this.state.pagination);
-    //     this.setState({
-    //         loading:true
-    //     })
-    //     // console.log(localStorage.teachclass);
-    //     let res = showAll(localStorage.teachclass, page);
-    //     res.then(
-    //         (result) => { 
-    //             let data = JSON.parse(result.data);
-    //             if (data === undefined) { 
-    //                 this.setState({
-    //                     pagination: {
-    //                         total: 0,
-    //                         onChange: this.onchange,
-    //                         pageSize: 7,
-    //                         hideOnSinglePage: true,
-    //                         current: page,
-    //                         showSizeChanger:false
-    //                     }
-    //                 })
-    //             }
-    //             else if (data[0].page <= 7) {
-                    
-    //                 this.setState({
-    //                     pagination: {
-    //                         total: data[0].page,
-    //                         onChange: this.onchange,
-    //                         pageSize: 7,
-    //                         hideOnSinglePage: true,
-    //                         current: page,
-    //                         showSizeChanger:false
-    //                     }
-    //                 })
-    //             }
-    //             else { 
-    //                 this.setState({
-    //                     pagination: {
-    //                         total: data[0].page,
-    //                         onChange: this.onchange,
-    //                         pageSize: 7,
-    //                         hideOnSinglePage: false,
-    //                         current: page,
-    //                         showSizeChanger:false
-    //                     }
-    //                 })
-    //             }
-
-    //             let newData = [];
-    //             for (let i in data) { 
-    //                 newData.push({
-    //                     key: data[i].studentId,
-    //                     "sno": data[i].studentId,
-    //                     "sname":data[i].userName
-    //                 })
-    //             };
-    //             this.setState({
-    //                 data: newData,
-    //                 loading:false
-    //             });
-    //         },
-    //         (err) => { 
-    //             console.log(err);
-    //         }
-    //     )
-    //   }
 
     componentDidMount() { 
         this.props.onRef(this);
@@ -117,7 +44,7 @@ class ChoseStudent extends Component {
         let mydata = [];
         res.then(
             (result) => { 
-                console.log(result);
+                // console.log(result);
                 // let data = JSON.parse(result.data);
                 // console.log(data[0].page);
                 if (result === undefined) { 
@@ -157,7 +84,7 @@ class ChoseStudent extends Component {
                             showSizeChanger:false
                         }
                     })
-                    console.log(this.state.pagination)
+                    // console.log(this.state.pagination)
                 }
 
                 let newData = [];
@@ -174,23 +101,18 @@ class ChoseStudent extends Component {
                 });
             },
             (err) => { 
-                console.log(err);
+                message.error('请求报错！');
+                // console.log(err);
             }
         )
     }
 
     toParent = () => {
-        // console.log(this.props.parent.getChildrenMsg.bind(this, this.state.msg))
-        // console.log('I am the child');
-        // console.log(this.state.selectedRowKeys[0]);
-
-        // let studentId = this.state.selectedRowKeys[0];
-
         this.props.parent.getChildrenData(this, this.state.selectedRowKeys[0]);
     }
 
     onSelectChange = selectedRowKeys => {
-        console.log('selectedRowKeys changed: ', selectedRowKeys);
+        // console.log('selectedRowKeys changed: ', selectedRowKeys);
         this.setState({ selectedRowKeys });
         
     };

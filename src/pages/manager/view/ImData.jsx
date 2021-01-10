@@ -78,11 +78,11 @@ class ImData extends Component {
   
   IsDisabled = () => { 
     if (this.state.classList.length == 0) {
-      // console.log(this.state.classList.length);
+      
       return true;
     }
     else if (this.state.classList.length > 1) {
-      // console.log(this.state.classList.length);
+     
       message.warning('只能上传一份文件');
       return true;
     }
@@ -94,21 +94,14 @@ class ImData extends Component {
 
     let fileList = [...info.fileList];
 
-    // console.log(fileList);
-    // console.log(1);
+    
     fileList = fileList.slice(-1);
-    // console.log(fileList);
-
-    // console.log(2);
+    
     this.setState(
       {
         classList:fileList
       }
     )
-    // setTimeout(() => {
-    //   console.log(3);
-    //   console.log(this.state.classList);
-    // }, 1000);
     
     
   }
