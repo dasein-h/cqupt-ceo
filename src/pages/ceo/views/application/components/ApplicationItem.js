@@ -15,7 +15,7 @@ const ApplicationItem = (props) => {
         <li> {info.position || "无职位"}</li>
         <li>状态：{info.state}</li>
         <li>班级id：{info.teachclass}</li>
-      </ul>
+      </ul>d
       <div style={{display: 'flex', justifyContent: 'space-between'}}>
         {
           info.state === '等待中'
