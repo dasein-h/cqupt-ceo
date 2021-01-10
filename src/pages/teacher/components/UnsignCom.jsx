@@ -4,9 +4,9 @@ import { noSign, setNosign } from '../../../until/api/teacherApi'
 class UnsignCom extends React.Component {
     constructor(props) {
         super(props)
-        localStorage.setItem("signKey", JSON.stringify({ key: 2, route: '/Teacher/Sign/UnSign' }))
+        sessionStorage.setItem("signKey", JSON.stringify({ key: 2, route: '/Teacher/Sign/UnSign' }))
         this.state = {
-            teachclass: localStorage.getItem("teachclass"),
+            teachclass: sessionStorage.getItem("teachclass"),
             loading: true,
             data: [],
             pagination: {
@@ -163,7 +163,15 @@ class UnsignCom extends React.Component {
             } else {
                 message.error('设置失败')
             }
-        })
+        }).catch(err => {
+            this.setState({ loading: false })
+            notification.warning({
+              message: '警告',
+              placement: "bottomRight",
+              description:
+                '请求超时或服务器异常,请检查网络或联系管理员!',
+            });
+          })
     }
     setOther = (record, index) => {
         let type;
@@ -189,7 +197,15 @@ class UnsignCom extends React.Component {
             } else {
                 message.error('设置失败!')
             }
-        })
+        }).catch(err => {
+            this.setState({ loading: false })
+            notification.warning({
+              message: '警告',
+              placement: "bottomRight",
+              description:
+                '请求超时或服务器异常,请检查网络或联系管理员!',
+            });
+          })
     }
 }
 export default UnsignCom

@@ -6,13 +6,13 @@ const { Search } = Input
 const { Option } = Select;
 class SignedCom extends React.Component {
   constructor(props) {
-    localStorage.setItem("signKey", JSON.stringify({ key: 1, route: '/Teacher/Sign/Signed' }))
+     sessionStorage.setItem("signKey", JSON.stringify({ key: 1, route: '/Teacher/Sign/Signed' }))
     super(props)
     this.state = {
       searchOrNot: false,
       select: "id",
       value: "",
-      teachclass: localStorage.getItem("teachclass"),
+      teachclass: sessionStorage.getItem("teachclass"),
       late: "迟到",
       drop: "旷课",
       data: [],
@@ -219,6 +219,14 @@ class SignedCom extends React.Component {
       } else {
         message.error(`设置失败（${res.message}）!`)
       }
+    }).catch(err => {
+      this.setState({ loading: false })
+      notification.warning({
+        message: '警告',
+        placement: "bottomRight",
+        description:
+          '请求超时或服务器异常,请检查网络或联系管理员!',
+      });
     })
   }
   dropClass = (record, index) => {
@@ -236,6 +244,14 @@ class SignedCom extends React.Component {
       } else {
         message.error(`设置失败（${res.message}）!`);
       }
+    }).catch(err => {
+      this.setState({ loading: false })
+      notification.warning({
+        message: '警告',
+        placement: "bottomRight",
+        description:
+          '请求超时或服务器异常,请检查网络或联系管理员!',
+      });
     })
   }
 }

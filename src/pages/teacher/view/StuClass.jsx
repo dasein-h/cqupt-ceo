@@ -81,7 +81,7 @@ class StuClass extends React.Component{
         this.setState({
             loading:true
         })
-        selectedClassTeacher(localStorage.getItem("userId"),currentPage,"5").then(
+        selectedClassTeacher(sessionStorage.getItem("userId"),currentPage,"5").then(
             (res) => {
                 if(res.data.data!==0){
                   console.log(res.data.data);
@@ -107,7 +107,7 @@ class StuClass extends React.Component{
     }
     handleIntoClass = (text,record) => {
       //存teachclass
-      localStorage.setItem('teachclass',record.teachclass);
+      sessionStorage.setItem('teachclass',record.teachclass);
       //重新刷新页面
       window.location.reload()
       this.props.handleDisTeach();

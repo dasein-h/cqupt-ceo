@@ -84,7 +84,7 @@ class Teacher extends Component {
                                             <span style={{marginLeft:"10px"}}>仿真辅助系统</span>
                                             <a href="http://172.22.4.2" rel="noopener noreferrer" target="_blank" style={{marginLeft:20}}>实验室</a>
                                             <span style={{float:"right"}}>
-                                            <span >欢迎你，{localStorage.getItem("userName")}</span>
+                                            <span >欢迎你，{sessionStorage.getItem("userName")}</span>
                                             <Button type="primary"  onClick={this.changeClass} style={{marginLeft:"10px",marginRight:"10px"}}
                                             >更改班级</Button>
                                             <Button className="exit" type="primary" onClick ={this.confirm.bind(this,this)}>
@@ -152,14 +152,14 @@ class Teacher extends Component {
     }
     
     componentDidMount(){
-        let userId = localStorage.getItem("userId");
-        let userName = localStorage.getItem('userName')
+        let userId = sessionStorage.getItem("userId");
+        let userName = sessionStorage.getItem('userName')
         this.setState({
             userid: userId,
             username:userName
         })
         //判断弹框
-        if(localStorage.hasOwnProperty("teachclass")){
+        if(sessionStorage.hasOwnProperty("teachclass")){
             this.handleDisTeach();
         }else{
             this.setState({
@@ -168,10 +168,10 @@ class Teacher extends Component {
             })
         }
         //简单的拦截
-        if(localStorage.hasOwnProperty("userId") && localStorage.getItem("type")==="admin") {
+        if(sessionStorage.hasOwnProperty("userId") && sessionStorage.getItem("type")==="admin") {
             this.props.history.push('/Manager');
         }
-        else if(!localStorage.hasOwnProperty("userId")){
+        else if(!sessionStorage.hasOwnProperty("userId")){
             message.info("请先登录",1);
             this.props.history.push('/Student/AllCompanies/ChosenClasses');
         }
@@ -190,7 +190,7 @@ class Teacher extends Component {
                 if(res.data.flag){
                     message.success("退出成功",1);
                     //退出后将localstorage清空
-                    localStorage.clear();
+                    sessionStorage.clear();
                     this.props.history.push('/Student/AllCompanies/ChosenClasses');
                 }else {
                     message.open("请先登录",1);

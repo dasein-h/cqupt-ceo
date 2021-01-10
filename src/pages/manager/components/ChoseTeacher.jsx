@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import { Table, Button, Space,notification,Input} from 'antd'
-import ManagerApi from '../../../until/api/ManagerApi'
+import ManagerApi from '../../../until/api/managerApi'
 import {Link} from "react-router-dom";
 
 const { Search } = Input;
@@ -86,8 +86,8 @@ class ChoseTeacher extends Component{
 
     handleClick = (text,record) => {
         console.log(record.userId);
-        localStorage.setItem('teachclass',record.userId);
-        localStorage.setItem('teachName',record.userName);
+        sessionStorage.setItem('teachclass',record.userId);
+        sessionStorage.setItem('teachName',record.userName);
         this.setState({
         },()=>{
             this.props.history.push({

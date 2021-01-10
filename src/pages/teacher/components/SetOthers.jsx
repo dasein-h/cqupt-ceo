@@ -4,11 +4,11 @@ import { showConfig, updateConfigOther } from '../../../until/api/teacherApi'
 class SetOthers extends React.Component {
     constructor(props) {
         super(props)
-        localStorage.setItem("setKey",JSON.stringify({key:3,route:'/Teacher/Set/Other'}))
+        sessionStorage.setItem("setKey",JSON.stringify({key:3,route:'/Teacher/Set/Other'}))
         this.state = {
             btnLoad:false,
             title: [{ "title": "迟到一次扣分:", "name": "late", "value": "" }, { "title": "旷到一次扣分:", "name": "absence", "value": "" }, { "title": "公司最多允许人数:", "name": "sameClassMember", "value": "" }, { "title": "一个企业允许同一个班级的同学个数", "name": "companyNum", "value": "" }],
-            teachclass: localStorage.getItem("teachclass"),
+            teachclass: sessionStorage.getItem("teachclass"),
             loading: true
         }
     }
@@ -74,7 +74,15 @@ class SetOthers extends React.Component {
             } else if (rs.data.flag === false) {
                 message.error(`修改失败(${rs.data.message})!`)
             }
-        })
+        }).catch(err => {
+            this.setState({ loading: false })
+            notification.warning({
+              message: '警告',
+              placement: "bottomRight",
+              description:
+                '请求超时或服务器异常,请检查网络或联系管理员!',
+            });
+          })
     }
 }
 export default SetOthers

@@ -53,7 +53,7 @@ class Manager extends Component {
                                 <span style={{marginLeft:"10px"}}>仿真辅助系统</span>
                                 <a href="http://172.22.4.2" rel="noopener noreferrer" target="_blank" style={{marginLeft:20}}>实验室</a>
                                 <span style={{float:"right"}}>
-                                    <span style={{marginRight:"10px"}}>欢迎你，{localStorage.getItem("userName")}</span>
+                                    <span style={{marginRight:"10px"}}>欢迎你，{sessionStorage.getItem("userName")}</span>
                                     <Button className="exit" type="primary" onClick ={this.confirm.bind(this,this)}>退出登陆</Button>
                                     </span>
                                                 
@@ -82,16 +82,16 @@ class Manager extends Component {
         )
     }
     componentDidMount(){
-        let userId = localStorage.getItem("userId");
-        let userName = localStorage.getItem('userName')
+        let userId = sessionStorage.getItem("userId");
+        let userName = sessionStorage.getItem('userName')
         this.setState({
             userid: userId,
             username:userName
         })
-        if(localStorage.hasOwnProperty("userId") && localStorage.getItem("type")==="teacher") {
+        if(sessionStorage.hasOwnProperty("userId") && sessionStorage.getItem("type")==="teacher") {
             this.props.history.push('/teacher');
         }
-        else if(!localStorage.hasOwnProperty("userId")){
+        else if(!sessionStorage.hasOwnProperty("userId")){
             message.info("请先登录",1);
             this.props.history.push('/Student/AllCompanies/ChosenClasses');
         }
@@ -102,7 +102,7 @@ class Manager extends Component {
                 console.log(res);
                 if(res.data.flag){
                     message.success("退出成功",1);
-                    localStorage.clear();
+                    sessionStorage.clear();
                     this.props.history.push('/Student/AllCompanies/ChosenClasses');
                 }else{
                     message.info("退出失败",1)

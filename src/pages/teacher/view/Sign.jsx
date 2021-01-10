@@ -13,11 +13,11 @@ class Sign extends React.Component {
     constructor(props) {
         super(props)
         let signKey;
-        if(localStorage.getItem("signKey")===null){
-           localStorage.setItem("signKey",JSON.stringify({key:1,route:'/Teacher/Sign/Signed'}))
+        if(sessionStorage.getItem("signKey")===null){
+           sessionStorage.setItem("signKey",JSON.stringify({key:1,route:'/Teacher/Sign/Signed'}))
            
         }
-        signKey = JSON.parse(localStorage.getItem("signKey"))
+        signKey = JSON.parse(sessionStorage.getItem("signKey"))
         this.state = {
             route:signKey.route,
             num:JSON.stringify(signKey.key)

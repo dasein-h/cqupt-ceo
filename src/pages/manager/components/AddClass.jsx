@@ -77,7 +77,7 @@ class AddClass extends Component{
         this.setState({
             loading:true
         })
-        unSelectedClassTeacher(localStorage.getItem("teachclass"),currentPage).then(
+        unSelectedClassTeacher(sessionStorage.getItem("teachclass"),currentPage).then(
             (res) => {
                 if(res.data.data!==0){
                     let pagination = {...this.state.pagination};
@@ -124,7 +124,7 @@ class AddClass extends Component{
         let dataList = [];
         let temp = {};
         for(let i=0;i<arr.length;i++){
-            temp.teacherId = localStorage.getItem("teachclass");
+            temp.teacherId = sessionStorage.getItem("teachclass");
             console.log(arr[i]);
             temp.teachclass = arr[i];
             dataList.push(temp);
@@ -137,7 +137,7 @@ class AddClass extends Component{
     handleClick = (text,record) => {
         let teachlist = [];
         let temp = {};
-        temp.teacherId = localStorage.getItem("teachclass");
+        temp.teacherId = sessionStorage.getItem("teachclass");
         temp.teachclass = record.teachclass;
         teachlist.push(temp)
         this.props.addClass(teachlist)

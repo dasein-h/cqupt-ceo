@@ -85,7 +85,7 @@ class DeleteClass extends Component{
         this.setState({
             loading:true
         })
-        selectedClassTeacher(localStorage.getItem("teachclass"),currentPage,"7").then(
+        selectedClassTeacher(sessionStorage.getItem("teachclass"),currentPage,"7").then(
             (res) => {
                 if(res.data.data!==0){
                     let pagination = {...this.state.pagination};
@@ -131,7 +131,7 @@ class DeleteClass extends Component{
         let dataList = [];
         let temp = {};
         for(let i=0;i<this.state.selectedRowKeys.length;i++){
-            temp.teacherId = localStorage.getItem("teachclass");
+            temp.teacherId = sessionStorage.getItem("teachclass");
             console.log(this.state.selectedRowKeys[i]);
             temp.teachclass = this.state.selectedRowKeys[i];
             dataList.push(temp);
@@ -144,7 +144,7 @@ class DeleteClass extends Component{
     handleClick = (text,record) => {
         let teachlist = [];
         let temp = {};
-        temp.teacherId = localStorage.getItem("teachclass");
+        temp.teacherId = sessionStorage.getItem("teachclass");
         temp.teachclass = record.teachclass;
         teachlist.push(temp)
         this.props.deleteClass(teachlist)

@@ -43,7 +43,7 @@ class StuInfo extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      teachclass:localStorage.getItem("teachclass"),
+      teachclass:sessionStorage.getItem("teachclass"),
       select: "name",
       value: "",
       data: [],

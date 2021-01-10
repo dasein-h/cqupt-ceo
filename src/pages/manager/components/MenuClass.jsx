@@ -10,7 +10,7 @@ import {
 import AddClass from './AddClass'
 import  DeleteClass  from './/DeleteClass'
 import ChoseClass from './ChoseTeacher'
-import ManagerApi from '../../../until/api/ManagerApi';
+import ManagerApi from '../../../until/api/managerApi';
 
 
 class MenuClass extends Component{
@@ -77,8 +77,8 @@ class MenuClass extends Component{
         )
     }
     componentDidMount(){
-        let teacherid = localStorage.getItem("teachclass");
-        let teachername = localStorage.getItem("teachName");
+        let teacherid = sessionStorage.getItem("teachclass");
+        let teachername = sessionStorage.getItem("teachName");
         this.setState({
             teacherId:teacherid,
             teacherName:teachername,

@@ -327,7 +327,8 @@ class ComInfo extends Component {
         },
       loading: true,
     })
-    let res = ShowComInfo(localStorage.teachclass);
+    let res = ShowComInfo(sessionStorage.teachclass);
+    // let res = ShowComInfo(localStorage.teachclass);
     let mydata=[];
     res.then(
       (result) => { 
@@ -444,7 +445,8 @@ class ComInfo extends Component {
   ShowCompanyLevel=()=> { 
 
     // console.log(localStorage.teachclass);
-    let res = ShowComLevel(localStorage.teachclass);
+    let res = ShowComLevel(sessionStorage.teachclass);
+    // let res = ShowComLevel(localStorage.teachclass);
     this.setState({
       ComLeLoading:true
     })
@@ -479,7 +481,8 @@ class ComInfo extends Component {
       this.setState({
         loading:true
       })
-      let res = ShowComInfo(localStorage.teachclass);
+      let res = ShowComInfo(sessionStorage.teachclass);
+      // let res = ShowComInfo(localStorage.teachclass);
       let mydata=[];
       res.then(
         (result) => { 
@@ -661,7 +664,8 @@ class DelPop extends React.Component {
       const ceo = this.props.record.ceoID;
       const companyName = this.props.record.comName;
       // console.log(companyName);
-      let res = deleteCompany(ceo,companyName,localStorage.teachclass);
+      let res = deleteCompany(ceo,companyName,sessionStorage.teachclass);
+      // let res = deleteCompany(ceo,companyName,localStorage.teachclass);
       res.then(
         (result) => { 
           // console.log(result);

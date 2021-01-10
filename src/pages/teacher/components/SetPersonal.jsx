@@ -4,13 +4,13 @@ import '../../../static/style/teacherStyle.scss'
 import { showConfig, updateConfigMember } from '../../../until/api/teacherApi'
 class SetPersonal extends React.Component {
     constructor(props) {
-        localStorage.setItem("setKey", JSON.stringify({ key: 1, route: '/Teacher/Set/Person' }))
+        sessionStorage.setItem("setKey", JSON.stringify({ key: 1, route: '/Teacher/Set/Person' }))
         super(props)
         this.state = {
             btnLoad:false,
             title: [{ "title": "CEO打分", "name": "ceoScore", "value": "" }, { "title": "成员互评", "name": "memberScore", "value": "" }, { "title": "签到打分", "name": "signScore", "value": "" }],
             loading: true,
-            teachclass: localStorage.getItem("teachclass")
+            teachclass: sessionStorage.getItem("teachclass")
         }
     }
     render() {
@@ -54,7 +54,15 @@ class SetPersonal extends React.Component {
     
             }
 
-        })
+        }).catch(err => {
+            this.setState({ loading: false })
+            notification.warning({
+              message: '警告',
+              placement: "bottomRight",
+              description:
+                '请求超时或服务器异常,请检查网络或联系管理员!',
+            });
+          })
     }
     change = (value, index) => {
         let title = [...this.state.title]
@@ -76,7 +84,15 @@ class SetPersonal extends React.Component {
             } else if (rs.data.flag === false) {
                 message.error(`修改失败(${rs.data.message})!`)
             }
-        })
+        }).catch(err => {
+            this.setState({ loading: false })
+            notification.warning({
+              message: '警告',
+              placement: "bottomRight",
+              description:
+                '请求超时或服务器异常,请检查网络或联系管理员!',
+            });
+          })
     }
 }
 export default SetPersonal
