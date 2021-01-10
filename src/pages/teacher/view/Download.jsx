@@ -175,6 +175,7 @@ class Download extends Component {
 
     onchange=(page)=> { 
         // console.log(page);
+        if (page == 0) page = 1;
         let pa = this.state.pagination;
         pa.current = page;
         this.setState({
@@ -188,13 +189,15 @@ class Download extends Component {
         let res = showFile(localStorage.teachclass,page);
         res.then(
             (result) => { 
+                console.log(result);
+                // let data = result.data;
                 let data = JSON.parse(result.data);
-                // console.log(data);
-                if (data === undefined) { 
+                console.log(data);
+                if (data == '' || data.length==0 ||data===undefined || data==null)  { 
                     this.setState({
                         pagination: {
                             total: 0,
-                            onChange: this.onchange,
+                            // onChange: this.onchange,
                             pageSize: 7,
                             hideOnSinglePage: true,
                             current:page
@@ -262,7 +265,7 @@ class Download extends Component {
             (result) => { 
                 let data = JSON.parse(result.data);
                 // console.log(data);
-                if (data === undefined) { 
+                if (data == '') { 
                     this.setState({
                         pagination: {
                             total: 0,
@@ -307,6 +310,7 @@ class Download extends Component {
                         "teachclass":data[i].teachclass
                     })
                 };
+                // console.log(newData);
                 this.setState({
                     data: newData,
                     loading:false
