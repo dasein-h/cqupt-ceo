@@ -43,7 +43,7 @@ class Detail extends Component {
           }
           if( newProps.isDeleteFile === true ){
             message.success("删除成功")
-            this.props.ShowFile(localStorage.getItem("class"),parseInt(sessionStorage.getItem("Page4"))||1)
+            this.props.ShowFile(sessionStorage.getItem("class"),parseInt(sessionStorage.getItem("Page4"))||1)
             this.setState({
               loading:true
             })
@@ -69,8 +69,8 @@ class Detail extends Component {
       }
     }
     componentDidMount() {
-      if(localStorage.getItem("class") && !this.props.FileData){
-        this.props.ShowFile(localStorage.getItem("class"),parseInt(sessionStorage.getItem("Page4"))||1)
+      if(sessionStorage.getItem("class") && !this.props.FileData){
+        this.props.ShowFile(sessionStorage.getItem("class"),parseInt(sessionStorage.getItem("Page4"))||1)
       }
       if(this.props.FileData){
         this.props.Exist()
@@ -112,8 +112,8 @@ class Detail extends Component {
       fileList.forEach(file => {
         formData.append('file', file)
       })
-      formData.append("studentId",localStorage.getItem("userId"))
-      formData.append("teachclass",localStorage.getItem("class"))
+      formData.append("studentId",sessionStorage.getItem("userId"))
+      formData.append("teachclass",sessionStorage.getItem("class"))
       this.setState({
         uploading: true,
       })
@@ -127,7 +127,7 @@ class Detail extends Component {
 				if(ajax.readyState == 4){
 					if(ajax.status == 200 && JSON.parse(ajax.response).flag){
             message.success("上传成功")
-            that.props.ShowFile(localStorage.getItem("class"),parseInt(sessionStorage.getItem("Page4"))||1)
+            that.props.ShowFile(sessionStorage.getItem("class"),parseInt(sessionStorage.getItem("Page4"))||1)
             that.setState({
               uploading: false,
               loading:true,
@@ -179,7 +179,7 @@ class Detail extends Component {
       })
     }
     onPageChange (page,pageSize) {
-        this.props.ShowFile(localStorage.getItem("class"),page)
+        this.props.ShowFile(sessionStorage.getItem("class"),page)
         // let newdata = this.state.data.object
         this.setState({
             currentPage: page,
@@ -214,7 +214,7 @@ class Detail extends Component {
           title: '操作',
           key: 'action',
           render: (text, record) => {
-            if(record.studentId!==localStorage.getItem("userId"))
+            if(record.studentId!==sessionStorage.getItem("userId"))
               return(
             <Space size="middle">
               <a onClick={this.props.DownloadFile.bind(this,record.id)}>下载</a>
@@ -258,7 +258,7 @@ class Detail extends Component {
       fileList,
     };
 
-    if(localStorage.getItem("class"))
+    if(sessionStorage.getItem("class"))
         return (
             <div className="table_div">
               <Button className="RunCeo" type="primary" onClick={this.showModal}>上传</Button>

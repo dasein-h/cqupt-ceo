@@ -177,21 +177,21 @@ class Student extends Component {
   }
   componentDidUpdate(){
     if(this.props.isLogin===true){
-        if (localStorage.getItem("type") === "student" && !/Student/.test(window.location) && localStorage.getItem("ceo") !== '1')
+        if (sessionStorage.getItem("type") === "student" && !/Student/.test(window.location) && sessionStorage.getItem("ceo") !== '1')
         {
-          window.location = "/Student"
+          this.props.history.push('/Student')
         }
-        else if (localStorage.getItem("type") === "teacher" && !/Teacher/.test(window.location))
+        else if (sessionStorage.getItem("type") === "teacher" && !/Teacher/.test(window.location))
          {
-          window.location = "/teacher"
+          this.props.history.push('/Teacher')
         }
-        else if (localStorage.getItem("ceo") === '1' && !/CEO/.test(window.location))
+        else if (sessionStorage.getItem("ceo") === '1' && !/CEO/.test(window.location))
         {
-         window.location = "/CEO"
+          this.props.history.push('/CEO')
        }
-       if (localStorage.getItem("type") === "admin" && !/Manager/.test(window.location))
+       if (sessionStorage.getItem("type") === "admin" && !/Manager/.test(window.location))
        {
-         window.location = "/Manager"
+        this.props.history.push('/Manager')
        }
     }
   }
@@ -377,7 +377,7 @@ class Student extends Component {
               <a href="http://172.22.4.2" rel="noopener noreferrer" target="_blank" style={{marginLeft:20}}>实验室</a>
               <Button className="exit" type="primary" onClick={this.confirm.bind(this,this)}>
                 退出登陆</Button>
-                <p className="Name">欢迎你，{localStorage.getItem("userName")}</p>
+                <p className="Name">欢迎你，{sessionStorage.getItem("userName")}</p>
             </Header>
             <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
               <div className="site-layout-background" style={{ padding: 24, textAlign: 'center', borderRadius: 10 }}>

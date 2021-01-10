@@ -35,7 +35,7 @@ class ChosenClasses extends Component {
             })
           }
           if(newProps.isVoteForCompany === true ){
-            this.props.getAllCompanies(localStorage.getItem("userId"))
+            this.props.getAllCompanies(sessionStorage.getItem("userId"))
             this.setState({
               loading:true,
             })
@@ -59,8 +59,8 @@ class ChosenClasses extends Component {
       }
     }
     componentDidMount() {
-      if(localStorage.getItem("userId") && !this.props.CompanyData){
-        this.props.getAllCompanies(localStorage.getItem("userId"))
+      if(sessionStorage.getItem("userId") && !this.props.CompanyData){
+        this.props.getAllCompanies(sessionStorage.getItem("userId"))
       }
       if(this.props.CompanyData){
         this.props.Exist()
@@ -122,12 +122,12 @@ class ChosenClasses extends Component {
           key: 'action',
           render: (text, record) => (
             <Space size="middle">
-              <a onClick={this.props.VoteForCompany.bind(this,localStorage.getItem("userId"),record.ceo)}>投票</a>
+              <a onClick={this.props.VoteForCompany.bind(this,sessionStorage.getItem("userId"),record.ceo)}>投票</a>
             </Space>
           ),
         },
       ]
-      if(localStorage.getItem("userId"))
+      if(sessionStorage.getItem("userId"))
         return (
           <div className="table_div">
             <Table columns={columns} dataSource={this.state.data} pagination={pagination} loading={this.state.loading}/>

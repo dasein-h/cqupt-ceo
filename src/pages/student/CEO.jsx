@@ -33,7 +33,7 @@ class CEO extends Component {
           }
           if( newProps.isVoteForCeo === true ){
             message.success("投票成功")
-            this.props.ShowCeo(parseInt(sessionStorage.getItem("Page2"))||1,localStorage.getItem("userId"))
+            this.props.ShowCeo(parseInt(sessionStorage.getItem("Page2"))||1,sessionStorage.getItem("userId"))
             this.setState({
               loading:true
             })
@@ -41,7 +41,7 @@ class CEO extends Component {
           if( newProps.message ){
             if( newProps.isRunCeo === true ){
               message.success(newProps.message)
-              this.props.ShowCeo(parseInt(sessionStorage.getItem("Page2"))||1,localStorage.getItem("userId"))
+              this.props.ShowCeo(parseInt(sessionStorage.getItem("Page2"))||1,sessionStorage.getItem("userId"))
               this.setState({
                 b_loading:false,
                 loading:true,
@@ -70,8 +70,8 @@ class CEO extends Component {
       }
     }
     componentDidMount() {
-      if(localStorage.getItem("userId") && !this.props.CeoData){
-        this.props.ShowCeo(parseInt(sessionStorage.getItem("Page2"))||1,localStorage.getItem("userId"))
+      if(sessionStorage.getItem("userId") && !this.props.CeoData){
+        this.props.ShowCeo(parseInt(sessionStorage.getItem("Page2"))||1,sessionStorage.getItem("userId"))
       }
       if(this.props.CeoData){
         this.props.Exist()
@@ -90,8 +90,8 @@ class CEO extends Component {
     }
     
     onPageChange (page,pageSize) {
-      if (localStorage.getItem("userId")){
-        this.props.ShowCeo(page,localStorage.getItem("userId"))
+      if (sessionStorage.getItem("userId")){
+        this.props.ShowCeo(page,sessionStorage.getItem("userId"))
       }
         // let newdata = this.state.data.object
         this.setState({
@@ -138,7 +138,7 @@ class CEO extends Component {
           key: 'action',
           render: (text, record) => (
             <Space size="middle">
-              <a onClick={this.props.VoteForCeo.bind(this,record.studentId,localStorage.getItem("userId"))}>投票</a>
+              <a onClick={this.props.VoteForCeo.bind(this,record.studentId,sessionStorage.getItem("userId"))}>投票</a>
               
             </Space>
           ),
@@ -151,7 +151,7 @@ class CEO extends Component {
         current:this.state.currentPage,
         hideOnSinglePage:true,
     }
-    if (localStorage.getItem("userId")){
+    if (sessionStorage.getItem("userId")){
         return ( 
             <div className="table_div">
             <Button type="primary" className="RunCeo" onClick={this.props.RunCeo.bind(this,this)} loading={this.state.b_loading}>竞选CEO</Button>
