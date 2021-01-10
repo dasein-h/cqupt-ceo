@@ -433,5 +433,30 @@ const actions = {
       type:"Exist",
     }
   },
+  CancelVoteCeo  : (studentId,ceoId) => {
+    return {
+      type:"CancelVoteCeo",
+      payload:{
+        studentId:studentId,
+        ceoId:ceoId,
+      }
+    }
+  },
+  CancelVoteCeo_OK : (message) => {
+    return {
+      type:"CancelVoteCeo_OK",
+      payload:{
+        message:message
+      }
+    }
+  },
+  CancelVoteCeo_NO : (message) => {
+    return {
+      type:"CancelVoteCeo_NO",
+      payload:{
+        message:message
+      }
+    }
+  },
 }
 export default actions

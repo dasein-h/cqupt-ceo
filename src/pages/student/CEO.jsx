@@ -38,6 +38,16 @@ class CEO extends Component {
               loading:true
             })
           }
+          if( newProps.isCancelVoteCeo === true ){
+            message.success("取消成功")
+            this.props.ShowCeo(parseInt(sessionStorage.getItem("Page2"))||1,sessionStorage.getItem("userId"))
+            this.setState({
+              loading:true
+            })
+          }
+          else if( newProps.isCancelVoteCeo === false ){
+            message.error("取消失败")
+          }
           if( newProps.message ){
             if( newProps.isRunCeo === true ){
               message.success(newProps.message)
@@ -47,7 +57,7 @@ class CEO extends Component {
                 loading:true,
               })
             }
-            else if(newProps.isVoteForCeo === false || newProps.isRunCeo === false ){
+            else if(newProps.isVoteForCeo === false || newProps.isRunCeo === false || newProps.isCancelVoteCeo === false ){
               message.error(newProps.message)
               this.setState({
                 b_loading:false,
@@ -136,16 +146,28 @@ class CEO extends Component {
             }
     },
         },
-
         {
           title: '操作',
           key: 'action',
-          render: (text, record) => (
+          render: (text, record) => {
+            if(!record.votedOrNot)
+            return(
             <Space size="middle">
               <a onClick={this.props.VoteForCeo.bind(this,record.studentId,sessionStorage.getItem("userId"))}>投票</a>
+<<<<<<< HEAD
+=======
               
+>>>>>>> 0d83ab226737a9b4bb1a20fac665085e6e061999
             </Space>
-          ),
+          )
+          else{
+            return(
+            <Space size="middle">
+            <a onClick={this.props.CancelVoteCeo.bind(this,sessionStorage.getItem("userId"),record.studentId)}>取消投票</a>
+          </Space>
+            )
+          }
+        },
         },
       ]
       const pagination = {
@@ -186,6 +208,9 @@ const mapDispatchToProps = (dispatch) => {
       that.setState({
         b_loading:true
       })
+    },
+    CancelVoteCeo: (studentId,ceoId) => {
+      dispatch(actions.CancelVoteCeo(studentId,ceoId))
     },
     Exist: () => {
       dispatch(actions.Exist())

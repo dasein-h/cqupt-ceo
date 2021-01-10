@@ -86,5 +86,10 @@ const StudentApi = {
                 ...payload
         })
     },
+    CancelVoteCeo : (payload) => {
+        return Service.post('/student/cancelVoteForCeo',{
+                ...payload
+        })
+    },
 }
 export default StudentApi
