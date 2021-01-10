@@ -20,15 +20,7 @@ const ManagerApi = {
         list
       }
       return Service.post('/admin/addclass', queryData)
-    },
-
-    searchTeacher: (value,currentPage) => {
-      return Service.post('/teacher/searchTeacher', {
-        value,
-        currentPage
-    })
-  }
-    
+    }
 }
 
 
