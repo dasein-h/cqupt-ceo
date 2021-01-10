@@ -159,7 +159,7 @@ class Teacher extends Component {
             username:userName
         })
         //判断弹框
-        if(sessionStorage.hasOwnProperty("teachclass")){
+        if(sessionStorage.getItem("teachclass")){
             this.handleDisTeach();
         }else{
             this.setState({
@@ -168,13 +168,13 @@ class Teacher extends Component {
             })
         }
         //简单的拦截
-        // if(sessionStorage.hasOwnProperty("userId") && sessionStorage.getItem("type")==="admin") {
-        //     this.props.history.push('/Manager');
-        // }
-        // else if(!sessionStorage.hasOwnProperty("userId")){
-        //     message.info("请先登录",1);
-        //     this.props.history.push('/Student/AllCompanies/ChosenClasses');
-        // }
+        if(sessionStorage.getItem("userId") && sessionStorage.getItem("type")==="admin") {
+            this.props.history.push('/Manager');
+        }
+        else if(!sessionStorage.getItem("userId")){
+            message.info("请先登录",1);
+            this.props.history.push('/Student/AllCompanies/ChosenClasses');
+        }
     }
     //modal隐藏
     handleDisTeach = () => {
