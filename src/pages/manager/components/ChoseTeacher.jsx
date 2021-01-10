@@ -86,8 +86,8 @@ class ChoseTeacher extends Component{
 
     handleClick = (text,record) => {
         console.log(record.userId);
-        localStorage.setItem('teachclass',record.userId);
-        localStorage.setItem('teachName',record.userName);
+        sessionStorage.setItem('teachclass',record.userId);
+        sessionStorage.setItem('teachName',record.userName);
         this.setState({
         },()=>{
             this.props.history.push({

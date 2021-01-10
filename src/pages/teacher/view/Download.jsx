@@ -132,7 +132,8 @@ class Download extends Component {
                     dataIndex: 'filename',
                     key: 'filename',
                       render: (text, record) => { 
-                          let userId = localStorage.userId;
+                          let userId = sessionStorage.userId;
+                        //   let userId = localStorage.userId;
                           let url = baseUrl + "/upload/download?id=" + record.id+"&userId="+userId;
                           return (
                               <a href={url}>{ text}</a>
@@ -186,7 +187,7 @@ class Download extends Component {
             loading:true
         })
         // console.log(localStorage.teachclass);
-        let res = showFile(localStorage.teachclass,page);
+        let res = showFile(sessionStorage.teachclass,page);
         res.then(
             (result) => { 
                 console.log(result);
@@ -260,7 +261,8 @@ class Download extends Component {
         this.setState({
             loading:true
         })
-        let res = showFile(localStorage.teachclass,1);
+        // let res = showFile(sessionStorage.teachclass,1);
+        let res = showFile(sessionStorage.teachclass,1);
         res.then(
             (result) => { 
                 let data = JSON.parse(result.data);
@@ -323,7 +325,8 @@ class Download extends Component {
             }
         )
 
-        res = isRunSpeakVot(localStorage.teachclass,localStorage.userId);
+        res = isRunSpeakVot(sessionStorage.teachclass,sessionStorage.userId);
+        // res = isRunSpeakVot(localStorage.teachclass,localStorage.userId);
         res.then(
             (result) => { 
                 // console.log(result);
@@ -349,7 +352,8 @@ class Download extends Component {
     handleVot = () => { 
         if (this.state.voteValue == '开启宣讲投票') {
             // console.log('开启');
-            let res = voteStatus(1, localStorage.userId, localStorage.teachclass);
+            let res = voteStatus(1, sessionStorage.userId, sessionStorage.teachclass);
+            // let res = voteStatus(1, localStorage.userId, localStorage.teachclass);
             res.then(
                 (result) => { 
                     if (result.data.flag == true) {
@@ -370,7 +374,8 @@ class Download extends Component {
         }
         else if(this.state.voteValue=='关闭宣讲投票'){ 
             // console.log('关闭');
-            let res = voteStatus(0, localStorage.userId, localStorage.teachclass);
+            let res = voteStatus(0, sessionStorage.userId, sessionStorage.teachclass);
+            // let res = voteStatus(0, localStorage.userId, localStorage.teachclass);
             res.then(
                 (result) => { 
                     if (result.data.flag == true) {
