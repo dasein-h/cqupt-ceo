@@ -107,6 +107,14 @@ class newLists extends React.Component {
         } else {
           message.error( '同意改名失败!');
         }
+      }).catch(err => {
+        this.setState({ loading: false })
+        notification.warning({
+          message: '警告',
+          placement: "bottomRight",
+          description:
+            '请求超时或服务器异常,请检查网络或联系管理员!',
+        });
       })
   
     }
@@ -119,8 +127,15 @@ class newLists extends React.Component {
         } else {
           message.error( '拒绝改名失败!');
         }
+      }).catch(err => {
+        this.setState({ loading: false })
+        notification.warning({
+          message: '警告',
+          placement: "bottomRight",
+          description:
+            '请求超时或服务器异常,请检查网络或联系管理员!',
+        });
       })
-      
     }
     componentDidMount() {
       this.changePage(1)

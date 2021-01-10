@@ -89,7 +89,15 @@ class SetCompany extends React.Component {
                   });
             }
 
-        })
+        }).catch(err => {
+            this.setState({ loading: false })
+            notification.warning({
+              message: '警告',
+              placement: "bottomRight",
+              description:
+                '请求超时或服务器异常,请检查网络或联系管理员!',
+            });
+          })
     }
     change = (value, index) => {
         let title = [...this.state.title]
@@ -112,7 +120,15 @@ class SetCompany extends React.Component {
             } else if (rs.data.flag === false) {
                 message.error(`修改失败(${rs.data.message})!`)
             }
-        })
+        }).catch(err => {
+            this.setState({ loading: false })
+            notification.warning({
+              message: '警告',
+              placement: "bottomRight",
+              description:
+                '请求超时或服务器异常,请检查网络或联系管理员!',
+            });
+          })
     }
 }
 export default SetCompany
