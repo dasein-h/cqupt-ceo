@@ -187,11 +187,9 @@ const MyCompany = (props) => {
                     <span className="dscr">成员数</span>{info.studentNum}
                   </div>
                   <div className="item">
-                    <span className="dscr">机构</span>
+                    <span className="dscr">公司类型</span>
                     {
-                      (info.typeCode || sessionStorage.getItem('typeCode')) < 3
-                        ? '普通公司'
-                        : '其他机构'
+                      info.type
                     }
                   </div>
                   <div className="item">

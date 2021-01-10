@@ -3,6 +3,15 @@ import { message } from 'antd'
 import Axios from "axios";
 import baseurl from '../BaseUrl'
 
+const inst = Axios.create({
+  // baseURL: 'http://39.100.140.143:8080',
+  baseURL: 'http://localhost:3000/api',
+  headers: {
+    'Content-Type': 'multipart/form-data',
+    'token': sessionStorage.getItem('tk')
+  }
+})
+
 async function agreeApplication(ceoId, studentId, companyName) {
   try {
     let res = await Service.post('/application/agreeApplication', {
@@ -149,7 +158,7 @@ async function companyInfo(studentId) {
 }
 
 async function uploadPPT(fd) {
-  const res = await Service.post(`/upload/up`, fd).catch(e => {
+  const res = await inst.post(`/upload/up`, fd).catch(e => {
     message.info('网络异常')
   })
 

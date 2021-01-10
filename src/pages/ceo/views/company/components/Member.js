@@ -1,8 +1,7 @@
 import React, {memo, useState, useMemo} from "react";
-import {Button, Card, message, Radio, InputNumber} from "antd";
+import { Button, Card, message, Radio, InputNumber, Input} from "antd";
 import WithModal from '../../../components/WithModal'
 import {setPosition, studentScore} from "../../../../../until/api/ceo";
-import {Tooltip} from 'antd';
 
 let cancel = () => {
   /* 占位 */
@@ -37,6 +36,9 @@ const Member = (props) => {
   const [scoreLevel, setScoreLevel] = useState(9)
   const [score, setScore] = useState(scoreLevel * 10)
   const handleSetPosition = async () => {
+    if (!posValue.trim()) {
+      message.info("职位不能为空")
+    }
     const res = await setPosition(ceoId, studentId, posValue)
     if (!res) {
       return
@@ -104,28 +106,14 @@ const Member = (props) => {
           }
         >
           <div style={{textAlign: 'center', fontSize: '18px'}}>职位</div>
-          <Radio.Group
-            style={{margin: '15px'}}
-            className="flex"
-            defaultValue={posValue}
-            onChange={({target: {value}}) => {
-              setPosValue(value)
-            }}
-          >
-            <div className="flex-around">
-              {
-                positions.map(position => (
-                  <Radio.Button
-                    buttonStyle="solid"
-                    key={position}
-                    value={position}
-                  >
-                    {position}
-                  </Radio.Button>
-                ))
+          <Input
+            value={position}
+            onChange={
+              e => {
+                setPosValue(e.target.value)
               }
-            </div>
-          </Radio.Group>
+            }
+          />
           <Button
             style={{
               display: 'block',

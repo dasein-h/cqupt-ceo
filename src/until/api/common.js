@@ -1,11 +1,14 @@
 import axios from 'axios'
+import {message} from 'antd'
 const Service = axios.create({
   /*没有被覆盖*/
-  baseURL: 'http://39.100.140.143:8080',
+  //baseURL: 'http://39.100.140.143:8080',
+  baseURL: 'http://localhost:3000/api',
   headers: {
     post: {
       'Content-Type': 'multipart/form-data'
-    }
+    },
+    token: sessionStorage.getItem('tk')
   },
   timeout: 30000,
   transformRequest: [data => {
@@ -23,19 +26,6 @@ const Service = axios.create({
     }
     return data
   }]
-})
-
-Service.interceptors.request.use(config => {
-  let tk
-  if (tk = sessionStorage.getItem('tk')) {
-    config.headers['token'] = tk
-  }
-
-  return config
-}, error => {
-  error.data = {}
-  error.data.msg = '服务器异常请联系管理员!'
-  return Promise.resolve(error)
 })
 
 Service.interceptors.response.use(response => {
@@ -64,4 +54,12 @@ Service.interceptors.response.use(response => {
   return Promise.resolve(error)
 })
 
-export default Service
+const uploadApi = async (fd) => {
+  const res = await Service.post(`/upload/up`, fd).catch(e => {
+    message.info('网络异常')
+  })
+
+  return res?.data
+}
+
+export default uploadApi
