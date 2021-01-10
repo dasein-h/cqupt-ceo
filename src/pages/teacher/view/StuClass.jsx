@@ -43,7 +43,6 @@ class StuClass extends React.Component{
                 total:'',
                 hideOnSinglePage: true,
                 onChange: (page, pageSize) => {
-                  console.log(this.changePage);
                   this.changePage(page);
                   this.state.pagination.current = page
                 }
@@ -84,7 +83,6 @@ class StuClass extends React.Component{
         selectedClassTeacher(sessionStorage.getItem("userId"),currentPage,"5").then(
             (res) => {
                 if(res.data.data!==0){
-                  console.log(res.data.data);
                     let pagination = {...this.state.pagination};
                     pagination.total = parseInt(res.data.page) * parseInt(pagination.pageSize);
                     this.setState({
@@ -93,7 +91,6 @@ class StuClass extends React.Component{
                     pagination
                 })
                 }
-                console.log(res);
             },
             (err) => {
                 this.setState({ loading: false })

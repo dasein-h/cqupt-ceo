@@ -4,8 +4,6 @@ import { AudioOutlined } from '@ant-design/icons';
 // import '../style/VoSit.css';
 import {showCeo, runCeo, closeCeo,decideCeo,deleteCeo,isRunVote} from '../../../until/api/teacherApi';
 import LoginApi from '../../../until/api/LoginApi';
-//table的静态内容
-
 
 class VotSit extends Component { 
     constructor(props) { 
@@ -25,7 +23,6 @@ class VotSit extends Component {
             total:'',
             hideOnSinglePage: true,
             onChange: (page, pageSize) => {
-              console.log(this.changePage);
               this.changePage(page);
               this.state.pagination.current = page
             }
@@ -173,9 +170,7 @@ class VotSit extends Component {
               })
             }
           })
-          console.log(res);
       }, (err) =>{
-        console.log(err);
       })
     }
 
@@ -204,7 +199,6 @@ class VotSit extends Component {
         })
         runCeo(this.state.teachclass).then(
         (res) => {
-          console.log(res);
           this.setState({
             btuValue:"关闭投票",
             isrunvote:!this.state.isrunvote,
@@ -213,7 +207,6 @@ class VotSit extends Component {
           message.success("开启成功",1)
         },
         (err) => {
-          console.log(err);
         }
         )
       }
@@ -228,7 +221,6 @@ class VotSit extends Component {
         })
         decideCeo(record.studentId).then(
           (res) => {
-            console.log(res);
             message.success("任命成功",1);
           },(err) => {
             message.warn("任命失败，请重试",1);
@@ -251,7 +243,6 @@ class VotSit extends Component {
             }
 
           },(err) => {
-            console.log(err);
           }
         )
         

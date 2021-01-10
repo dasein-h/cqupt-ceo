@@ -99,7 +99,6 @@ class Manager extends Component {
     handleExit = () => {
         LoginApi.Exit().then(
             (res) => {
-                console.log(res);
                 if(res.data.flag){
                     message.success("退出成功",1);
                     sessionStorage.clear();

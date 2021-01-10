@@ -19,7 +19,6 @@ class AddClass extends Component{
                 total:'',
                 hideOnSinglePage: true,
                 onChange: (page, pageSize) => {
-                console.log(this.changePage);
                 this.changePage(page);
                 this.state.pagination.current = page
                 }
@@ -115,22 +114,18 @@ class AddClass extends Component{
     }
     onSelectedRowKeysChange = (selectedRowKeys) => {
         this.setState({ selectedRowKeys },() => {
-            console.log(selectedRowKeys);
             this.toBeList(selectedRowKeys);
         });
     }
     toBeList = (arr) => {
-        console.log(1);
         let dataList = [];
         let temp = {};
         for(let i=0;i<arr.length;i++){
             temp.teacherId = sessionStorage.getItem("teachclass");
-            console.log(arr[i]);
             temp.teachclass = arr[i];
             dataList.push(temp);
             temp = {};
         }
-        console.log(dataList);
         this.props.getTeachClassList(dataList,this);
     } 
 

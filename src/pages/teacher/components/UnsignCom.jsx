@@ -65,7 +65,6 @@ class UnsignCom extends React.Component {
     changePage = (page) => {
         let lists = [];
         noSign(this.state.teachclass, page).then((res) => {
-            console.log(res);
             this.setState({ loading: false });
             if (res.data.flag === false) {
                 this.setState({

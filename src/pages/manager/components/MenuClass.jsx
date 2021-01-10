@@ -117,8 +117,6 @@ class MenuClass extends Component{
     getTeachClassList = (list,ref) => {
         this.setState({
             List:list
-        },() => {
-            console.log(this.state.List);
         })
         this.child = ref;
     }

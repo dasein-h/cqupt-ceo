@@ -78,7 +78,6 @@ class DeleteClass extends Component{
         )
     }
     componentDidMount(){
-        console.log("delete");
         this.changePage(1);
     }
     changePage = (currentPage) => {
@@ -123,7 +122,6 @@ class DeleteClass extends Component{
     }
     onSelectedRowKeysChange = (selectedRowKeys) => {
         this.setState({ selectedRowKeys },() => {
-            console.log(selectedRowKeys);
             this.toBeList();
         });
     }
@@ -132,12 +130,10 @@ class DeleteClass extends Component{
         let temp = {};
         for(let i=0;i<this.state.selectedRowKeys.length;i++){
             temp.teacherId = sessionStorage.getItem("teachclass");
-            console.log(this.state.selectedRowKeys[i]);
             temp.teachclass = this.state.selectedRowKeys[i];
             dataList.push(temp);
             temp = {};
         }
-        console.log(dataList);
         this.props.getTeachClassList(dataList);
     }
 

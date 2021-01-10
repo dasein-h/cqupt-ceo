@@ -50,7 +50,6 @@ class ChoseTeacher extends Component{
                 total:'',
                 hideOnSinglePage: true,
                 onChange: (page, pageSize) => {
-                    console.log(this.changePage);
                     this.changePage(page);
                     this.state.pagination.current = page
                 }
@@ -85,7 +84,6 @@ class ChoseTeacher extends Component{
     }
 
     handleClick = (text,record) => {
-        console.log(record.userId);
         sessionStorage.setItem('teachclass',record.userId);
         sessionStorage.setItem('teachName',record.userName);
         this.setState({
@@ -134,7 +132,6 @@ class ChoseTeacher extends Component{
     }
 
     onSearch = (value) => {
-        console.log(value);
         if(value === ""){
             this.changePage(1);
         }else{
@@ -149,7 +146,6 @@ class ChoseTeacher extends Component{
         ManagerApi.searchTeacher(value,currentPage).then(
             (res) => {
                 if(res.request.status === 200 && res.request.readyState === 4){
-                    console.log(res);
                     let pagination = {...this.state.pagination};
                     pagination.total = res.data.page; 
                     if(currentPage === 1){
@@ -167,7 +163,6 @@ class ChoseTeacher extends Component{
                 }
                 
             },(err) => {
-                console.log(err);
             }
         )
     }

@@ -167,14 +167,6 @@ class Teacher extends Component {
                 isMask:true
             })
         }
-        //简单的拦截
-        if(sessionStorage.getItem("userId") && sessionStorage.getItem("type")==="admin") {
-            this.props.history.push('/Manager');
-        }
-        else if(!sessionStorage.getItem("userId")){
-            message.info("请先登录",1);
-            this.props.history.push('/Student/AllCompanies/ChosenClasses');
-        }
     }
     //modal隐藏
     handleDisTeach = () => {
