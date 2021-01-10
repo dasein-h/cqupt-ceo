@@ -88,13 +88,13 @@ class Manager extends Component {
             userid: userId,
             username:userName
         })
-        if(sessionStorage.hasOwnProperty("userId") && sessionStorage.getItem("type")==="teacher") {
-            this.props.history.push('/teacher');
-        }
-        else if(!sessionStorage.hasOwnProperty("userId")){
-            message.info("请先登录",1);
-            this.props.history.push('/Student/AllCompanies/ChosenClasses');
-        }
+        // if(sessionStorage.hasOwnProperty("userId") && sessionStorage.getItem("type")==="teacher") {
+        //     this.props.history.push('/teacher');
+        // }
+        // else if(!sessionStorage.hasOwnProperty("userId")){
+        //     message.info("请先登录",1);
+        //     this.props.history.push('/Student/AllCompanies/ChosenClasses');
+        // }
     }
     handleExit = () => {
         LoginApi.Exit().then(

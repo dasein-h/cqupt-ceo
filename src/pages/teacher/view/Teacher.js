@@ -168,13 +168,13 @@ class Teacher extends Component {
             })
         }
         //简单的拦截
-        if(sessionStorage.hasOwnProperty("userId") && sessionStorage.getItem("type")==="admin") {
-            this.props.history.push('/Manager');
-        }
-        else if(!sessionStorage.hasOwnProperty("userId")){
-            message.info("请先登录",1);
-            this.props.history.push('/Student/AllCompanies/ChosenClasses');
-        }
+    //     if(sessionStorage.hasOwnProperty("userId") && sessionStorage.getItem("type")==="admin") {
+    //         this.props.history.push('/Manager');
+    //     }
+    //     else if(!sessionStorage.hasOwnProperty("userId")){
+    //         message.info("请先登录",1);
+    //         this.props.history.push('/Student/AllCompanies/ChosenClasses');
+    //     }
     }
     //modal隐藏
     handleDisTeach = () => {
