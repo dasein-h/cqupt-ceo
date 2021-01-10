@@ -110,6 +110,10 @@ class ChoseTeacher extends Component{
                 if(list.length !== 0){
                     let pagination = {...this.state.pagination};
                     pagination.total = list[0].count;
+                    pagination.onChange = (page, pageSize) => {
+                        this.changePage(page);
+                        this.state.pagination.current = page
+                    }
                     this.setState({
                         loading:false,
                         dataSource: list,

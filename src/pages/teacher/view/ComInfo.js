@@ -176,7 +176,7 @@ class ComInfo extends Component {
   }
 
   onchange = (e) => { 
-    console.log(e);
+    // console.log(e);
     let newdata = this.state.pagination;
     newdata.current = e;
     this.setState({
@@ -305,7 +305,7 @@ class ComInfo extends Component {
         },
         (err) => {
           message.warning("请求超时或服务器异常，请检查网络或联系管理员!");
-          console.log(err);
+          // console.log(err);
         }
       )
 
@@ -437,7 +437,7 @@ class ComInfo extends Component {
       },
       (err) => { 
         message.warning(err.result.message);
-        console.log(err);
+        // console.log(err);
       }
   )
   }
@@ -483,7 +483,7 @@ class ComInfo extends Component {
       let mydata=[];
       res.then(
         (result) => { 
-          console.log(result);
+          // console.log(result);
           if (result.data.data == undefined) {
             this.setState({
               data: [],
@@ -561,7 +561,7 @@ class ComInfo extends Component {
                 loading: false,
                 
               })
-              console.log(this.state.pagination)
+              // console.log(this.state.pagination)
             }
             else { 
               this.setState({
@@ -586,7 +586,7 @@ class ComInfo extends Component {
         },
         (err) => { 
           message.warning("请求超时或服务器异常，请检查网络或联系管理员!");
-          console.log(err);
+          // console.log(err);
         }
     )
     
@@ -660,12 +660,12 @@ class DelPop extends React.Component {
       const key = this.props.record.key;
       const ceo = this.props.record.ceoID;
       const companyName = this.props.record.comName;
-      console.log(companyName);
+      // console.log(companyName);
       let res = deleteCompany(ceo,companyName,localStorage.teachclass);
       res.then(
         (result) => { 
-          console.log(result);
-          console.log(result.data.flag);
+          // console.log(result);
+          // console.log(result.data.flag);
           this.props.parent.setState({
                 data: dataSource.filter((item) => item.key !== key)
           })
@@ -695,7 +695,7 @@ class DelPop extends React.Component {
           
         },
         (err) => { 
-          console.log(err);
+          // console.log(err);
           message.warning("请求超时或服务器异常，请检查网络或联系管理员!");
         }
       )
@@ -764,11 +764,11 @@ class CustomTextInput extends React.Component {
   focusTextInput() {
       let ceo = this.state.record.ceoID;
       let scoreTeacher = this.state.inputValue;
-      console.log(ceo);
+      // console.log(ceo);
       let res = putScore(ceo, scoreTeacher);
       res.then(
         (result) => { 
-          console.log(result);
+          // console.log(result);
           if (result.data.error) {
             message.error('修改失败！');
             
@@ -782,7 +782,7 @@ class CustomTextInput extends React.Component {
           
         },
         (err) => { 
-          console.log(err);
+          // console.log(err);
           message.warning("请求超时或服务器异常，请检查网络或联系管理员!");
          
           }
@@ -897,14 +897,14 @@ class AddStudent extends React.Component {
     let ceo = this.state.record.ceoID;
     let companyName = this.state.record.comName;
     
-    console.log(this.state);
+    // console.log(this.state);
     let studentId = this.state.inputValue;
-    console.log(studentId);
-    console.log(ceo);
+    // console.log(studentId);
+    // console.log(ceo);
     let res = ChoseCompany(ceo, studentId,companyName);
     res.then(
       (result) => { 
-        console.log(result);
+        // console.log(result);
        
         if (result.data.flag) {
           message.success(result.data.message);
@@ -917,7 +917,7 @@ class AddStudent extends React.Component {
         
       },
       (err) => { 
-        console.log(err);
+        // console.log(err);
         message.warning(err.data.message);
         this.setState({ loading: false, visible: false });
         }
@@ -1051,8 +1051,8 @@ class ChangeType extends React.Component {
       })
       res.then(
         (result) => { 
-          console.log(result);
-          console.log(result.data.flag);
+          // console.log(result);
+          // console.log(result.data.flag);
           // this.props.parent.setState({
           //       data: dataSource.filter((item) => item.key !== key)
           // })
@@ -1069,7 +1069,7 @@ class ChangeType extends React.Component {
           
         },
         (err) => { 
-          console.log(err);
+          // console.log(err);
           message.warning("请求超时或服务器异常，请检查网络或联系管理员!");
           // this.handleCancel;
         }

@@ -1,6 +1,5 @@
-import React, {useEffect, useReducer, useState, memo, useCallback} from "react";
-import {downloadFile, fetchFileList, deleteFile} from "../../../../../until/api/ceo";
-import {message} from "antd";
+import React, {useEffect, memo} from "react";
+import {downloadFile} from "../../../../../until/api/ceo";
 import MyTable from "../../../components/MyTable";
 import Confirm from '../../../../ceo/components/Comfirm'
 

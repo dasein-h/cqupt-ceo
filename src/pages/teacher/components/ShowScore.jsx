@@ -43,7 +43,7 @@ class ShowScore extends Component {
 
 
     componentDidMount() { 
-        console.log(this.props.record);
+        // console.log(this.props.record);
         this.setState({ loading: true });
         // typecode在3以下
         if (this.props.record.typeCode < 3) {
@@ -123,7 +123,7 @@ class ShowScore extends Component {
 
     
     handleEditOkClick = () => {
-        console.log('点击确定');
+        // console.log('点击确定');
     
         this.setState ({
           isShowEditModal: false,
@@ -131,7 +131,7 @@ class ShowScore extends Component {
       }
     
     handleEditCancelClick = () => {
-        console.log('点击取消');
+        // console.log('点击取消');
     
         this.setState ({
           isShowEditModal: false,
