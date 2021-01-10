@@ -234,7 +234,6 @@ function Company(props) {
                     autoFocus
                     onChange={
                       val => {
-                        console.log(Math.max(0, Math.min(100, val)));
                         setScore(Math.max(0, Math.min(100, val)))
                       }
                     }

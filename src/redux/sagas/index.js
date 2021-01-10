@@ -23,7 +23,8 @@ export default function* defSaga() {
       }
       sessionStorage.setItem("userName",res.data.data.userName)
       sessionStorage.setItem("ceo",res.data.error)
-      sessionStorage.setItem("class",res.data.teachclass)
+      sessionStorage.setItem("class", res.data.teachclass)
+      sessionStorage.setItem("tk", res.data.token)
       if(sessionStorage.getItem("type")==="student" && sessionStorage.getItem("ceo") !== '1'){
         window.location.reload()
       }

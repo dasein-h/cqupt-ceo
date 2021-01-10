@@ -49,7 +49,7 @@ const MyCompany = (props) => {
       return
     }
     const res = await changeCompanyName(userId, name.trim()).catch(e => {
-      console.log('网络异常')
+      message.info('网络异常')
     })
     cancel()
     if (!res) {
