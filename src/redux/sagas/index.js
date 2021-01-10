@@ -46,16 +46,16 @@ export default function* defSaga() {
     }
   })
   yield takeEvery('Exit', function* () {
-    const res = yield call(LoginApi.Exit, sessionStorage.getItem("userId"))
-    if (res.status === 200)
-    {
+    // const res = yield call(LoginApi.Exit, sessionStorage.getItem("userId"))
+    // if (res.status === 200)
+    // {
       yield put(actions.Exit_OK())
       sessionStorage.clear()
       window.location.reload()
-    } else {
-      message.error('退出失败')
-      yield put(actions.Exit_NO())
-    }
+    // } else {
+    //   message.error('退出失败')
+    //   yield put(actions.Exit_NO())
+    // }
   })
 
   yield takeEvery('getAllCompanies', function* () {

@@ -177,26 +177,10 @@ class Teacher extends Component {
     }
     //退出登录
     handleExit = () => {
-        LoginApi.Exit().then(
-            (res) => {
-                if(res.data.flag){
                     message.success("退出成功",1);
                     //退出后将localstorage清空
                     sessionStorage.clear();
                     this.props.history.push('/Student/AllCompanies/ChosenClasses');
-                }else {
-                    message.open("请先登录",1);
-                }
-            },
-            (err) => {
-                 notification.open({
-                    message: '警告',
-                    placement: "bottomRight",
-                    description:
-                    '请求超时或服务器异常,请检查网络或联系管理员!',
-                });
-            }
-        )
     }   
     //更加班级按钮点击后调用 修改按钮内容
     changeClass = () => {

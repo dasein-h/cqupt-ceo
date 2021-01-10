@@ -97,26 +97,9 @@ class Manager extends Component {
         // }
     }
     handleExit = () => {
-        LoginApi.Exit().then(
-            (res) => {
-                if(res.data.flag){
                     message.success("退出成功",1);
                     sessionStorage.clear();
                     this.props.history.push('/Student/AllCompanies/ChosenClasses');
-                }else{
-                    message.info("退出失败",1)
-                }
-                
-            },
-            (err) => {
-                notification.open({
-                    message: '警告',
-                    placement: "bottomRight",
-                    description:
-                    '请求超时或服务器异常,请检查网络或联系管理员!',
-                });
-            }
-        )
     }
     confirm = (that) => {
     Modal.confirm({
