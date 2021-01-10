@@ -4,9 +4,9 @@ import { noSign, setNosign } from '../../../until/api/teacherApi'
 class UnsignCom extends React.Component {
     constructor(props) {
         super(props)
-        localStorage.setItem("signKey", JSON.stringify({ key: 2, route: '/Teacher/Sign/UnSign' }))
+        sessionStorage.setItem("signKey", JSON.stringify({ key: 2, route: '/Teacher/Sign/UnSign' }))
         this.state = {
-            teachclass: localStorage.getItem("teachclass"),
+            teachclass: sessionStorage.getItem("teachclass"),
             loading: true,
             data: [],
             pagination: {

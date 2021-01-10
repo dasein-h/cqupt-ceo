@@ -106,7 +106,7 @@ class VotSit extends Component {
     }
 
     componentDidMount () {
-      let teachClass = localStorage.getItem('teachclass');
+      let teachClass = sessionStorage.getItem('teachclass');
       this.setState({
         teachclass:teachClass
       },()=>{

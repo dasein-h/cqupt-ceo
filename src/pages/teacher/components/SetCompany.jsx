@@ -5,12 +5,12 @@ import { showConfig, updateConfigCompany } from '../../../until/api/teacherApi'
 
 class SetCompany extends React.Component {
     constructor(props) {
-        localStorage.setItem("setKey", JSON.stringify({ key: 2, route: '/Teacher/Set/Company' }))
+        sessionStorage.setItem("setKey", JSON.stringify({ key: 2, route: '/Teacher/Set/Company' }))
         super(props)
         this.state = {
             btnLoad:false,
             title: [{ "title": "老师给普通企业", "name": "companyScore", "value": "" }, { "title": "新闻机构", "name": "newsScore", "value": "" }, { "title": "银行", "name": "bankScore", "value": "" }, { "title": "会计事务所:", "name": "accountScore", "value": "" }, { "title": "工商局", "name": "tradeScore", "value": "" }, { "title": "税务局:", "name": "revenueScore", "value": "" }, { "title": "老师给机构", "name": "agencyScore", "value": "" }, { "title": "企业互评给机构", "name": "fromCompanyScore", "value": "" }],
-            teachclass: localStorage.getItem("teachclass"),
+            teachclass: sessionStorage.getItem("teachclass"),
             loading: true,
             data: [],
         }

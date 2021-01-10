@@ -13,17 +13,17 @@ import {
 class Set extends React.Component {
     constructor(props) {
         super(props)
-        if(localStorage.getItem("setKey")===null){
-            localStorage.setItem("setKey",JSON.stringify({key:1,route:'/Teacher/Set/Person'}))
+        if(sessionStorage.getItem("setKey")===null){
+            sessionStorage.setItem("setKey",JSON.stringify({key:1,route:'/Teacher/Set/Person'}))
          }
-         let setKey = JSON.parse(localStorage.getItem("setKey"))
+         let setKey = JSON.parse(sessionStorage.getItem("setKey"))
         this.state = {
             route:setKey.route,
             num:JSON.stringify(setKey.key),
             person: "",
             company: "",
             other: "",
-            teachclass: localStorage.getItem("teachclass")
+            teachclass: sessionStorage.getItem("teachclass")
         }
     }
     render() {

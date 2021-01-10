@@ -12,10 +12,10 @@ class News extends React.Component{
   constructor(props){
     super(props)
     let newsKey;
-    if(localStorage.getItem("newsKey")===null){
-       localStorage.setItem("newsKey",JSON.stringify({key:1,route:'/Teacher/News/Name'}))
+    if(sessionStorage.getItem("newsKey")===null){
+       sessionStorage.setItem("newsKey",JSON.stringify({key:1,route:'/Teacher/News/Name'}))
     }
-    newsKey = JSON.parse(localStorage.getItem("newsKey"))
+    newsKey = JSON.parse(sessionStorage.getItem("newsKey"))
     this.state = {
         route:newsKey.route,
         num:JSON.stringify(newsKey.key)

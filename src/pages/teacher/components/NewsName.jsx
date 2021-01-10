@@ -6,10 +6,10 @@ import '../../../static/style/teacherStyle.scss'
 // const { Option } = Select;
 class newLists extends React.Component {
     constructor(...props) {
-        localStorage.setItem("newsKey",JSON.stringify({key:1,route:'/Teacher/News/Name'}))
+        sessionStorage.setItem("newsKey",JSON.stringify({key:1,route:'/Teacher/News/Name'}))
       super(...props)
       this.state = {
-        teachclass: localStorage.getItem("teachclass"),
+        teachclass: sessionStorage.getItem("teachclass"),
         select: "name",
         value: "",
         loading: true,
@@ -99,7 +99,7 @@ class newLists extends React.Component {
   
       //直接用 this.state.pagination.current 调用数据？
       // console.log(store.getState());
-      agreeChange(record.id, record.error,localStorage.teachclass).then((rs) => {
+      agreeChange(record.id, record.error,sessionStorage.teachclass).then((rs) => {
         let res = rs.data;
         if (res.flag === true) {
           this.changePage(this.state.pagination.current)
@@ -148,10 +148,6 @@ class newLists extends React.Component {
       // }
       changeCompanyName(this.state.teachclass, newPage, "1").then(
         res => {
-          if(!res.data.flag && res.data.message === "没有登录，请先登录"){
-            localStorage.clear();
-            this.props.history.push('/Student/AllCompanies/ChosenClasses');
-          }
           this.setState({ loading: false })
           let rs = JSON.parse(res.data);
           if (rs.length === 0) {

@@ -112,7 +112,7 @@ class ChoseStudent extends Component {
     componentDidMount() { 
         this.props.onRef(this);
         this.setState({ loading: true });
-        let res = ShowNoComStu(localStorage.teachclass);
+        let res = ShowNoComStu(sessionStorage.teachclass);
         // let res = showAll(localStorage.teachclass, 1);
         let mydata = [];
         res.then(

@@ -4,13 +4,13 @@ import '../../../static/style/teacherStyle.scss'
 import { showConfig, updateConfigMember } from '../../../until/api/teacherApi'
 class SetPersonal extends React.Component {
     constructor(props) {
-        localStorage.setItem("setKey", JSON.stringify({ key: 1, route: '/Teacher/Set/Person' }))
+        sessionStorage.setItem("setKey", JSON.stringify({ key: 1, route: '/Teacher/Set/Person' }))
         super(props)
         this.state = {
             btnLoad:false,
             title: [{ "title": "CEO打分", "name": "ceoScore", "value": "" }, { "title": "成员互评", "name": "memberScore", "value": "" }, { "title": "签到打分", "name": "signScore", "value": "" }],
             loading: true,
-            teachclass: localStorage.getItem("teachclass")
+            teachclass: sessionStorage.getItem("teachclass")
         }
     }
     render() {

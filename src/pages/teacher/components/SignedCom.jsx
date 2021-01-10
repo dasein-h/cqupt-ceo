@@ -6,13 +6,13 @@ const { Search } = Input
 const { Option } = Select;
 class SignedCom extends React.Component {
   constructor(props) {
-    localStorage.setItem("signKey", JSON.stringify({ key: 1, route: '/Teacher/Sign/Signed' }))
+     sessionStorage.setItem("signKey", JSON.stringify({ key: 1, route: '/Teacher/Sign/Signed' }))
     super(props)
     this.state = {
       searchOrNot: false,
       select: "id",
       value: "",
-      teachclass: localStorage.getItem("teachclass"),
+      teachclass: sessionStorage.getItem("teachclass"),
       late: "迟到",
       drop: "旷课",
       data: [],
