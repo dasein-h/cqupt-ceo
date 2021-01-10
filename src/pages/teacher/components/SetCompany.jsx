@@ -89,15 +89,7 @@ class SetCompany extends React.Component {
                   });
             }
 
-        }).catch(err => {
-            this.setState({ loading: false })
-            notification.warning({
-              message: '警告',
-              placement: "bottomRight",
-              description:
-                '请求超时或服务器异常,请检查网络或联系管理员!',
-            });
-          })
+        })
     }
     change = (value, index) => {
         let title = [...this.state.title]
