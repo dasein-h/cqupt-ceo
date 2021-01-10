@@ -1,5 +1,5 @@
 import Service from "../Service";
-import {message} from 'antd'
+import { message } from 'antd'
 import Axios from "axios";
 import baseurl from '../BaseUrl'
 
@@ -133,7 +133,7 @@ async function fetchFileList(teachclass, currentPage) {
       teachclass,
       currentPage
     })
-    return typeof res.data === 'object' ? res.data :  JSON.parse(res.data)
+    return typeof res.data === 'object' ? res.data : JSON.parse(res.data)
   } catch (e) {
     message.info('网络错误')
   }
@@ -149,11 +149,7 @@ async function companyInfo(studentId) {
 }
 
 async function uploadPPT(fd) {
-  const res = await Axios.post(`${baseurl}/upload/up`, fd, {
-    headers: {
-      'Content-Type': 'multipart/form-data'
-    }
-  }).catch(e => {
+  const res = await Service.post(`/upload/up`, fd).catch(e => {
     message.info('网络异常')
   })
 
@@ -202,7 +198,7 @@ async function showScored(studentId) {
       studentId
     })
     return res.data
-  }catch (e) {
+  } catch (e) {
     message.info('网络错误')
   }
 }

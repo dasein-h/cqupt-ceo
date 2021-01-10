@@ -1,11 +1,10 @@
 import axios from 'axios'
 const Service = axios.create({
   /*没有被覆盖*/
-  // baseURL: 'http://39.100.140.143:8080',
-  baseURL: 'http://localhost:3000/api',
+  baseURL: 'http://39.100.140.143:8080',
   headers: {
     post: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'multipart/form-data'
     }
   },
   timeout: 30000,

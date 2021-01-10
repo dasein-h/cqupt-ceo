@@ -20,7 +20,6 @@ const reducer = (state, {type, payload}) => {
       return {...state, currentPage: payload, loading: false}
     case INIT_PAGE:
       payload.object?.forEach((item, i) => item.key = i)
-      payload.object = payload.object?.filter((item) => item.state !== '已同意')
       return {
         ...state,
         total: payload.totalNumber,
@@ -39,6 +38,7 @@ const reducer = (state, {type, payload}) => {
 
 function Application(props) {
   const {userId} = props
+
   const [state, dispatch] = useReducer(reducer, {
     currentPage: 0,
     loading: true,
@@ -46,14 +46,14 @@ function Application(props) {
     pageSize: 0,
   })
   const fetchApplication = () => {
-    showApplication(0, userId).then(
+    showApplication(state.currentPage, userId).then(
       res => {
         if (!res.flag) return
         dispatch({
           type: INIT_PAGE,
           payload: res.data
         })
-      }
+      },
     )
   }
 
@@ -65,10 +65,7 @@ function Application(props) {
     const res = await agreeApplication(userId, studentId, companyName)
     if (res && res.flag) {
       message.success('已同意')
-      dispatch({
-        type: MARK_STATE,
-        payload: idx
-      })
+      fetchApplication()
     } else {
       message.info(res.message || "请求失败")
     }
@@ -77,6 +74,14 @@ function Application(props) {
     <div>
       <PageHeader title="所有申请"/>
       <MyTable
+        onChange={
+          pos => {
+            dispatch({
+              type: SET_CURR_PAGE,
+              payload: pos
+            })
+          }
+        }
         dataSource={state.data}
         columns={[
           {

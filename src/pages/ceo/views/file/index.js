@@ -33,10 +33,12 @@ const File = props => {
     fetchFile: async () => {
       try {
         const res = await fetchFileList(teachclass, currentPage)
-        dispatch({
+        if (res) {
+           dispatch({
           type: 'FETCH_OK',
           payload: res
         })
+        }
       } catch (e) {
         message.warn("获取文件失败")
       }
@@ -62,7 +64,7 @@ const File = props => {
       <PageHeader
         title="文件"
         extra={[
-          <Uploader {...props} reload={dispatchActions.fetchFile}/>
+          <Uploader {...props} reload={dispatchActions.fetchFile} />
         ]}
       />
       <FileList state={state} {...props} {...dispatchActions} currentPage={currentPage} />
