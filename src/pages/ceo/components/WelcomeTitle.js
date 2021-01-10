@@ -11,12 +11,8 @@ const WelcomeTitle = props => {
   }
 
   const exit = async () => {
-    const res = await LoginApi.Exit(userId)
-    message.info(res.data.message)
-    if (res.data.flag) {
-      sessionStorage.clear()
-      history.replace('/')
-    }
+    sessionStorage.clear()
+    history.replace('/')
   }
 
   return (
