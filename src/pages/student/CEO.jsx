@@ -124,9 +124,13 @@ class CEO extends Component {
             key: 'state',
             dataIndex: 'state',
         render: (text) => {
-            if(text===1){
+          if(text===1 && record.studentId === sessionStorage.getItem("userId")){
+            sessionStorage.setItem("ceo",'1')
+            window.location.reload()
+        }    
+            if(text===1 && record.studentId !== sessionStorage.getItem("userId")){
                 return(<p>已成为CEO</p>)
-            }            
+            }           
             if(text===0){
                 return(<p>未成为CEO</p>)
             }
