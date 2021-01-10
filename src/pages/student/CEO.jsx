@@ -123,7 +123,7 @@ class CEO extends Component {
             title: '状态',
             key: 'state',
             dataIndex: 'state',
-        render: (text) => {
+        render: (text,record) => {
           if(text===1 && record.studentId === sessionStorage.getItem("userId")){
             sessionStorage.setItem("ceo",'1')
             window.location.reload()
