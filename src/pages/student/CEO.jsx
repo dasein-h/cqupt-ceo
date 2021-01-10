@@ -154,10 +154,6 @@ class CEO extends Component {
             return(
             <Space size="middle">
               <a onClick={this.props.VoteForCeo.bind(this,record.studentId,sessionStorage.getItem("userId"))}>投票</a>
-<<<<<<< HEAD
-=======
-              
->>>>>>> 0d83ab226737a9b4bb1a20fac665085e6e061999
             </Space>
           )
           else{
