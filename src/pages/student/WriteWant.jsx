@@ -62,7 +62,7 @@ class WriteWant extends Component {
           if(flag === true){
             for(let i = 1 ; i <= 6 ; i ++){
               applications.push({
-                  studentId:localStorage.getItem("userId"),
+                  studentId:sessionStorage.getItem("userId"),
                   companyName:this.state['value'+i],
                   level:i
               })
@@ -113,8 +113,8 @@ class WriteWant extends Component {
         }
       }
       componentDidMount() {
-        if(localStorage.getItem("userId") && !this.props.CompanyData){
-            this.props.getAllCompanies(localStorage.getItem("userId"))
+        if(sessionStorage.getItem("userId") && !this.props.CompanyData){
+            this.props.getAllCompanies(sessionStorage.getItem("userId"))
         }
         if(this.props.CompanyData){
           this.props.Exist()
@@ -122,7 +122,7 @@ class WriteWant extends Component {
       }
       render() {
           const data = this.state.data
-        if(localStorage.getItem("userId"))
+        if(sessionStorage.getItem("userId"))
         return (
         <div className="table_div">
             <div style={{ marginTop: 50 }}>

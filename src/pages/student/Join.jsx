@@ -53,8 +53,8 @@ class Join extends Component {
       }
     }
     componentDidMount() {
-      if(localStorage.getItem("userId") && !this.props.ApplicationData){
-        this.props.ShowApplication(parseInt(sessionStorage.getItem("Page3"))||1,localStorage.getItem("userId"))
+      if(sessionStorage.getItem("userId") && !this.props.ApplicationData){
+        this.props.ShowApplication(parseInt(sessionStorage.getItem("Page3"))||1,sessionStorage.getItem("userId"))
       }
       if(this.props.ApplicationData){
         this.props.Exist()
@@ -73,7 +73,7 @@ class Join extends Component {
     }
     
     onPageChange (page,pageSize) {
-        this.props.ShowApplication(page,localStorage.getItem("userId"))
+        this.props.ShowApplication(page,sessionStorage.getItem("userId"))
         // let newdata = this.state.data.object
         this.setState({
             currentPage: page,
@@ -121,7 +121,7 @@ class Join extends Component {
         current:this.state.currentPage,
         hideOnSinglePage:true,
     }
-    if(localStorage.getItem("userId"))
+    if(sessionStorage.getItem("userId"))
         return ( 
             <div className="table_div">
             <Table columns={columns} dataSource={this.state.data} pagination={pagination} loading={this.state.loading}/>

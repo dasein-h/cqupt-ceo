@@ -29,7 +29,7 @@ const actions = {
     return {
       type: "Login_Check",
       payload: {
-        userId: localStorage.getItem("userId")
+        userId: sessionStorage.getItem("userId")
       }
     }
   },
@@ -68,7 +68,7 @@ const actions = {
     return {
       type: "Exit",
       payload:{
-        userId: localStorage.getItem("userId")
+        userId: sessionStorage.getItem("userId")
       }
     }
   },
@@ -158,7 +158,7 @@ const actions = {
     return {
       type:"RunCeo",
       payload:{
-        studentId:localStorage.getItem("userId")
+        studentId:sessionStorage.getItem("userId")
       }
     }
   },
@@ -249,8 +249,8 @@ const actions = {
       type:"UploadFile",
       payload:{
         file:file,
-        studentId:localStorage.getItem("userId"),
-        teachClass:localStorage.getItem("class")
+        studentId:sessionStorage.getItem("userId"),
+        teachClass:sessionStorage.getItem("class")
       }
     }
   },
@@ -343,7 +343,7 @@ const actions = {
     return {
       type:"RunScore",
       payload:{
-        scorer:localStorage.getItem("userId"),
+        scorer:sessionStorage.getItem("userId"),
         scored:scored,
         score:score
       }

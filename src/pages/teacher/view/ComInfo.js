@@ -22,6 +22,8 @@ class ComInfo extends Component {
             dataIndex: 'comName',
             key: 'comName',
             align: 'center',
+            width: '4%',
+            fixed:'left'
           },
           {
             title: '公司类型',
@@ -35,9 +37,12 @@ class ComInfo extends Component {
                 <Fragment>
                   <table>
                     <tr>
-                      <td style={{width:'50%'}}>
+                      <td style={{width:'50%',textAlign:'center'}}>
                         <span>{ text}</span>
                       </td>
+                      
+                    </tr>
+                    <tr>
                       <td style={{textAlign:'center'}}>
                           <ChangeType parent={this} record={ record}/>
                       </td>
@@ -62,6 +67,7 @@ class ComInfo extends Component {
             dataIndex: 'ceoname',
             key: 'ceoname',
             align: 'center',
+            width:'8%'
           },
           {
             title: '票数',
@@ -123,7 +129,7 @@ class ComInfo extends Component {
             dataIndex: 'AddStudent',
             key: 'AddStudent',
             align: 'center',
-            // width:'20%',
+            width:'10%',
             render: (text,record) => {
              
               return (
@@ -139,6 +145,7 @@ class ComInfo extends Component {
             title: '操作',
             dataIndex: 'operation',
             align: 'center',
+            width:'10%',
             render: (text, record) =>
               this.state.data.length >= 1 ? (
                 <Fragment>
@@ -629,7 +636,7 @@ class ComInfo extends Component {
                 pagination={this.state.pagination}
                 loading={this.state.loading}
                 expandedRowRender={record => this.expandedRowRender(record)}
-                onExpand={(expanded,record)=>this.onExpand(expanded,record)}      
+                onExpand={(expanded, record) => this.onExpand(expanded, record)} 
               />
              
               </div>

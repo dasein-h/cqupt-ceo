@@ -7,14 +7,14 @@ import Confirm from "./Comfirm";
 const WelcomeTitle = props => {
   let { userName, userId, history } = props
   if (!userName) {
-    userName = localStorage.getItem('userName')
+    userName = sessionStorage.getItem('userName')
   }
 
   const exit = async () => {
     const res = await LoginApi.Exit(userId)
     message.info(res.data.message)
     if (res.data.flag) {
-      localStorage.clear()
+      sessionStorage.clear()
       history.replace('/')
     }
   }

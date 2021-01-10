@@ -1,6 +1,7 @@
 import Service from "../Service";
 import {message} from 'antd'
 import Axios from "axios";
+import baseurl from '../BaseUrl'
 
 async function agreeApplication(ceoId, studentId, companyName) {
   try {
@@ -148,7 +149,7 @@ async function companyInfo(studentId) {
 }
 
 async function uploadPPT(fd) {
-  const res = await Axios.post('http://localhost:3000/api/upload/up', fd, {
+  const res = await Axios.post(`${baseurl}/upload/up`, fd, {
     headers: {
       'Content-Type': 'multipart/form-data'
     }

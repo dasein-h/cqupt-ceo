@@ -62,7 +62,7 @@ class CompanyMember extends Component {
           if( newProps.message ){
             if( newProps.isRunScore === true ){
               message.success("打分成功")
-              this.props.ShowScore(localStorage.getItem("userId"))
+              this.props.ShowScore(sessionStorage.getItem("userId"))
               this.setState({
                 b_loading:false,
                 disabled:true,
@@ -102,11 +102,11 @@ class CompanyMember extends Component {
       }
     }
     componentDidMount() {
-      if(localStorage.getItem("userId") && !this.props.MemberData){
-        this.props.ShowCompanyMember(localStorage.getItem("userId"))
-        this.props.ShowNumber(localStorage.getItem("userId"))
-        this.props.ShowScore(localStorage.getItem("userId"))
-        this.props.ShowCompany(localStorage.getItem("userId"))
+      if(sessionStorage.getItem("userId") && !this.props.MemberData){
+        this.props.ShowCompanyMember(sessionStorage.getItem("userId"))
+        this.props.ShowNumber(sessionStorage.getItem("userId"))
+        this.props.ShowScore(sessionStorage.getItem("userId"))
+        this.props.ShowCompany(sessionStorage.getItem("userId"))
       }
       if(this.props.MemberData){
         this.props.Exist()
@@ -151,11 +151,11 @@ class CompanyMember extends Component {
 
   }
     onPageChange (page,pageSize) {
-      if (localStorage.getItem("userId")){
-        this.props.ShowCompanyMember(localStorage.getItem("userId"))
-        this.props.ShowNumber(localStorage.getItem("userId"))
-        this.props.ShowScore(localStorage.getItem("userId"))
-        this.props.ShowCompany(localStorage.getItem("userId"))
+      if (sessionStorage.getItem("userId")){
+        this.props.ShowCompanyMember(sessionStorage.getItem("userId"))
+        this.props.ShowNumber(sessionStorage.getItem("userId"))
+        this.props.ShowScore(sessionStorage.getItem("userId"))
+        this.props.ShowCompany(sessionStorage.getItem("userId"))
       }
         // let newdata = this.state.data.object
         this.setState({
@@ -210,7 +210,7 @@ class CompanyMember extends Component {
           render: (text, record) => {
             let flag = true
             let score 
-            // if(record.studentId !== localStorage.getItem("userId") && this.state.NumberData.level !== 0)
+            // if(record.studentId !== sessionStorage.getItem("userId") && this.state.NumberData.level !== 0)
             for(let item of this.state.ScoreData){
               if(item.scored === record.studentId){
                 flag = false
@@ -218,8 +218,8 @@ class CompanyMember extends Component {
                 break
               }
             }
-            if(record.studentId !== localStorage.getItem("userId") && flag && this.state.NumberData.level !== 0)
-            // if(record.studentId !== localStorage.getItem("userId") && flag)
+            if(record.studentId !== sessionStorage.getItem("userId") && flag && this.state.NumberData.level !== 0)
+            // if(record.studentId !== sessionStorage.getItem("userId") && flag)
             return (
             <Space size="middle">
               <a onClick={this.showModal.bind(this,record.studentId)}>打分</a>
@@ -307,7 +307,7 @@ class CompanyMember extends Component {
         current:this.state.currentPage,
         hideOnSinglePage:true,
     }
-    if (localStorage.getItem("userId")){
+    if (sessionStorage.getItem("userId")){
      if(this.state.NumberData){
       if(this.state.NumberData.typeCode < 3 && this.state.NumberData.level === 0)
         return ( 
