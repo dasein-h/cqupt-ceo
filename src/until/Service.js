@@ -1,25 +1,19 @@
 import axios from 'axios'
 const Service = axios.create({
   /*没有被覆盖*/
-  baseURL: 'http://39.100.140.143:8080',
+  baseURL: 'http://localhost:3000/api',
   headers: {
-    get: {
-      'Content-Type': 'application/json'
-    },
     post: {
-
       'Content-Type': 'application/json'
     }
   },
   timeout: 30000,
-  transformRequest: [ data => {
-
+  transformRequest: [data => {
     data = JSON.stringify(data)
-
     return data
   }],
-  withCredentials:true,
-  validateStatus () {
+
+  validateStatus() {
 
     return true
   },
@@ -32,13 +26,11 @@ const Service = axios.create({
 })
 
 Service.interceptors.request.use(config => {
-  const isServer = typeof window === 'undefined'
-  if (!isServer) {
-    const token = window.localStorage.getItem('token')
-    if (token) {
-      config.headers.common['token'] = token
-    }
+  let tk
+  if (tk = sessionStorage.getItem('tk')) {
+    config.headers['token'] = tk
   }
+
   return config
 }, error => {
   error.data = {}
@@ -56,10 +48,15 @@ Service.interceptors.response.use(response => {
       response.data.message = message
     }
   }
-  if (response.data.message === '没有登录，请先登录') {
+
+  if (
+    response.data.message === '没有登录，请先登录' ||
+    response.data.message === '资源访问受限!请重新登录！'
+  ) {
     sessionStorage.clear()
     window.location.replace('/')
   }
+
   return response
 }, error => {
   error.data = {}

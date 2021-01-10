@@ -33,10 +33,11 @@ const routes = [
 function CEO(props) {
   const {dispatch, history} = props
 
-  let userId = /*       */sessionStorage.getItem('userId')
-  let userName = /*     */sessionStorage.getItem('userName')
-  let teachclass = /*   */sessionStorage.getItem('class')
-  let ceo = /*          */sessionStorage.getItem('ceo')
+  let userId = /*    */sessionStorage.getItem('userId')
+  let userName = /*  */sessionStorage.getItem('userName')
+  let teachclass = /**/sessionStorage.getItem('class')
+  let ceo = /*       */sessionStorage.getItem('ceo')
+
   /* 如果不是ceo进入这个页面直接跳走 */
   if (!ceo || ceo !== '1') {
     history.replace('/')
