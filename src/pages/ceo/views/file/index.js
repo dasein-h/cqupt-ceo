@@ -26,7 +26,7 @@ const reducer = (state, action) => {
 
 const File = props => {
   const [state, dispatch] = useReducer(reducer, {})
-  const teachclass = localStorage.getItem('class')
+  const teachclass = sessionStorage.getItem('class')
   const [currentPage, setPage] = useState(1)
 
   const dispatchActions = {

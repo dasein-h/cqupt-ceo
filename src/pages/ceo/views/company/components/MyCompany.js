@@ -19,7 +19,7 @@ const companyTypes = [
 ]
 
 const MyCompany = (props) => {
-  const userId = localStorage.getItem('userId')
+  const userId = sessionStorage.getItem('userId')
   const [info, setInfo] = useState(null)
   const [name, setName] = useState('')
 
@@ -35,7 +35,7 @@ const MyCompany = (props) => {
             return
           }
           const {typeCode} = res.data
-          localStorage.setItem('typeCode', typeCode)
+          sessionStorage.setItem('typeCode', typeCode)
           setInfo(res.data)
         }
       )
@@ -189,7 +189,7 @@ const MyCompany = (props) => {
                   <div className="item">
                     <span className="dscr">机构</span>
                     {
-                      (info.typeCode || localStorage.getItem('typeCode')) < 3
+                      (info.typeCode || sessionStorage.getItem('typeCode')) < 3
                         ? '普通公司'
                         : '其他机构'
                     }

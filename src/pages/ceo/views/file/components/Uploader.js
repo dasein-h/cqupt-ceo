@@ -28,9 +28,9 @@ export default (props) => {
     }
     const fd = new FormData()
     fd.append('file', file)
-    if (!userId) userId = localStorage.getItem('userId')
+    if (!userId) userId = sessionStorage.getItem('userId')
     fd.append('studentId', userId)
-    if (!teachclass) teachclass = localStorage.getItem('class')
+    if (!teachclass) teachclass = sessionStorage.getItem('class')
     fd.append('teachclass', teachclass)
 
     const res = await uploadPPT(fd)

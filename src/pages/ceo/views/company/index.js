@@ -139,7 +139,7 @@ function Company(props) {
   }
 
   const vote = async (targetTypeCode, ceo) => {
-    const typeCode = localStorage.getItem('typeCode')
+    const typeCode = sessionStorage.getItem('typeCode')
     if (!validateVote(typeCode, targetTypeCode)) {
       message.info("普通公司和其他机构不能给自己一方公司投票")
     }
@@ -189,7 +189,7 @@ function Company(props) {
         *   >3 其它机构
         *   只能互相打分
         */
-        const canOperate = validateVote(localStorage.getItem('typeCode'), typeCode)
+        const canOperate = validateVote(sessionStorage.getItem('typeCode'), typeCode)
         return canOperate ? (
           <>
             <Confirm
