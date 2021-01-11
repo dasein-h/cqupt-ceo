@@ -295,6 +295,19 @@ export default function* defSaga() {
       yield put(actions.ShowCompany_NO())
     }
   })
+  yield takeEvery('CancelVoteCeo', function* () {
+    const action = yield select()
+    const res = yield call(StudentApi.CancelVoteCeo,action.payload)
+    if (res.status === 200 && res.data.flag) {
+      yield put(actions.CancelVoteCeo_OK(res.data.message))
+    }
+    else if (!res.data.flag && res.data.message === "没有登录，请先登录"){
+      yield put(actions.Exit(sessionStorage.getItem("userId")))
+    }
+    else{
+      yield put(actions.CancelVoteCeo_NO(res.data.message))
+    }
+  })
   /* CEO */
   // yield takeLatest('CEO_MEMBER', function* ceoSetMember(action) {
   //   action.cb && action.cb()
