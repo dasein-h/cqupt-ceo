@@ -9,12 +9,7 @@ let cancel = () => {
 let cancelPos = () => {
   /* 占位 */
 }
-const validateScore = score => {
-  score = score << 0
-  if (score > 100) return 100
-  if (score < 70) return 70
-  return score
-}
+
 const positions = [
   '副总裁',
   '总裁'
@@ -53,7 +48,9 @@ const Member = (props) => {
   }
   const handleScore = async () => {
     const res = await studentScore(score, studentId, ceoId)
-    if (!res) return
+    if (!res) {
+      return
+    }
     if (!res.flag) {
       message.info(res.message + '\n每个公司的优秀，良好，及格，人数是有限的' || '网络错误')
       return
@@ -117,10 +114,10 @@ const Member = (props) => {
           <Button
             style={{
               display: 'block',
-              margin: '0 auto'
+              width: '100%',
+              margin: '10px auto'
             }}
             type="primary"
-            shape="round"
             onClick={handleSetPosition.bind(null)}
             disabled={!posValue}
           >确 认</Button>

@@ -27,9 +27,9 @@ export default function* defSaga() {
       sessionStorage.setItem("ceo",res.data.error)
       sessionStorage.setItem("class", res.data.teachclass)
       sessionStorage.setItem("tk", res.data.token)
-      if(sessionStorage.getItem("type")==="student" && sessionStorage.getItem("ceo") !== '1'){
-        window.location.reload()
-      }
+      // if(sessionStorage.getItem("type")==="student" && sessionStorage.getItem("ceo") !== '1'){
+      //   window.location.reload()
+      // }
       yield put(actions.Login_Success(res.data.message, res.data))
     } 
     else {

@@ -40,6 +40,7 @@ function CEO(props) {
 
   /* 如果不是ceo进入这个页面直接跳走 */
   if (!ceo || ceo !== '1') {
+    /*@TODO */
     history.replace('/')
   }
   /* 将userId挂在redux中 */
