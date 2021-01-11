@@ -274,7 +274,7 @@ class Detail extends Component {
             if(record.studentId!==sessionStorage.getItem("userId"))
               return(
             <Space size="middle">
-              <a onClick={this.props.DownloadFile.bind(this,record.id)}>下载</a>
+              <a onClick={this.props.DownloadFile.bind(this,record.id,record.fileName)}>下载</a>
             </Space>
           )
             else
@@ -363,8 +363,8 @@ const mapDispatchToProps = (dispatch) => {
     UploadFile: (file,studentId,teachclass) => {
       dispatch(actions.UploadFile(file,studentId,teachclass))
     },
-    DownloadFile: (id) => {
-      dispatch(actions.DownloadFile(id))
+    DownloadFile: (id,name) => {
+      dispatch(actions.DownloadFile(id,name))
     },
     DeleteFile: (id) => {
       dispatch(actions.DeleteFile(id))

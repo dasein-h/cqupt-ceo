@@ -103,7 +103,7 @@ function Application(props) {
             }
           }, {
             title: '班级',
-            dataIndex: 'teachclass'
+            dataIndex: 'cls'
           }, {
             title: '操作',
             dataIndex: 'action',

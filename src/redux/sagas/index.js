@@ -171,21 +171,42 @@ export default function* defSaga() {
     const res = yield call(StudentApi.DownloadFile,action.payload)
     if (res.status === 200 ) {
       yield put(actions.DownloadFile_OK(res.data.message))
+      let filename = action.name
+      let back = filename.substring(filename.lastIndexOf('.'), filename.length);
       axios({
-        url:baseurl+"/upload/download?id="+action.payload.id,
-        method:'get',
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-    }).then(res => {
-        let blob = new Blob([res.data])
+          url: baseurl+"/upload/download?id="+action.payload.id,
+          method: 'get',
+          headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          responseType: 'blob'
+      }).then(res => {
+          let blobtype;
+          switch (back) { 
+              case '.pptx':
+                  blobtype = 'applicationnd.openxmlformats-officedocument.presentationml.presentation'; break;
+              case '.ppt':
+                  blobtype = 'applicationnd.ms-powerpoint'; break;
+              default:
+                  blobtype= 'application/msword'; break;
+          }
+          let blob = new Blob([res.data], {
+              type:blobtype
+          })
           let a = document.createElement('a')
           a.href = window.URL.createObjectURL(blob)
-          a.download = window.URL.createObjectURL(blob)
+          a.download = action.name
           a.click();
-      }
+      });
+      
+  
+
+
+    
       // let download = document.createElement('a')
       // download.href = res.data
       // download.click()
-    )
+    
     }
     else if (!res.data.flag && res.data.message === "没有登录，请先登录"){
       yield put(actions.Exit(sessionStorage.getItem("userId")))
