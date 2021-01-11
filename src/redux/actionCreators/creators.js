@@ -270,12 +270,13 @@ const actions = {
       }
     }
   },
-  DownloadFile : (id) => {
+  DownloadFile : (id,name) => {
     return {
       type:"DownloadFile",
       payload:{
         id:id
-      }
+      },
+      name:name
     }
   },
   DownloadFile_OK : (message) => {
