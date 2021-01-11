@@ -147,7 +147,7 @@ class Detail extends Component {
       })
       var that = this
     axios({
-      url:'http://39.100.140.143:8080/upload/up',
+      url:'http://172.22.4.2:8089/upload/up',
       method:'post',
       data:formData,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'}

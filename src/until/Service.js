@@ -1,7 +1,7 @@
 import axios from 'axios'
 const Service = axios.create({
   /*没有被覆盖*/
-  baseURL: 'http://39.100.140.143:8080',
+  baseURL: 'http://172.22.4.2:8089',
   // baseURL: 'http://localhost:3000/api',
   headers: {
     post: {

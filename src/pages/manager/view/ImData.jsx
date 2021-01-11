@@ -35,7 +35,7 @@ class ImData extends Component {
     console.log(sessionStorage.tk)
 
     axios({
-      url:'http://39.100.140.143:8080/admin/file',
+      url:'http://172.22.4.2:8089/admin/file',
       method:'post',
       data:formData,
       headers: {
