@@ -170,7 +170,8 @@ class MenuClass extends Component{
     }
 
     toChoseClass = () => {
-        this.props.history.push('/Manager/ChoseClass/ChoseTeacher')
+        this.props.history.push('/Manager/ChoseClass/ChoseTeacher');
+        sessionStorage.removeItem("count");
     }
 }
 

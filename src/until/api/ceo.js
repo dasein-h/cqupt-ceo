@@ -165,6 +165,9 @@ async function uploadPPT(fd) {
   return res?.data
 }
 
+
+
+
 async function deleteFile(id) {
   try {
     const res = await Service.post('/upload/delete', {
@@ -227,7 +230,7 @@ export {
   deleteFile,
   companyScore,
   studentScore,
-  showScored
+  showScored,
 }
 
 

@@ -1,11 +1,12 @@
 import React, { Component,Fragment } from 'react';
-import { Upload, Button, message } from 'antd';
+import { Upload, Button, message,notification } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import baseurl from '../../../until/BaseUrl';
 import axios from 'axios';
 import '../style/ImData.css';
+import { ImportData } from '../../../until/api/teacherApi';
 
-
+axios.defaults.headers.common['token'] = sessionStorage.getItem("tk")
 class ImData extends Component {
   constructor(props) { 
     super(props);
@@ -18,14 +19,56 @@ class ImData extends Component {
     this.Ajax = this.Ajax.bind(this);
   }
 
-  Ajax (type, url, formData){
+  // Ajax(formData) {
+  //   let status = false;
+
+  //   let res = ImportData(formData);
+  //   res.then(
+  //     (result) => {
+  //       // console.log(result);
+
+  //       if (result.data.flag == true) {
+  //         // console.log('上传成功！');
+  //         message.success("上传成功");
+  //         status = true;
+  //       }
+  //       else if (result.data.flag == false) {
+  //         // console.log('上传失败');
+  //         message.error('上传失败！');
+  //       }
+  //     }
+  //   ).then(() => {
+      
+  //     this.handleStatusClass(status);
+
+  //   }).catch(err => {
+      
+      
+  //     this.handleStatusClass(status);
+      
+  //     notification.warning({
+  //       message: '警告',
+  //       placement: "bottomRight",
+  //       description:
+  //         '请求超时或服务器异常,请检查网络或联系管理员!',
+  //     })
+  //   })
+
+
+  // }
+
+
+  Ajax (formData){
     let status = false;
+    let url = baseurl + '/admin/file';
     axios({
       method: 'post',
       url: url,
       data: formData,
-      processData: false,
-      contentType:false
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        // 'token':sessionStorage.getItem("tk")
+      }
     }).then(
       (result) => {
         // console.log(result);
@@ -41,27 +84,20 @@ class ImData extends Component {
         }
       }
     ).then(() => {
-      if (type == 0) {
-        this.handleStatusStu(status);
-      }
-      else if (type == 1) {
-        this.handleStatusClass(status);
-      }
+      this.handleStatusClass(status);
     })
 
   }
 
-
   handleUploadClass = () => {
     const { classList } = this.state;
+    console.log(this.state.classList[0]);
     const formData = new FormData();
-    classList.forEach(file => {
-      formData.append('file', file);
-    });
+    formData.append('file', this.state.classList[0]);
+    this.Ajax(formData);
     this.setState({
       uploadingClass: true
     })
-    this.Ajax(1, baseurl + '/admin/file', formData);
   }
     
 
@@ -107,6 +143,7 @@ class ImData extends Component {
   }
 
   render() {
+
     const { uploadingClass} = this.state;
     const classprops = {
       onRemove: file => {

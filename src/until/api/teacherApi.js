@@ -304,6 +304,18 @@ function ShowNoComStu(teachclass) {
     teachclass
   })
 }
+
+// 管理端导入数据
+function ImportData(file) {
+
+  return Service.post('/admin/file', {
+    file
+  })
+}
+
+
+
+
 export{
   selectedClassTeacher,
   unSelectedClassTeacher,
@@ -344,5 +356,6 @@ export{
   agreeNewsType,
   rejectNewsType,
   downLoadStudent,
-  ShowNoComStu
+  ShowNoComStu,
+  ImportData
 }

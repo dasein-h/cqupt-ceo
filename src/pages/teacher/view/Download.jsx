@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { showFile,DeleteUpload,download,voteStatus,isRunSpeakVot } from '../../../until/api/teacherApi';
 import { Table, message, Modal, Button } from 'antd';
 import baseUrl from '../../../until/BaseUrl';
-
+import axios from 'axios';
 
 
 class DelPop extends React.Component { 
@@ -110,10 +110,58 @@ class DelPop extends React.Component {
 }
 
 
+class File extends React.Component { 
+    constructor(props) { 
+        super(props);
+        this.state = {
+            record: this.props.record,
+            text:this.props.text
+        }
+        this.handleClick = this.handleClick.bind(this);
+    }
+    handleClick=()=> { 
+        axios.defaults.headers.common['token'] = sessionStorage.getItem("tk")
+        let userId = sessionStorage.userId;
+        let url = baseUrl + "/upload/download?id=" + this.state.record.id + "&userId=" + userId;
+        let filename = this.state.text;
+        let back = filename.substring(filename.lastIndexOf('.'), filename.length);
+        axios({
+            url: url,
+            method: 'get',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            responseType: 'blob'
+        }).then(res => {
+            let blobtype;
+            switch (back) { 
+                case '.pptx':
+                    blobtype = 'application/vnd.openxmlformats-officedocument.presentationml.presentation'; break;
+                case '.ppt':
+                    blobtype = 'application/vnd.ms-powerpoint'; break;
+                default:
+                    blobtype= 'application/msword'; break;
+            }
+            let blob = new Blob([res.data], {
+                type:blobtype
+            })
+            let a = document.createElement('a')
+            a.href = window.URL.createObjectURL(blob)
+            a.download = this.state.text;
+            a.click();
+        });
+
+    }
+    render() { 
+        return <a onClick={ this.handleClick}>{ this.props.text}</a>
+    }
+}
+
 class Download extends Component { 
     constructor(props) { 
         super(props);
         this.onchange = this.onchange.bind(this);
+        
         this.state = {
             columns: [
                   {
@@ -132,11 +180,10 @@ class Download extends Component {
                     dataIndex: 'filename',
                     key: 'filename',
                       render: (text, record) => { 
-                          let userId = sessionStorage.userId;
-                        //   let userId = localStorage.userId;
-                          let url = baseUrl + "/upload/download?id=" + record.id+"&userId="+userId;
+
+
                           return (
-                              <a href={url}>{ text}</a>
+                              <File text={text} record={ record}/>
                         )
                       }
                 },
@@ -395,6 +442,7 @@ class Download extends Component {
 
         }
     }
+
     render() { 
         return (
             <Fragment >
