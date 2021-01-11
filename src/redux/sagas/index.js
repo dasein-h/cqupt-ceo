@@ -12,7 +12,7 @@ export default function* defSaga() {
   yield throttle(2000, 'login', function* () {
     const action = yield select();
     const res = yield call(LoginApi.Login, action.payload)
-    console.log(res)
+    // console.log(res)
     if (res.status === 200 && res.data.flag)
     {        
       if(action.payload.studentId!==undefined){
