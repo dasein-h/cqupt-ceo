@@ -1,9 +1,9 @@
-import React, {useState, memo, useEffect} from "react";
-import {Button, Tooltip, Input, message, Radio} from "antd";
-import {changeCompanyName, createCompany as createCompanyImpl, createCompany} from '../../../../../until/api/ceo';
+import React, { useState, memo, useEffect } from "react";
+import { Button, Tooltip, Input, message, Radio } from "antd";
+import { changeCompanyName, createCompany as createCompanyImpl, createCompany } from '../../../../../until/api/ceo';
 import WithModal from "../../../components/WithModal";
-import {companyInfo} from "../../../../../until/api/ceo";
-import {EditFilled} from '@ant-design/icons'
+import { companyInfo } from "../../../../../until/api/ceo";
+import { EditFilled } from '@ant-design/icons'
 
 let cancel = () => {
 }
@@ -34,7 +34,7 @@ const MyCompany = (props) => {
           if (!res.data) {
             return
           }
-          const {typeCode} = res.data
+          const { typeCode } = res.data
           sessionStorage.setItem('typeCode', typeCode)
           setInfo(res.data)
         }
@@ -64,7 +64,7 @@ const MyCompany = (props) => {
   }
 
   const CreateCompany = (props) => {
-    const {reload} = props
+    const { reload } = props
     const [companyType, setCompanyType] = useState('贸易公司')
     const [companyName, setCompanyName] = useState('')
     const createCompany = async (userId) => {
@@ -89,18 +89,24 @@ const MyCompany = (props) => {
           (props, onCancel) => {
             cancel = onCancel
             return (
-              <Button
-                style={{width: '100%', height: '100%'}}
-                {...props}
-              >创建公司</Button>
+              <>
+                <h4 style={{
+                  textAlign: 'center'
+                }}>未创建公司</h4>
+                <Button
+                  type="primary"
+                  style={{ width: '100%', height: '100%' }}
+                  {...props}
+                >创建公司</Button>
+              </>
             )
           }
         }
       >
-        <Input placeholder="公司名" onChange={e => setCompanyName(e.target.value)}/>
+        <Input placeholder="公司名" onChange={e => setCompanyName(e.target.value)} />
         <Radio.Group
           defaultValue='贸易公司'
-          onChange={({target: {value}}) => {
+          onChange={({ target: { value } }) => {
             setCompanyType(value)
           }}
           style={{
@@ -124,7 +130,7 @@ const MyCompany = (props) => {
             ))
           }
         </Radio.Group>
-        <br/>
+        <br />
         <Button
           style={{
             display: 'block',
@@ -144,7 +150,7 @@ const MyCompany = (props) => {
               <div className="flex_grid">
                 <div>
                   <div className="item">
-                      <span className="dscr">
+                    <span className="dscr">
                       公司名
                       </span>{info.companyName}
                     <WithModal
@@ -153,23 +159,23 @@ const MyCompany = (props) => {
                           cancel = _cancel
                           return (
                             info ? <Tooltip title="申请改名">
-                              <EditFilled {...props}/>
+                              <EditFilled {...props} />
                             </Tooltip> : <></>
                           )
                         }
                       }
                     >
                       <div className="flex column">
-                        <div style={{textAlign: 'center'}}>输入公司名</div>
+                        <div style={{ textAlign: 'center' }}>输入公司名</div>
                         <Input
-                          style={{margin: '10px 0'}}
+                          style={{ margin: '10px 0' }}
                           defaultValue={info.companyName}
                           onChange={e => setName(e.target.value)}
                         />
                         <Button
                           onClick={changeName}
                           type="primary"
-                          style={{marginLeft: '0'}}>确认</Button>
+                          style={{ marginLeft: '0' }}>确认</Button>
                       </div>
                     </WithModal>
                   </div>
@@ -211,7 +217,7 @@ const MyCompany = (props) => {
               </div>
             </>
           )
-          : <CreateCompany reload={fetchCompanyInfo}/>
+          : <CreateCompany reload={fetchCompanyInfo} />
       }
     </div>
   )

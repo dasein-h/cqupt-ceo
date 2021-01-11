@@ -1,7 +1,6 @@
 import Service from "../Service";
 import { message } from 'antd'
 import Axios from "axios";
-import baseurl from '../BaseUrl'
 
 const inst = Axios.create({
   // baseURL: 'http://39.100.140.143:8080',
@@ -199,6 +198,7 @@ async function studentScore(score, scored, scorer) {
       scored,
       scorer
     })
+    console.log(res)
     return res.data
   } catch (e) {
     message.info('网络错误')
