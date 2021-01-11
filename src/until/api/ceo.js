@@ -1,9 +1,12 @@
 import Service from "../Service";
 import { message } from 'antd'
 import Axios from "axios";
+import baseurl from '../BaseUrl';
 
 const inst = Axios.create({
-  baseURL: 'http://172.22.4.2:8089',
+  // baseURL: 'http://172.22.4.2:8089',
+  baseURL: baseurl,
+  
   // baseURL: 'http://localhost:3000/api',
   headers: {
     'Content-Type': 'multipart/form-data',

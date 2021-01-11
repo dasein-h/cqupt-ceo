@@ -5,6 +5,7 @@ import actions from '../../redux/actionCreators/creators'
 import changePage from '../../until/changePage'
 import { UploadOutlined , ExclamationCircleOutlined } from '@ant-design/icons';
 import axios from 'axios'
+import baseurl from '../../until/BaseUrl';
 // import $ from 'jquery';
 import '../../static/style/style.scss'
 axios.defaults.headers.common['token'] = sessionStorage.getItem("tk")
@@ -147,7 +148,9 @@ class Detail extends Component {
       })
       var that = this
     axios({
-      url:'http://172.22.4.2:8089/upload/up',
+      // url: 'http://172.22.4.2:8089/upload/up',
+      url: baseurl + '/upload/up',
+      
       method:'post',
       data:formData,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
