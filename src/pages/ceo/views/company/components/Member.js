@@ -104,9 +104,10 @@ const Member = (props) => {
         >
           <div style={{textAlign: 'center', fontSize: '18px'}}>职位</div>
           <Input
-            value={position}
+            value={posValue}
             onChange={
               e => {
+                console.log(e.target.value)
                 setPosValue(e.target.value)
               }
             }

@@ -44,6 +44,10 @@ const MyCompany = (props) => {
     fetchCompanyInfo()
   }, [])
   const changeName = async () => {
+    if (!name.trim()) {
+      message.info("请输入公司名")
+      return
+    }
     if (name.length > 10) {
       message.info("公司名字最长不超过10个汉字")
       return
