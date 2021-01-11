@@ -5,8 +5,9 @@ import baseurl from '../../../until/BaseUrl';
 import axios from 'axios';
 import '../style/ImData.css';
 import { ImportData } from '../../../until/api/teacherApi';
+import qs from 'qs';
 
-axios.defaults.headers.common['token'] = sessionStorage.getItem("tk")
+// axios.defaults.headers.common['token'] = sessionStorage.getItem("tk")
 class ImData extends Component {
   constructor(props) { 
     super(props);
@@ -16,85 +17,51 @@ class ImData extends Component {
     }
     this.handleUploadClass = this.handleUploadClass.bind(this);
     this.handleStatusClass = this.handleStatusClass.bind(this);
-    this.Ajax = this.Ajax.bind(this);
+    // this.Ajax = this.Ajax.bind(this);
   }
 
-  // Ajax(formData) {
-  //   let status = false;
-
-  //   let res = ImportData(formData);
-  //   res.then(
-  //     (result) => {
-  //       // console.log(result);
-
-  //       if (result.data.flag == true) {
-  //         // console.log('上传成功！');
-  //         message.success("上传成功");
-  //         status = true;
-  //       }
-  //       else if (result.data.flag == false) {
-  //         // console.log('上传失败');
-  //         message.error('上传失败！');
-  //       }
-  //     }
-  //   ).then(() => {
-      
-  //     this.handleStatusClass(status);
-
-  //   }).catch(err => {
-      
-      
-  //     this.handleStatusClass(status);
-      
-  //     notification.warning({
-  //       message: '警告',
-  //       placement: "bottomRight",
-  //       description:
-  //         '请求超时或服务器异常,请检查网络或联系管理员!',
-  //     })
-  //   })
-
-
-  // }
-
-
-  Ajax (formData){
-    let status = false;
-    let url = baseurl + '/admin/file';
-    axios({
-      method: 'post',
-      url: url,
-      data: formData,
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        // 'token':sessionStorage.getItem("tk")
-      }
-    }).then(
-      (result) => {
-        // console.log(result);
-
-        if (result.data.flag == true) {
-          // console.log('上传成功！');
-          message.success("上传成功");
-          status = true;
-        }
-        else if (result.data.flag == false) {
-          // console.log('上传失败');
-          message.error('上传失败！');
-        }
-      }
-    ).then(() => {
-      this.handleStatusClass(status);
-    })
-
-  }
 
   handleUploadClass = () => {
+    this.setState({classList:[]})
     const { classList } = this.state;
-    console.log(this.state.classList[0]);
+
     const formData = new FormData();
-    formData.append('file', this.state.classList[0]);
-    this.Ajax(formData);
+    console.log(classList.length);
+    classList.forEach(file => {
+      console.log(file);
+      formData.append('file', file)
+    })
+
+    console.log(sessionStorage.tk)
+
+    axios({
+      url:'http://39.100.140.143:8080/admin/file',
+      method:'post',
+      data:formData,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'token':sessionStorage.tk
+      }
+      }).then(
+        function(res){
+          console.log(res)
+          if(res.status == 200 && res.data.flag){
+            message.success("上传成功")
+            
+          }
+          else{
+            if(res.message)
+            message.error(res.message)
+            else
+              message.error("上传失败")
+          }
+        }
+    ).then(
+      () => { 
+        this.handleStatusClass(true);
+      }
+    )
+    
     this.setState({
       uploadingClass: true
     })
@@ -126,19 +93,14 @@ class ImData extends Component {
   }
 
   handleChange = (info) => { 
-
-
-    let fileList = [...info.fileList];
-
-    
-    fileList = fileList.slice(-1);
-    
+    console.log(info.file);
+    let newlist = [];
+    newlist.push(info.file);
     this.setState(
       {
-        classList:fileList
+        classList:newlist
       }
     )
-    
     
   }
 

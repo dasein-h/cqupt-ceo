@@ -137,6 +137,7 @@ class Detail extends Component {
       const { fileList } = this.state;
       const formData = new FormData()
       fileList.forEach(file => {
+        console.log(file)
         formData.append('file', file)
       })
       formData.append("studentId",sessionStorage.getItem("userId"))
