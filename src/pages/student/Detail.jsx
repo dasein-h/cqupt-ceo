@@ -4,10 +4,37 @@ import { Table, Tag, Space,pagination, message, Button , Empty , Modal , Upload,
 import actions from '../../redux/actionCreators/creators'
 import changePage from '../../until/changePage'
 import { UploadOutlined , ExclamationCircleOutlined } from '@ant-design/icons';
-import baseurl from '../../until/BaseUrl'
+import axios from 'axios'
 // import $ from 'jquery';
 import '../../static/style/style.scss'
-
+axios.defaults.headers.common['token'] = sessionStorage.getItem("tk")
+// axios.interceptors.request.use(function (config) {
+//   // Do something before request is sent
+//   let token = window.localStorage.getItem("accessToken")
+//   if (token) {
+//       config.headers.accessToken = token
+//       return config
+//   }
+// }, function (error) {
+//   return Promise.reject(error)
+// })
+// axios.interceptors.response.use(res => {
+//   const code = res.data.code
+//   if (code === 401) {
+//   } else if (code !== 200) {
+//     Notification.error({
+//       title: res.data.msg
+//     })
+//     return Promise.reject('error')
+//   } else {
+//     return res.data
+//   }
+// },
+// error => {
+//   console.log('err' + error)
+//   return Promise.reject(error)
+// }
+// )
 class Detail extends Component {
     constructor(props) {
         super(props);
@@ -117,15 +144,16 @@ class Detail extends Component {
       this.setState({
         uploading: true,
       })
-      var ajax = new XMLHttpRequest()
       var that = this
-      ajax.open("post", baseurl+"/upload/up", true)
-      ajax.onload = function () {
-      }
-      ajax.send(formData);
-      ajax.onreadystatechange = function() {
-				if(ajax.readyState == 4){
-					if(ajax.status == 200 && JSON.parse(ajax.response).flag){
+    axios({
+      url:'http://39.100.140.143:8080/upload/up',
+      method:'post',
+      data:formData,
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+  }).then(
+        function(res){
+          console.log(res)
+          if(res.status == 200 && res.data.flag){
             message.success("上传成功")
             that.props.ShowFile(sessionStorage.getItem("class"),parseInt(sessionStorage.getItem("Page4"))||1)
             that.setState({
@@ -134,8 +162,8 @@ class Detail extends Component {
             })
           }
           else{
-            if(JSON.parse(ajax.response).message)
-            message.error(JSON.parse(ajax.response).message)
+            if(res.message)
+            message.error(res.message)
             else
             message.error("上传失败")
             //后端返回提示信息后再修改
@@ -144,7 +172,35 @@ class Detail extends Component {
             })
           }
         }
-      }
+      )
+      // var ajax = new XMLHttpRequest()
+      // var that = this
+      // ajax.open("post", baseurl+"/upload/up", true)
+      // ajax.onload = function () {
+      // }
+      // ajax.send(formData);
+      // ajax.onreadystatechange = function() {
+			// 	if(ajax.readyState == 4){
+			// 		if(ajax.status == 200 && JSON.parse(ajax.response).flag){
+      //       message.success("上传成功")
+      //       that.props.ShowFile(sessionStorage.getItem("class"),parseInt(sessionStorage.getItem("Page4"))||1)
+      //       that.setState({
+      //         uploading: false,
+      //         loading:true,
+      //       })
+      //     }
+      //     else{
+      //       if(JSON.parse(ajax.response).message)
+      //       message.error(JSON.parse(ajax.response).message)
+      //       else
+      //       message.error("上传失败")
+      //       //后端返回提示信息后再修改
+      //       that.setState({
+      //         uploading: false,
+      //       })
+      //     }
+      //   }
+      // }
 
       // $.ajax({
       //   url: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',

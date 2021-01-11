@@ -5,6 +5,10 @@ import isPPT from "../../../../../until/api/isPPT";
 import { UploadOutlined } from '@ant-design/icons';
 import WithModal from '../../../components/WithModal'
 
+let cancel = () => {
+  /**后面会赋值 */
+}
+
 export default (props) => {
   let { userId, teachclass, reload } = props
   const fileRef = useRef(null)
@@ -40,6 +44,7 @@ export default (props) => {
     }
     if (res.flag) {
       message.success('上传成功')
+      cancel()
       reload()
     } else {
       message.warn(res.message || "数据库异常")
@@ -52,7 +57,8 @@ export default (props) => {
       }}>
         <WithModal
           render={
-            (props) => {
+            (props, onCancel) => {
+              cancel = onCancel
               return <Button {...props} icon={<UploadOutlined />}>上传文件</Button>
             }
           }

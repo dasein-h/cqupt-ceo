@@ -1,14 +1,12 @@
 import Service from "../Service";
 import { message } from 'antd'
 import Axios from "axios";
-import baseurl from '../BaseUrl'
 
 const inst = Axios.create({
   // baseURL: 'http://39.100.140.143:8080',
   baseURL: 'http://localhost:3000/api',
   headers: {
     'Content-Type': 'multipart/form-data',
-    'token': sessionStorage.getItem('tk')
   }
 })
 
@@ -158,7 +156,11 @@ async function companyInfo(studentId) {
 }
 
 async function uploadPPT(fd) {
-  const res = await inst.post(`/upload/up`, fd).catch(e => {
+  const res = await inst.post(`/upload/up`, fd, {
+    headers: {
+      'token': sessionStorage.getItem("tk")
+    }
+  }).catch(e => {
     message.info('网络异常')
   })
 
@@ -199,6 +201,7 @@ async function studentScore(score, scored, scorer) {
       scored,
       scorer
     })
+    console.log(res)
     return res.data
   } catch (e) {
     message.info('网络错误')

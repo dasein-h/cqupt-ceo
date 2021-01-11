@@ -5,12 +5,14 @@ import StudentApi from '../../until/api/StudentApi'
 import {getMember, setPosition} from "../../until/api/ceo"
 import baseurl from '../../until/BaseUrl'
 import { message } from 'antd'
-
+import axios from 'axios'
+axios.defaults.headers.common['token'] = sessionStorage.getItem("tk")
 
 export default function* defSaga() {
   yield throttle(2000, 'login', function* () {
     const action = yield select();
     const res = yield call(LoginApi.Login, action.payload)
+    console.log(res)
     if (res.status === 200 && res.data.flag)
     {        
       if(action.payload.studentId!==undefined){
@@ -25,9 +27,9 @@ export default function* defSaga() {
       sessionStorage.setItem("ceo",res.data.error)
       sessionStorage.setItem("class", res.data.teachclass)
       sessionStorage.setItem("tk", res.data.token)
-      if(sessionStorage.getItem("type")==="student" && sessionStorage.getItem("ceo") !== '1'){
-        window.location.reload()
-      }
+      // if(sessionStorage.getItem("type")==="student" && sessionStorage.getItem("ceo") !== '1'){
+      //   window.location.reload()
+      // }
       yield put(actions.Login_Success(res.data.message, res.data))
     } 
     else {
@@ -169,9 +171,21 @@ export default function* defSaga() {
     const res = yield call(StudentApi.DownloadFile,action.payload)
     if (res.status === 200 ) {
       yield put(actions.DownloadFile_OK(res.data.message))
-      let download = document.createElement('a')
-      download.href = baseurl+"/upload/download?id="+action.payload.id
-      download.click()
+      axios({
+        url:baseurl+"/upload/download?id="+action.payload.id,
+        method:'get',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    }).then(res => {
+        let blob = new Blob([res.data])
+          let a = document.createElement('a')
+          a.href = window.URL.createObjectURL(blob)
+          a.download = window.URL.createObjectURL(blob)
+          a.click();
+      }
+      // let download = document.createElement('a')
+      // download.href = res.data
+      // download.click()
+    )
     }
     else if (!res.data.flag && res.data.message === "没有登录，请先登录"){
       yield put(actions.Exit(sessionStorage.getItem("userId")))
@@ -258,19 +272,6 @@ export default function* defSaga() {
     }
     else{
       yield put(actions.ShowCompany_NO())
-    }
-  })
-  yield takeEvery('CancelVoteCeo', function* () {
-    const action = yield select()
-    const res = yield call(StudentApi.CancelVoteCeo,action.payload)
-    if (res.status === 200 && res.data.flag) {
-      yield put(actions.CancelVoteCeo_OK(res.data.message))
-    }
-    else if (!res.data.flag && res.data.message === "没有登录，请先登录"){
-      yield put(actions.Exit(sessionStorage.getItem("userId")))
-    }
-    else{
-      yield put(actions.CancelVoteCeo_NO(res.data.message))
     }
   })
   /* CEO */

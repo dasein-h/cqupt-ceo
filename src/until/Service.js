@@ -48,11 +48,12 @@ Service.interceptors.response.use(response => {
     } else {
       response.data.message = message
     }
+    throw response.data
   }
 
   if (
-    response.data.message === '没有登录，请先登录' ||
-    response.data.message === '资源访问受限!请重新登录！'
+    response?.data.message === '没有登录，请先登录' ||
+    response?.data.message === '资源访问受限!请重新登录！'
   ) {
     sessionStorage.clear()
     window.location.replace('/')
