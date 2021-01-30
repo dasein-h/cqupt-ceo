@@ -1,0 +1,182 @@
+卷 Windows-SSD 的文件夹 PATH 列表
+卷序列号为 D835-8F8C
+C:.
+│  index.js
+│  router.js
+│  setupProxy.js
+│  tree.txt
+│  
+├─components
+├─pages
+│  │  App.js
+│  │  
+│  ├─ceo
+│  │  │  CEO.js
+│  │  │  
+│  │  ├─application
+│  │  ├─components
+│  │  │      Comfirm.js
+│  │  │      Lists.js
+│  │  │      MyTable.js
+│  │  │      NavMenu.js
+│  │  │      Router.js
+│  │  │      WelcomeTitle.js
+│  │  │      WithModal.js
+│  │  │      
+│  │  ├─config
+│  │  │      defaultPagination.js
+│  │  │      
+│  │  ├─store
+│  │  │      actionCreators.js
+│  │  │      constants.js
+│  │  │      index.js
+│  │  │      reducer.js
+│  │  │      
+│  │  └─views
+│  │      ├─application
+│  │      │  │  index.js
+│  │      │  │  
+│  │      │  ├─components
+│  │      │  │      ApplicationItem.js
+│  │      │  │      
+│  │      │  ├─consts
+│  │      │  │      constants.js
+│  │      │  │      
+│  │      │  └─style
+│  │      │          application.scss
+│  │      │          
+│  │      ├─company
+│  │      │  │  index.js
+│  │      │  │  
+│  │      │  ├─components
+│  │      │  │      CompanyItem.js
+│  │      │  │      Member.js
+│  │      │  │      MyCompany.js
+│  │      │  │      
+│  │      │  └─style
+│  │      │          position.scss
+│  │      │          
+│  │      └─file
+│  │          │  index.js
+│  │          │  
+│  │          └─components
+│  │                  FileList.js
+│  │                  Uploader.js
+│  │                  
+│  ├─manager
+│  │  │  Manager.js
+│  │  │  
+│  │  ├─components
+│  │  │      AddClass.jsx
+│  │  │      ChoseTeacher.jsx
+│  │  │      DeleteClass.jsx
+│  │  │      MenuClass.jsx
+│  │  │      
+│  │  ├─style
+│  │  │      choseclass.scss
+│  │  │      ImData.css
+│  │  │      Nav.css
+│  │  │      
+│  │  └─view
+│  │          ChoseClass.jsx
+│  │          ImData.jsx
+│  │          
+│  ├─student
+│  │      AllCompanies.jsx
+│  │      CEO.jsx
+│  │      ChosenClasses.jsx
+│  │      CompanyMember.jsx
+│  │      Detail.jsx
+│  │      Join.jsx
+│  │      MyCompany.jsx
+│  │      Student.jsx
+│  │      WriteWant.jsx
+│  │      
+│  └─teacher
+│      ├─components
+│      │      ChosenStuClass.jsx
+│      │      ChoseStudent.jsx
+│      │      NewsName.jsx
+│      │      NewsType.jsx
+│      │      SetCompany.jsx
+│      │      SetOthers.jsx
+│      │      SetPersonal.jsx
+│      │      ShowScore.jsx
+│      │      SignedCom.jsx
+│      │      UnChosenStuClass.jsx
+│      │      UnsignCom.jsx
+│      │      
+│      ├─content
+│      │      Teacher.js
+│      │      
+│      ├─style
+│      │      ComInfo.css
+│      │      contentNav.css
+│      │      StuInfo.css
+│      │      VoSit.css
+│      │      
+│      └─view
+│              ComInfo.js
+│              Download.jsx
+│              news.jsx
+│              Set.jsx
+│              Sign.jsx
+│              StuClass.jsx
+│              StuInfo.js
+│              Teacher.js
+│              VotSit.js
+│              
+├─redux
+│  │  actionTypes.js
+│  │  store.js
+│  │  
+│  ├─actionCreators
+│  │      creators.js
+│  │      user.js
+│  │      
+│  ├─reducers
+│  │      reducer.js
+│  │      
+│  └─sagas
+│          index.js
+│          
+├─static
+│  ├─images
+│  └─style
+│          style.css
+│          style.css.map
+│          style.sass
+│          style.scss
+│          teacherStyle.css
+│          teacherStyle.css.map
+│          teacherStyle.scss
+│          
+└─until
+    │  .Service.js.swp
+    │  .Service_BASE_1018.js.swp
+    │  .Service_LOCAL_1018.js.swp
+    │  .Service_REMOTE_1018.js.swp
+    │  BaseUrl.js
+    │  changeNav.js
+    │  changePage.js
+    │  encrypt.js
+    │  index.js
+    │  Jquery.js
+    │  Service.js
+    │  Service_BACKUP_1018.js
+    │  Service_BASE_1018.js
+    │  Service_LOCAL_1018.js
+    │  Service_REMOTE_1018.js
+    │  useInput.js
+    │  useRequest.js
+    │  
+    └─api
+            ceo.js
+            common.js
+            isPPT.js
+            LoginApi.js
+            managerApi.js
+            ManagerApi.js~Stashed changes_0
+            StudentApi.js
+            teacherApi.js
+            
