@@ -237,21 +237,21 @@
 
 ### 登录界面
 
-![login](https://img01.sogoucdn.com/app/a/100520146/0139e977cc8732bb4cfb303097ac18f3)
+![login](https://github.com/cqupt-geek-studio/cqupt-ceo/blob/master/login.png)
 
 ### 学生提交公司申请
 
-![wish](https://img01.sogoucdn.com/app/a/100520146/d985a77ee3e47a1bc4dfd992cd0aa136)
+![wish](https://github.com/cqupt-geek-studio/cqupt-ceo/blob/master/wish.png)
 
 
 
 ### 管理员管理老师的班级
 
-![manager](https://img01.sogoucdn.com/app/a/100520146/b2a434475eebc1099414c53e5cedde2a)
+![manager](https://github.com/cqupt-geek-studio/cqupt-ceo/blob/master/manager.png)
 
 ### 确认删除文件
 
-![delete](https://img04.sogoucdn.com/app/a/100520146/eeaff668264a51776263a17a799793ee)
+![delete](https://github.com/cqupt-geek-studio/cqupt-ceo/blob/master/delete.png)
 
 
 
