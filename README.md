@@ -18,18 +18,17 @@
 
 使用tree生成的src目录内容
 
-
-
+```js
 │  index.js
 │  router.js
-│  setupProxy.js
-│  tree.txt
+│  setupProxy.js       //开发时使用的代理，用于解决跨域问题
+│  tree.txt                    //目录
 │  
 ├─components
 ├─pages
 │  │  App.js
 │  │  
-│  ├─ceo
+│  ├─ceo                    //CEO端
 │  │  │  CEO.js
 │  │  │  
 │  │  ├─application
@@ -82,7 +81,7 @@
 │  │                  FileList.js
 │  │                  Uploader.js
 │  │                  
-│  ├─manager
+│  ├─manager                    //管理员端
 │  │  │  Manager.js
 │  │  │  
 │  │  ├─components
@@ -100,7 +99,7 @@
 │  │          ChoseClass.jsx
 │  │          ImData.jsx
 │  │          
-│  ├─student
+│  ├─student                    //学生端
 │  │      AllCompanies.jsx
 │  │      CEO.jsx
 │  │      ChosenClasses.jsx
@@ -111,7 +110,7 @@
 │  │      Student.jsx
 │  │      WriteWant.jsx
 │  │      
-│  └─teacher
+│  └─teacher                    //老师端
 │      ├─components
 │      │      ChosenStuClass.jsx
 │      │      ChoseStudent.jsx
@@ -145,7 +144,7 @@
 │              Teacher.js
 │              VotSit.js
 │              
-├─redux
+├─redux                    //redux文件夹
 │  │  actionTypes.js
 │  │  store.js
 │  │  
@@ -156,12 +155,12 @@
 │  ├─reducers
 │  │      reducer.js
 │  │      
-│  └─sagas
+│  └─sagas                    //中间键
 │          index.js
 │          
 ├─static
 │  ├─images
-│  └─style
+│  └─style                    //样式文件
 │          style.css
 │          style.css.map
 │          style.sass
@@ -170,18 +169,18 @@
 │          teacherStyle.css.map
 │          teacherStyle.scss
 │          
-└─until
+└─until                    //页面中使用的函数及封装
     │  .Service.js.swp
     │  .Service_BASE_1018.js.swp
     │  .Service_LOCAL_1018.js.swp
     │  .Service_REMOTE_1018.js.swp
-    │  BaseUrl.js
-    │  changeNav.js
-    │  changePage.js
-    │  encrypt.js
+    │  BaseUrl.js                    //请求地址
+    │  changeNav.js                    //保留导航栏高亮
+    │  changePage.js                   //保留导航栏高亮
+    │  encrypt.js                    //加密
     │  index.js
     │  Jquery.js
-    │  Service.js
+    │  Service.js                    //请求封装
     │  Service_BACKUP_1018.js
     │  Service_BASE_1018.js
     │  Service_LOCAL_1018.js
@@ -189,7 +188,7 @@
     │  useInput.js
     │  useRequest.js
     │  
-    └─api
+    └─api                    //页面中使用的接口封装
             ceo.js
             common.js
             isPPT.js
@@ -198,18 +197,7 @@
             ManagerApi.js~Stashed changes_0
             StudentApi.js
             teacherApi.js
-
-
-
-
-
-
-
-
-
-
-
-
+```
 
 
 
@@ -248,20 +236,22 @@
 ## 图例
 
 ### 登录界面
+
 ![login](https://img01.sogoucdn.com/app/a/100520146/0139e977cc8732bb4cfb303097ac18f3)
 
 ### 学生提交公司申请
 
-http://a1.qpic.cn/psc?/V51WXymp1Cgvxy4DGGSM22e0kM1ZbCmp/8v1c6OdZLSE3kzDE6fnRyvFfazeAz2BRJItzXXe*fuiGWsn3GjfLmVP.fHRavdhCUYRA8vpFQfqBQxIe9Xa1blip7diYiT*5V.JqnrbRPmA!/b&ek=1&kp=1&pt=0&bo=QgPHAkIDxwIRADc!&tl=3&vuin=2213618169&tm=1612537200&sce=60-2-2&rf=viewer_311
+![wish](https://img01.sogoucdn.com/app/a/100520146/d985a77ee3e47a1bc4dfd992cd0aa136)
+
 
 
 ### 管理员管理老师的班级
 
-http://a1.qpic.cn/psc?/V51WXymp1Cgvxy4DGGSM22e0kM1ZbCmp/05RlWl8gsTOH*Z17MtCBzBXfaIgDVdPC21g7XpWuzRcpV.cGKf419t5dRqaz5ykqc6.9QfPvCTJyfXNt1ST0fA!!/b&ek=1&kp=1&pt=0&bo=bgVrAm4FawIRADc!&tl=1&vuin=2213618169&tm=1612537200&sce=50-1-1&rf=viewer_311
+![manager](https://img01.sogoucdn.com/app/a/100520146/b2a434475eebc1099414c53e5cedde2a)
 
 ### 确认删除文件
 
-http://a1.qpic.cn/psc?/V51WXymp1Cgvxy4DGGSM22e0kM1ZbCmp/05RlWl8gsTOH*Z17MtCBzD.Q7D9dSL1zDqbcX1iMo7fQJbHpMhMI2PzhohEQ5lZ6M53d88bpgFd1qD4PbAbQbw!!/b&ek=1&kp=1&pt=0&bo=fgMqAX4DKgERADc!&tl=1&vuin=2213618169&tm=1612537200&sce=50-1-1&rf=viewer_311
+![delete](https://img04.sogoucdn.com/app/a/100520146/eeaff668264a51776263a17a799793ee)
 
 
 
@@ -312,14 +302,17 @@ http://a1.qpic.cn/psc?/V51WXymp1Cgvxy4DGGSM22e0kM1ZbCmp/05RlWl8gsTOH*Z17MtCBzD.Q
 ## 参与项目成员以及项目负责人
 
 成员：
-前端
+
+ 前端
+
 1. 尹彦臻
 2. 冉渝
 3. 冯宇
 4. 娄欣雨
 5. 秦元浩(负责人)
 
-后端
+ 后端
+
 1. 何科伟(负责人)
 2. 陈瑞
 
@@ -333,7 +326,7 @@ http://a1.qpic.cn/psc?/V51WXymp1Cgvxy4DGGSM22e0kM1ZbCmp/05RlWl8gsTOH*Z17MtCBzD.Q
 
 ## 代码的 GitHub 地址
 
-https://github.com/cqupt-geek-studio/cqupt-ceo
+ https://github.com/cqupt-geek-studio/cqupt-ceo 
 
 
 
