@@ -249,23 +249,20 @@
 
 ### 登录界面
 
-![1612017918375](C:\Users\香港记者Excited\AppData\Roaming\Typora\typora-user-images\1612017918375.png)
+http://a1.qpic.cn/psc?/V51WXymp1Cgvxy4DGGSM22e0kM1ZbCmp/05RlWl8gsTOH*Z17MtCBzEfleDRM7lnqpXo9o.DdyXzxxI7g2rfsvqeT0u78A1qfb7qVbd6aEJKpiukMnMMAJA!!/b&ek=1&kp=1&pt=0&bo=QAYPA0AGDwMRADc!&tl=1&vuin=2213618169&tm=1612537200&sce=50-1-1&rf=viewer_311
 
 ### 学生提交公司申请
 
-![1612018090196](C:\Users\香港记者Excited\AppData\Roaming\Typora\typora-user-images\1612018090196.png)
+http://a1.qpic.cn/psc?/V51WXymp1Cgvxy4DGGSM22e0kM1ZbCmp/8v1c6OdZLSE3kzDE6fnRyvFfazeAz2BRJItzXXe*fuiGWsn3GjfLmVP.fHRavdhCUYRA8vpFQfqBQxIe9Xa1blip7diYiT*5V.JqnrbRPmA!/b&ek=1&kp=1&pt=0&bo=QgPHAkIDxwIRADc!&tl=3&vuin=2213618169&tm=1612537200&sce=60-2-2&rf=viewer_311
 
-### 学生为竞选的CEO投票以及参与竞选
-
-![1612018144093](C:\Users\香港记者Excited\AppData\Roaming\Typora\typora-user-images\1612018144093.png)
 
 ### 管理员管理老师的班级
 
-![1612018238060](C:\Users\香港记者Excited\AppData\Roaming\Typora\typora-user-images\1612018238060.png)
+http://a1.qpic.cn/psc?/V51WXymp1Cgvxy4DGGSM22e0kM1ZbCmp/05RlWl8gsTOH*Z17MtCBzBXfaIgDVdPC21g7XpWuzRcpV.cGKf419t5dRqaz5ykqc6.9QfPvCTJyfXNt1ST0fA!!/b&ek=1&kp=1&pt=0&bo=bgVrAm4FawIRADc!&tl=1&vuin=2213618169&tm=1612537200&sce=50-1-1&rf=viewer_311
 
 ### 确认删除文件
 
-![1612018355385](C:\Users\香港记者Excited\AppData\Roaming\Typora\typora-user-images\1612018355385.png)
+http://a1.qpic.cn/psc?/V51WXymp1Cgvxy4DGGSM22e0kM1ZbCmp/05RlWl8gsTOH*Z17MtCBzD.Q7D9dSL1zDqbcX1iMo7fQJbHpMhMI2PzhohEQ5lZ6M53d88bpgFd1qD4PbAbQbw!!/b&ek=1&kp=1&pt=0&bo=fgMqAX4DKgERADc!&tl=1&vuin=2213618169&tm=1612537200&sce=50-1-1&rf=viewer_311
 
 
 
@@ -316,14 +313,16 @@
 ## 参与项目成员以及项目负责人
 
 成员：
-
+前端
 1. 尹彦臻
 2. 冉渝
 3. 冯宇
 4. 娄欣雨
 5. 秦元浩(负责人)
 
-
+后端
+1. 何科伟(负责人)
+2. 陈瑞
 
 
 
