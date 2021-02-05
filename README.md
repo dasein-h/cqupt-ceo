@@ -248,8 +248,7 @@
 ## 图例
 
 ### 登录界面
-
-![1612018144093](http://a1.qpic.cn/psc?/V51WXymp1Cgvxy4DGGSM22e0kM1ZbCmp/05RlWl8gsTOH*Z17MtCBzEfleDRM7lnqpXo9o.DdyXzxxI7g2rfsvqeT0u78A1qfb7qVbd6aEJKpiukMnMMAJA!!/b&ek=1&kp=1&pt=0&bo=QAYPA0AGDwMRADc!&tl=1&vuin=2213618169&tm=1612537200&sce=50-1-1&rf=viewer_311)
+![login](https://img01.sogoucdn.com/app/a/100520146/0139e977cc8732bb4cfb303097ac18f3)
 
 ### 学生提交公司申请
 
